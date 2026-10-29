@@ -1,0 +1,1364 @@
+/* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.sceneArtwork {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.eclipseGroup {
+  position: absolute;
+  display: contents;
+  left: calc(62 * var(--u));
+  top: calc(297 * var(--u));
+}
+
+.eclipseHalo {
+  position: absolute;
+  height: calc(1144 * var(--u));
+  left: calc(176 * var(--u));
+  top: calc(465 * var(--u));
+  width: calc(1161 * var(--u));
+}
+
+.eclipseHaloPaintBounds {
+  position: absolute;
+  inset: -42.11% -47.95% -42.27% -40.31%;
+}
+
+.image {
+  display: block;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+}
+
+.eclipseOuterRing {
+  position: absolute;
+  height: calc(1315 * var(--u));
+  left: calc(89 * var(--u));
+  top: calc(420 * var(--u));
+  width: calc(1334 * var(--u));
+}
+
+.eclipseOuterRingPaintBounds {
+  position: absolute;
+  inset: -7.6% -7.5%;
+}
+
+.eclipseInnerGlow {
+  position: absolute;
+  height: calc(1099 * var(--u));
+  left: calc(130 * var(--u));
+  top: calc(465 * var(--u));
+  width: calc(1090 * var(--u));
+}
+
+.eclipseInnerGlowPaintBounds {
+  position: absolute;
+  inset: -9.1% -9.17%;
+}
+
+.eclipseCore {
+  position: absolute;
+  height: calc(1205 * var(--u));
+  left: calc(145 * var(--u));
+  top: calc(480 * var(--u));
+  width: calc(1222 * var(--u));
+}
+
+.eclipseCorePaintBounds {
+  position: absolute;
+  inset: -0.58% -0.57%;
+}
+
+.eclipseStar {
+  position: absolute;
+  height: calc(550.381 * var(--u));
+  left: calc(62 * var(--u));
+  top: calc(333 * var(--u));
+  width: calc(553.852 * var(--u));
+}
+
+.absoluteImage {
+  position: absolute;
+  display: block;
+  inset: 0;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+}
+
+.farMountain {
+  position: absolute;
+  height: calc(648 * var(--u));
+  left: calc(-31 * var(--u));
+  top: calc(864 * var(--u));
+  width: calc(1574 * var(--u));
+}
+
+.farMountainPaintBounds {
+  position: absolute;
+  inset: -0.2% -0.32% -0.85% -0.35%;
+}
+
+.shader {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* The supplied runtime sets mask shorthand inline; these must retain responsive sizing. */
+  mask-size: 100% 100% !important;
+  mask-repeat: no-repeat !important;
+}
+
+.nativeImage {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
+.nativeGroup {
+  position: absolute;
+  transform-origin: 0 0;
+}
+
+.smallMountainStar {
+  position: absolute;
+  display: flex;
+  height: calc(414.403 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(870 * var(--u));
+  top: calc(1247 * var(--u));
+  width: calc(414.561 * var(--u));
+}
+
+.smallMountainStarRotation {
+  flex: none;
+  rotate: 109.3deg;
+}
+
+.smallMountainStarShape {
+  height: calc(325.377 * var(--u));
+  position: relative;
+  width: calc(325.12 * var(--u));
+}
+
+.smallMountainStarPaintBounds {
+  position: absolute;
+  inset: -42.25% -58.56% -52.75% -42.63%;
+}
+
+.middleMountain {
+  position: absolute;
+  height: calc(648 * var(--u));
+  left: calc(-23 * var(--u));
+  top: calc(937 * var(--u));
+  width: calc(1574 * var(--u));
+}
+
+.middleMountainPaintBounds {
+  position: absolute;
+  inset: -11.15% -4.04% -8.18% -4.07%;
+}
+
+.largeMountainStar {
+  position: absolute;
+  display: flex;
+  height: calc(606.136 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(745 * var(--u));
+  top: calc(1426 * var(--u));
+  width: calc(606.017 * var(--u));
+}
+
+.largeMountainStarRotation {
+  flex: none;
+  rotate: -30.96deg;
+}
+
+.largeMountainStarShape {
+  height: calc(441.925 * var(--u));
+  position: relative;
+  width: calc(441.579 * var(--u));
+}
+
+.largeMountainStarPaintBounds {
+  position: absolute;
+  inset: -34.15% -50.43% -44.64% -34.51%;
+}
+
+.leftMountainStar {
+  position: absolute;
+  display: flex;
+  height: calc(327.532 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(249 * var(--u));
+  top: calc(1257 * var(--u));
+  width: calc(327.468 * var(--u));
+}
+
+.leftMountainStarShape {
+  height: calc(238.799 * var(--u));
+  position: relative;
+  width: calc(238.612 * var(--u));
+}
+
+.leftMountainStarPaintBounds {
+  position: absolute;
+  inset: -53.4% -69.73% -63.89% -53.78%;
+}
+
+.nearMountain {
+  position: absolute;
+  height: calc(1121 * var(--u));
+  left: calc(-42 * var(--u));
+  top: calc(984 * var(--u));
+  width: calc(1574.004 * var(--u));
+}
+
+.nearMountainPaintBounds {
+  position: absolute;
+  inset: -5.87% -3.53% -3.53% -3.53%;
+}
+
+.mountainForeground {
+  position: absolute;
+  height: calc(956.5 * var(--u));
+  left: calc(-63 * var(--u));
+  top: calc(1389.5 * var(--u));
+  width: calc(1603.5 * var(--u));
+}
+
+.mountainForegroundPaintBounds {
+  position: absolute;
+  inset: -8.98% -5.68% -9.51% -5.67%;
+}
+
+.cloudSection {
+  position: absolute;
+  display: contents;
+  left: calc(-742 * var(--u));
+  top: calc(2230 * var(--u));
+}
+
+.cloudBackground {
+  position: absolute;
+  height: calc(2087 * var(--u));
+  left: 0;
+  top: calc(2230 * var(--u));
+  width: calc(1512 * var(--u));
+}
+
+.tallLeftCloud {
+  position: absolute;
+  height: calc(1935 * var(--u));
+  left: calc(-21 * var(--u));
+  top: calc(2291 * var(--u));
+  width: calc(1151 * var(--u));
+}
+
+.upperRightCloud {
+  position: absolute;
+  display: flex;
+  height: calc(841 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(597 * var(--u));
+  top: calc(2310 * var(--u));
+  width: calc(928 * var(--u));
+}
+
+.upperRightCloudRotation {
+  flex: none;
+  rotate: 180deg;
+  scale: 1 -1;
+}
+
+.upperRightCloudShape {
+  height: calc(841 * var(--u));
+  position: relative;
+  width: calc(928 * var(--u));
+}
+
+.lowerRightCloud {
+  position: absolute;
+  display: flex;
+  height: calc(1597 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(551 * var(--u));
+  top: calc(3230 * var(--u));
+  width: calc(1096 * var(--u));
+}
+
+.lowerRightCloudShape {
+  height: calc(1597 * var(--u));
+  position: relative;
+  width: calc(1096 * var(--u));
+}
+
+.lowerLeftCloud {
+  position: absolute;
+  height: calc(1004 * var(--u));
+  left: calc(-76 * var(--u));
+  top: calc(3853 * var(--u));
+  width: calc(961 * var(--u));
+}
+
+.middleLeftCloud {
+  position: absolute;
+  height: calc(941 * var(--u));
+  left: calc(-104 * var(--u));
+  top: calc(2814 * var(--u));
+  width: calc(961 * var(--u));
+}
+
+.peachShootingStar {
+  position: absolute;
+  display: contents;
+  left: calc(-732 * var(--u));
+  top: calc(2623 * var(--u));
+}
+
+.peachTrail {
+  position: absolute;
+  display: flex;
+  height: calc(828.401 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(-732 * var(--u));
+  top: calc(2655.82 * var(--u));
+  width: calc(1165.19 * var(--u));
+}
+
+.peachTrailRotation {
+  flex: none;
+  rotate: 4.44deg;
+}
+
+.peachTrailShape {
+  height: calc(744.682 * var(--u));
+  overflow: clip;
+  position: relative;
+  border-radius: calc(12.989 * var(--u));
+  width: calc(1110.903 * var(--u));
+}
+
+.peachStar {
+  position: absolute;
+  height: calc(442.983 * var(--u));
+  left: calc(277.61 * var(--u));
+  top: calc(2623 * var(--u));
+  width: calc(475.648 * var(--u));
+}
+
+.peachCloudBase {
+  position: absolute;
+  height: calc(352 * var(--u));
+  left: calc(-76 * var(--u));
+  top: calc(2847 * var(--u));
+  width: calc(747 * var(--u));
+}
+
+.peachCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.84% -5.2% -12.06% -7.22%;
+}
+
+.smallCloudAccent {
+  position: absolute;
+  display: flex;
+  height: calc(83.5 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(405 * var(--u));
+  top: calc(3853 * var(--u));
+  width: calc(191.5 * var(--u));
+}
+
+.smallCloudAccentShape {
+  height: calc(83.5 * var(--u));
+  position: relative;
+  width: calc(191.5 * var(--u));
+}
+
+.smallCloudAccentPaintBounds {
+  position: absolute;
+  inset: -49.98% -19.29% -59.72% -18.49%;
+}
+
+.blueShootingStar {
+  position: absolute;
+  display: contents;
+  left: calc(-742 * var(--u));
+  top: calc(3008.8 * var(--u));
+}
+
+.blueTrail {
+  position: absolute;
+  display: flex;
+  height: calc(1029.047 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(-742 * var(--u));
+  top: calc(3213 * var(--u));
+  width: calc(1276.432 * var(--u));
+}
+
+.blueTrailRotation {
+  flex: none;
+  rotate: -16.47deg;
+}
+
+.blueStar {
+  position: absolute;
+  display: flex;
+  height: calc(500.091 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(196 * var(--u));
+  top: calc(3008.8 * var(--u));
+  width: calc(522.924 * var(--u));
+}
+
+.blueStarRotation {
+  flex: none;
+  rotate: -7.45deg;
+}
+
+.blueStarShape {
+  height: calc(442.983 * var(--u));
+  position: relative;
+  width: calc(469.473 * var(--u));
+}
+
+.yellowShootingStar {
+  position: absolute;
+  display: contents;
+  left: calc(658 * var(--u));
+  top: calc(2325 * var(--u));
+}
+
+.yellowTrail {
+  position: absolute;
+  display: flex;
+  height: calc(1225.443 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(988 * var(--u));
+  top: calc(2325 * var(--u));
+  width: calc(1337.072 * var(--u));
+}
+
+.yellowTrailRotation {
+  flex: none;
+  rotate: 147.45deg;
+  scale: 1 -1;
+}
+
+.yellowStar {
+  position: absolute;
+  display: flex;
+  height: calc(560.975 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(658 * var(--u));
+  top: calc(2770 * var(--u));
+  width: calc(582.876 * var(--u));
+}
+
+.yellowStarRotation {
+  flex: none;
+  rotate: -16.7deg;
+}
+
+.yellowStarShape {
+  height: calc(442.983 * var(--u));
+  position: relative;
+  width: calc(475.648 * var(--u));
+}
+
+.blueCloudGroup {
+  position: absolute;
+  display: contents;
+  left: calc(35 * var(--u));
+  top: calc(3339 * var(--u));
+}
+
+.blueCloudBase {
+  position: absolute;
+  height: calc(377.186 * var(--u));
+  left: calc(40.07 * var(--u));
+  top: calc(3339 * var(--u));
+  width: calc(670.932 * var(--u));
+}
+
+.blueCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.55% -5.07% -12.02% -7.72%;
+}
+
+.yellowCloudGroup {
+  position: absolute;
+  display: contents;
+  left: calc(810 * var(--u));
+  top: calc(3035 * var(--u));
+}
+
+.yellowCloudBase {
+  position: absolute;
+  display: flex;
+  height: calc(400 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(810 * var(--u));
+  top: calc(3035 * var(--u));
+  width: calc(738 * var(--u));
+}
+
+.yellowCloudBaseShape {
+  height: calc(400 * var(--u));
+  position: relative;
+  width: calc(738 * var(--u));
+}
+
+.yellowCloudBasePaintBounds {
+  position: absolute;
+  inset: -9.14% -5.5% -9.93% -7.3%;
+}
+
+.yellowCloudMaskFrame {
+  position: absolute;
+  display: flex;
+  height: calc(391 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(822 * var(--u));
+  top: calc(3086 * var(--u));
+  width: calc(713 * var(--u));
+}
+
+.yellowCloudMaskFrameMask {
+  height: calc(391 * var(--u));
+  mask-mode: alpha;
+  mask-composite: intersect;
+  mask-clip: no-clip;
+  mask-repeat: no-repeat;
+  mask-position: calc(-52.564 * var(--u)) calc(-87.551 * var(--u));
+  mask-size: calc(832.462 * var(--u)) calc(476.284 * var(--u));
+  position: relative;
+  width: calc(713 * var(--u));
+}
+
+.yellowCloudMaskFramePaintBounds {
+  position: absolute;
+  inset: -22.51% -12.34%;
+}
+
+.pinkShootingStar {
+  position: absolute;
+  display: contents;
+  left: calc(725 * var(--u));
+  top: calc(3235 * var(--u));
+}
+
+.pinkTrail {
+  position: absolute;
+  display: flex;
+  height: calc(779.231 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1089.7 * var(--u));
+  top: calc(3463.1 * var(--u));
+  width: calc(1133.76 * var(--u));
+}
+
+.pinkTrailRotation {
+  flex: none;
+  rotate: -178.2deg;
+  scale: 1 -1;
+}
+
+.pinkStar {
+  position: absolute;
+  display: flex;
+  height: calc(555.304 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(725 * var(--u));
+  top: calc(3235 * var(--u));
+  width: calc(577.893 * var(--u));
+}
+
+.pinkStarRotation {
+  flex: none;
+  rotate: -15.72deg;
+}
+
+.pinkStarShape {
+  height: calc(442.984 * var(--u));
+  position: relative;
+  width: calc(475.647 * var(--u));
+}
+
+.pinkCloudGroup {
+  position: absolute;
+  display: contents;
+  left: calc(771 * var(--u));
+  top: calc(3594 * var(--u));
+}
+
+.pinkCloudBase {
+  position: absolute;
+  display: flex;
+  height: calc(376.5 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(771 * var(--u));
+  top: calc(3594 * var(--u));
+  width: calc(662 * var(--u));
+}
+
+.pinkCloudBaseShape {
+  height: calc(376.5 * var(--u));
+  position: relative;
+  width: calc(662 * var(--u));
+}
+
+.pinkCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.32% -6.11% -11.21% -6.44%;
+}
+
+.lastYearGroup {
+  position: absolute;
+  display: contents;
+  left: calc(796 * var(--u));
+  top: calc(2602 * var(--u));
+}
+
+.lastYearCloudBase {
+  position: absolute;
+  display: flex;
+  height: calc(119 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(796 * var(--u));
+  top: calc(2602 * var(--u));
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudBaseShape {
+  height: calc(119 * var(--u));
+  position: relative;
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudBasePaintBounds {
+  position: absolute;
+  inset: -33.56% -12.85% -38.75% -17.02%;
+}
+
+.lastYearCloudMaskFrame {
+  position: absolute;
+  display: flex;
+  height: calc(119 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(800.31 * var(--u));
+  top: calc(2629.43 * var(--u));
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudMaskFrameMask {
+  height: calc(119 * var(--u));
+  mask-mode: alpha;
+  mask-composite: intersect;
+  mask-clip: no-clip;
+  mask-repeat: no-repeat;
+  mask-position: calc(-39.661 * var(--u)) calc(-67.358 * var(--u));
+  mask-size: calc(357.148 * var(--u)) calc(205.046 * var(--u));
+  position: relative;
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudMaskFramePaintBounds {
+  position: absolute;
+  inset: -73.95% -32%;
+}
+
+.faqScene {
+  position: absolute;
+  display: contents;
+  left: calc(-637 * var(--u));
+  top: calc(3695 * var(--u));
+}
+
+.faqBackdrop {
+  position: absolute;
+  height: calc(1450 * var(--u));
+  left: calc(-2 * var(--u));
+  top: calc(3695 * var(--u));
+  width: calc(1514 * var(--u));
+}
+
+.faqHalo {
+  position: absolute;
+  display: flex;
+  height: calc(1294.447 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(101.04 * var(--u));
+  top: calc(4314.78 * var(--u));
+  width: calc(1308.915 * var(--u));
+}
+
+.faqHaloRotation {
+  flex: none;
+  rotate: -8deg;
+}
+
+.faqHaloShape {
+  height: calc(1144 * var(--u));
+  position: relative;
+  width: calc(1161 * var(--u));
+}
+
+.faqGlow {
+  position: absolute;
+  height: calc(1035 * var(--u));
+  left: calc(245.82 * var(--u));
+  top: calc(4473 * var(--u));
+  width: calc(1026.524 * var(--u));
+}
+
+.faqGlowPaintBounds {
+  position: absolute;
+  inset: -10.93% -11.02%;
+}
+
+.faqGround {
+  position: absolute;
+  background: #f7f7f7;
+  height: calc(451 * var(--u));
+  left: calc(-2 * var(--u));
+  top: calc(5465 * var(--u));
+  width: calc(1514 * var(--u));
+}
+
+.faqLeftCloud {
+  position: absolute;
+  display: contents;
+  left: calc(-246 * var(--u));
+  top: calc(5020 * var(--u));
+}
+
+.faqLeftCloudBase {
+  position: absolute;
+  height: calc(377.186 * var(--u));
+  left: calc(-239.55 * var(--u));
+  top: calc(5020 * var(--u));
+  width: calc(854.546 * var(--u));
+}
+
+.faqLeftCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.52% -4.5% -12.32% -5.69%;
+}
+
+.faqRightCloud {
+  position: absolute;
+  display: contents;
+  left: calc(852 * var(--u));
+  top: calc(4990 * var(--u));
+}
+
+.faqRightCloudBase {
+  position: absolute;
+  height: calc(412.186 * var(--u));
+  left: calc(858.45 * var(--u));
+  top: calc(4990 * var(--u));
+  width: calc(854.546 * var(--u));
+}
+
+.faqRightCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.08% -4.17% -11.32% -6.15%;
+}
+
+.faqMiddleCloud {
+  position: absolute;
+  display: contents;
+  left: calc(318 * var(--u));
+  top: calc(5002 * var(--u));
+}
+
+.faqMiddleCloudBase {
+  position: absolute;
+  display: flex;
+  height: calc(377.186 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(318 * var(--u));
+  top: calc(5002 * var(--u));
+  width: calc(814.846 * var(--u));
+}
+
+.faqMiddleCloudBaseShape {
+  height: calc(377.186 * var(--u));
+  position: relative;
+  width: calc(814.846 * var(--u));
+}
+
+.faqMiddleCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.46% -3.98% -12.53% -6.05%;
+}
+
+.faqWideCloud {
+  position: absolute;
+  display: contents;
+  left: calc(-637 * var(--u));
+  top: calc(5058 * var(--u));
+}
+
+.faqWideCloudBase {
+  position: absolute;
+  height: calc(385 * var(--u));
+  left: calc(-618.1 * var(--u));
+  top: calc(5058 * var(--u));
+  width: calc(2502.102 * var(--u));
+}
+
+.faqWideCloudBasePaintBounds {
+  position: absolute;
+  inset: -13.14% -1.48% -12.78% -2.01%;
+}
+
+.boatGroup {
+  position: absolute;
+  inset: 0;
+}
+
+.boatHull {
+  position: absolute;
+  display: flex;
+  height: calc(234.234 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1007.71 * var(--u));
+  top: calc(5011.63 * var(--u));
+  width: calc(426.574 * var(--u));
+}
+
+.boatHullRotation {
+  flex: none;
+  rotate: 1.75deg;
+}
+
+.boatHullShape {
+  height: calc(221.5 * var(--u));
+  position: relative;
+  width: calc(420 * var(--u));
+}
+
+.boatHullPaintBounds {
+  position: absolute;
+  inset: -0.84% -0.68% -2.26% -0.46%;
+}
+
+.orangeSparklerGroup {
+  position: absolute;
+  display: contents;
+  height: calc(361.283 * var(--u));
+  left: calc(1052 * var(--u));
+  top: calc(4784 * var(--u));
+  width: calc(342.407 * var(--u));
+}
+
+.orangeSparklerStem {
+  position: absolute;
+  display: flex;
+  height: calc(185.977 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1230.34 * var(--u));
+  top: calc(4944.25 * var(--u));
+  width: calc(27.763 * var(--u));
+}
+
+.orangeSparklerStemRotation {
+  flex: none;
+  rotate: 81.51deg;
+}
+
+.orangeSparklerStemShape {
+  height: 0;
+  position: relative;
+  width: calc(188.038 * var(--u));
+}
+
+.orangeSparklerStemPaintBounds {
+  position: absolute;
+  inset: calc(-6.6 * var(--u)) 0 calc(-1.72 * var(--u)) 0;
+}
+
+.orangeSparkler {
+  position: absolute;
+  display: flex;
+  height: calc(321.435 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1064.48 * var(--u));
+  top: calc(4784 * var(--u));
+  width: calc(329.929 * var(--u));
+}
+
+.orangeSparklerRotation {
+  flex: none;
+  rotate: 17.39deg;
+}
+
+.orangeSparklerShape {
+  border-width: 0;
+  border-color: #674b3b;
+  border-style: solid;
+  height: calc(253.413 * var(--u));
+  position: relative;
+  border-radius: calc(8.639 * var(--u));
+  width: calc(266.372 * var(--u));
+}
+
+.purpleSparklerGroup {
+  position: absolute;
+  display: contents;
+  height: calc(406.319 * var(--u));
+  left: calc(954 * var(--u));
+  top: calc(4785 * var(--u));
+  width: calc(377.179 * var(--u));
+}
+
+.purpleSparklerStem {
+  position: absolute;
+  display: flex;
+  height: calc(187.896 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1139.32 * var(--u));
+  top: calc(4962.03 * var(--u));
+  width: calc(131.208 * var(--u));
+}
+
+.purpleSparklerStemRotation {
+  flex: none;
+  rotate: 55.07deg;
+}
+
+.purpleSparklerStemShape {
+  height: 0;
+  position: relative;
+  width: calc(229.173 * var(--u));
+}
+
+.purpleSparklerStemPaintBounds {
+  position: absolute;
+  inset: calc(-8.04 * var(--u)) 0 calc(-2.1 * var(--u)) 0;
+}
+
+.purpleSparkler {
+  position: absolute;
+  display: flex;
+  height: calc(356.062 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(954 * var(--u));
+  top: calc(4785 * var(--u));
+  width: calc(369.175 * var(--u));
+}
+
+.purpleSparklerRotation {
+  flex: none;
+  rotate: -9.05deg;
+}
+
+.purpleSparklerShape {
+  border-width: 0;
+  border-color: #674b3b;
+  border-style: solid;
+  height: calc(308.85 * var(--u));
+  position: relative;
+  border-radius: calc(10.529 * var(--u));
+  width: calc(324.643 * var(--u));
+}
+
+.boatCharacter {
+  position: absolute;
+  display: flex;
+  height: calc(302.291 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1162 * var(--u));
+  top: calc(4947 * var(--u));
+  width: calc(299.043 * var(--u));
+}
+
+.boatCharacterRotation {
+  flex: none;
+  rotate: 0.55deg;
+}
+
+.boatCharacterShape {
+  height: calc(299.445 * var(--u));
+  position: relative;
+  width: calc(296.165 * var(--u));
+}
+
+.boatOar {
+  position: absolute;
+  display: flex;
+  height: calc(116.459 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1214.62 * var(--u));
+  top: calc(5129.41 * var(--u));
+  width: calc(216.263 * var(--u));
+}
+
+.boatOarShape {
+  height: calc(110 * var(--u));
+  position: relative;
+  width: calc(213 * var(--u));
+}
+
+.boatOarPaintBounds {
+  position: absolute;
+  inset: -6.43% -5.45% -5.15% 0;
+}
+
+.floatingYellowStar {
+  position: absolute;
+  display: flex;
+  height: calc(396.313 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(90 * var(--u));
+  top: calc(4983 * var(--u));
+  width: calc(394.719 * var(--u));
+}
+
+.floatingYellowStarRotation {
+  flex: none;
+  rotate: -24.9deg;
+}
+
+.faqFrontCloud {
+  position: absolute;
+  display: contents;
+  left: calc(-609 * var(--u));
+  top: calc(5196 * var(--u));
+}
+
+.faqFrontCloudBase {
+  position: absolute;
+  display: flex;
+  height: calc(424 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(-609 * var(--u));
+  top: calc(5196 * var(--u));
+  width: calc(2502.102 * var(--u));
+}
+
+.faqFrontCloudBaseRotation {
+  flex: none;
+  rotate: 180deg;
+}
+
+.faqFrontCloudBaseShape {
+  height: calc(424 * var(--u));
+  position: relative;
+  width: calc(2502.102 * var(--u));
+}
+
+.faqFrontCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.9% -1.12% -11.74% -2.11%;
+}
+
+.campfireGroup {
+  position: absolute;
+  display: contents;
+  left: calc(888.02 * var(--u));
+  top: calc(1699 * var(--u));
+}
+
+.campfireLeftCharacter {
+  position: absolute;
+  display: flex;
+  height: calc(217.459 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(888.02 * var(--u));
+  top: calc(1821 * var(--u));
+  width: calc(182.633 * var(--u));
+}
+
+.campfireLeftCharacterRotation {
+  flex: none;
+  rotate: -175.04deg;
+  scale: 1 -1;
+}
+
+.campfireLeftCharacterShape {
+  height: calc(203.906 * var(--u));
+  position: relative;
+  width: calc(165.628 * var(--u));
+}
+
+.campfireLeftLog {
+  position: absolute;
+  height: calc(91 * var(--u));
+  left: calc(1040.02 * var(--u));
+  top: calc(1943 * var(--u));
+  width: calc(165 * var(--u));
+}
+
+.campfireLeftLogPaintBounds {
+  position: absolute;
+  inset: -1.54% -0.86% -1.45% -0.8%;
+}
+
+.campfireRightLog {
+  position: absolute;
+  display: flex;
+  height: calc(91 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1067.02 * var(--u));
+  top: calc(1943 * var(--u));
+  width: calc(164 * var(--u));
+}
+
+.campfireRightLogShape {
+  height: calc(91 * var(--u));
+  position: relative;
+  width: calc(164 * var(--u));
+}
+
+.campfireRightCharacter {
+  position: absolute;
+  display: flex;
+  height: calc(216.244 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1188.5 * var(--u));
+  top: calc(1821.02 * var(--u));
+  width: calc(194.771 * var(--u));
+}
+
+.campfireRightCharacterRotation {
+  flex: none;
+  rotate: 3.13deg;
+}
+
+.campfireRightCharacterShape {
+  height: calc(206.509 * var(--u));
+  position: relative;
+  width: calc(183.759 * var(--u));
+}
+
+.campfireFrontCharacter {
+  position: absolute;
+  display: flex;
+  height: calc(240.217 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1069.1 * var(--u));
+  top: calc(1925.46 * var(--u));
+  width: calc(254.876 * var(--u));
+}
+
+.campfireFrontCharacterRotation {
+  flex: none;
+  rotate: -16.34deg;
+}
+
+.campfireFrontCharacterShape {
+  height: calc(188.673 * var(--u));
+  position: relative;
+  width: calc(210.286 * var(--u));
+}
+
+.campfireLowFlame {
+  position: absolute;
+  display: flex;
+  height: calc(226.996 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1017.02 * var(--u));
+  top: calc(1817 * var(--u));
+  width: calc(232.994 * var(--u));
+}
+
+.campfireLowFlameShape {
+  border-width: 0;
+  border-color: #674b3b;
+  border-style: solid;
+  height: calc(178.959 * var(--u));
+  position: relative;
+  border-radius: calc(6.101 * var(--u));
+  width: calc(188.11 * var(--u));
+}
+
+.campfireMiddleFlame {
+  position: absolute;
+  display: flex;
+  height: calc(195.722 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1051 * var(--u));
+  top: calc(1777 * var(--u));
+  width: calc(203.98 * var(--u));
+}
+
+.campfireMiddleFlameRotation {
+  flex: none;
+  rotate: 5.35deg;
+}
+
+.campfireInnerFlame {
+  position: absolute;
+  height: calc(137.558 * var(--u));
+  left: calc(-19.49 * var(--u));
+  border-radius: calc(4.689 * var(--u));
+  top: calc(-27.3 * var(--u));
+  width: calc(144.592 * var(--u));
+}
+
+.campfireSmoke {
+  position: absolute;
+  display: flex;
+  height: calc(150.443 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(1077 * var(--u));
+  top: calc(1699 * var(--u));
+  width: calc(156.79 * var(--u));
+}
+
+.campfireSmokeShape {
+  height: calc(137.558 * var(--u));
+  position: relative;
+  border-radius: calc(4.689 * var(--u));
+  width: calc(144.592 * var(--u));
+}
+
+.sponsorLogoRowOne {
+  position: absolute;
+  height: calc(227.426 * var(--u));
+  left: calc(104 * var(--u));
+  top: calc(5770 * var(--u));
+  width: calc(511 * var(--u));
+}
+
+.sponsorImage {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.sponsorLogoRowTwo {
+  position: absolute;
+  height: calc(227.426 * var(--u));
+  left: calc(104 * var(--u));
+  top: calc(5916 * var(--u));
+  width: calc(511 * var(--u));
+}
+
+.sponsorLogoRowThree {
+  position: absolute;
+  height: calc(227.426 * var(--u));
+  left: calc(104 * var(--u));
+  top: calc(6069 * var(--u));
+  width: calc(511 * var(--u));
+}
+
+.sponsorLogoRowFour {
+  position: absolute;
+  height: calc(227.426 * var(--u));
+  left: calc(104 * var(--u));
+  top: calc(6222 * var(--u));
+  width: calc(511 * var(--u));
+}
+
+.sponsorMessageRowOne {
+  position: absolute;
+  height: calc(361 * var(--u));
+  left: calc(508 * var(--u));
+  top: calc(5703 * var(--u));
+  width: calc(641 * var(--u));
+}
+
+.sponsorMessageRowOnePaintBounds {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sponsorImage2 {
+  position: absolute;
+  max-width: none;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.sponsorMessageRowTwo {
+  position: absolute;
+  height: calc(361 * var(--u));
+  left: calc(508 * var(--u));
+  top: calc(5849 * var(--u));
+  width: calc(641 * var(--u));
+}
+
+.sponsorMessageRowThree {
+  position: absolute;
+  height: calc(361 * var(--u));
+  left: calc(508 * var(--u));
+  top: calc(5995 * var(--u));
+  width: calc(641 * var(--u));
+}
+
+.sponsorMessageRowFour {
+  position: absolute;
+  height: calc(361 * var(--u));
+  left: calc(508 * var(--u));
+  top: calc(6141 * var(--u));
+  width: calc(641 * var(--u));
+}
+
+.sponsorBackground {
+  position: absolute;
+  background: #f7f7f7;
+  height: calc(1412 * var(--u));
+  left: 0;
+  top: calc(5666 * var(--u));
+  width: calc(1512 * var(--u));
+}
+
+.heroGround {
+  position: absolute;
+  background: #0a0a0a;
+  height: calc(831 * var(--u));
+  left: 0;
+  top: calc(1273 * var(--u));
+  width: calc(1512 * var(--u));
+}
+

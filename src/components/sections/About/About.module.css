@@ -1,0 +1,31 @@
+.about { display: contents; }
+
+.heading {
+  position: absolute;
+  left: calc(176 * var(--u));
+  top: calc(1683 * var(--u));
+  width: calc(474.629272 * var(--u));
+  font-size: calc(42.929924 * var(--u));
+  font-weight: 800;
+  /* Figma's two line boxes measure 112px in total. */
+  line-height: calc(56 * var(--u));
+  letter-spacing: calc(-0.429299 * var(--u));
+  background: linear-gradient(89.98905699185383deg, #fff 19.611%, #ff560f 106.78%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.copy {
+  position: absolute;
+  left: calc(176 * var(--u));
+  top: calc(1825 * var(--u));
+  width: calc(534 * var(--u));
+  color: #bdbdbd;
+  font-size: calc(22.063156 * var(--u));
+  font-weight: 400;
+  /* Figma's seven line boxes measure 203px in total. */
+  line-height: calc(29 * var(--u));
+  letter-spacing: calc(-0.220632 * var(--u));
+  text-align: justify;
+}

@@ -1,0 +1,54 @@
+.art {
+  position: absolute;
+  left: var(--ascii-left);
+  top: var(--ascii-top);
+  display: block;
+  width: max-content;
+  color: var(--ascii-color);
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--ascii-font-size);
+  font-weight: var(--ascii-weight);
+  line-height: var(--ascii-line-height);
+  letter-spacing: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.source {
+  width: max-content;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: block;
+  pointer-events: none;
+}
+
+.art[data-mode="fire"][data-running="true"] .source {
+  visibility: hidden;
+}
+
+.marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.axisX {
+  left: 100px;
+}
+
+.axisY {
+  top: 100px;
+}

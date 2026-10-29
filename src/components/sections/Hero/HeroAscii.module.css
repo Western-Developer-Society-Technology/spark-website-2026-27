@@ -1,0 +1,39 @@
+.distant,
+.orange,
+.peach,
+.left {
+  position: absolute;
+  pointer-events: none;
+}
+
+.distant {
+  left: calc(-141.54 * var(--u));
+  top: calc(-32 * var(--u));
+  width: calc(1793.846 * var(--u));
+  height: calc(1060 * var(--u));
+  border-radius: calc(15.288 * var(--u));
+}
+
+.orange {
+  left: calc(-23 * var(--u));
+  top: calc(37 * var(--u));
+  width: calc(1555.123 * var(--u));
+  height: calc(973.038 * var(--u));
+  border-radius: calc(26.064 * var(--u));
+}
+
+.peach {
+  left: 0;
+  top: calc(102 * var(--u));
+  width: calc(1524 * var(--u));
+  height: calc(744.682 * var(--u));
+  border-radius: calc(12.989 * var(--u));
+}
+
+.left {
+  left: calc(-12 * var(--u));
+  top: calc(221 * var(--u));
+  width: calc(422 * var(--u));
+  height: calc(894.184 * var(--u));
+  border-radius: calc(13.686 * var(--u));
+}

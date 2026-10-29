@@ -1,0 +1,50 @@
+.lastYear,
+.sponsors,
+.footer { display: contents; }
+
+.lastYear h2 {
+  position: absolute;
+  top: calc(2648 * var(--u));
+  left: calc(849 * var(--u));
+  width: calc(191 * var(--u));
+  color: #4a1d07;
+  font-size: calc(40 * var(--u));
+  font-weight: 800;
+  line-height: calc(52 * var(--u));
+  letter-spacing: calc(-0.4 * var(--u));
+}
+
+.sponsors h2,
+.footer h2 {
+  position: absolute;
+  font-size: calc(46.400532 * var(--u));
+  font-weight: 800;
+  line-height: calc(60 * var(--u));
+  letter-spacing: calc(-0.464005 * var(--u));
+}
+
+.sponsors h2 {
+  left: calc(163 * var(--u));
+  width: calc(195 * var(--u));
+  top: calc(5740 * var(--u));
+  color: #000;
+}
+
+.footer h2 {
+  left: calc(211 * var(--u));
+  width: calc(258 * var(--u));
+  top: calc(7167 * var(--u));
+  background: linear-gradient(89.98889627541516deg, #fff 19.611%, #ff560f 106.78%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

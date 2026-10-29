@@ -1,0 +1,25 @@
+.site {
+  container-type: inline-size;
+  width: 100%;
+  overflow: clip;
+  background: #0a0a0a;
+}
+
+.stage {
+  --u: calc(100cqw / 1512);
+  position: relative;
+  height: calc(7709 * var(--u));
+  isolation: isolate;
+  color: #fff;
+}
+
+.heroMotionRegion,
+.waterMotionRegion {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.heroMotionRegion { top: 0; height: calc(1735 * var(--u)); }
+.waterMotionRegion { top: calc(4784 * var(--u)); height: calc(836 * var(--u)); }

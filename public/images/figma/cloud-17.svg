@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="357.149" height="205.046" viewBox="0 0 357.149 205.046" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Cloud 5">
+<g id="Cloud 4">
+<g id="Vector 4" filter="url(#filter0_f_0_158)">
+<path d="M310.351 146.461L302.33 86.375L211.265 86.375L131.565 39.9316L82.022 101.367H35.3509C62.1568 141.093 60.4813 160.829 166.748 136.259C175.929 134.136 201.912 180.375 244.275 146.461H310.351Z" fill="white"/>
+<path d="M305.233 110.579C307.169 126.714 302.359 137.301 290.803 142.337C279.248 147.374 265.719 150.744 250.218 152.449C234.716 154.154 219.235 153.871 203.777 151.601C188.318 149.332 173.335 147.082 158.829 144.852C144.323 142.623 129.043 142.236 112.99 143.691C96.9368 145.146 81.8911 142.235 67.8528 134.96C53.8144 127.684 48.815 120.48 52.8547 113.348C56.8944 106.215 65.402 99.0713 78.3774 91.9157C91.3528 84.7601 103.299 75.1467 114.217 63.0755C125.135 51.0043 136.809 48.3785 149.241 55.1979C161.672 62.0173 175.238 69.3931 189.938 77.3252C204.639 85.2573 220.115 88.2333 236.365 86.2534C252.615 84.2734 267.671 83.7671 281.535 84.7347C295.398 85.7022 302.33 86.2175 302.33 86.2805C302.33 86.3435 303.298 94.4429 305.233 110.579Z" stroke-width="65" stroke="white"/>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_158" x="0" y="0" width="357.149" height="205.046" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="8.4" result="effect1_foregroundBlur_0_158"/>
+</filter>
+</defs>
+</svg>
