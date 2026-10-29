@@ -33,8 +33,8 @@
 
 .apply {
   position: absolute;
-  left: calc(689 * var(--u));
-  top: calc(723 * var(--u));
+  left: calc(81 * var(--u));
+  top: 0;
   width: calc(132 * var(--u));
   height: calc(50 * var(--u));
   border: calc(1 * var(--u)) solid #fff;
@@ -50,7 +50,10 @@
 
 .details {
   position: absolute;
-  inset: 0;
+  left: calc(608 * var(--u));
+  top: calc(723 * var(--u));
+  width: calc(295 * var(--u));
+  height: calc(150 * var(--u));
   pointer-events: none;
 }
 
@@ -79,18 +82,6 @@
   white-space: nowrap;
 }
 
-.date { left: calc(676 * var(--u)); top: calc(796 * var(--u)); width: calc(159 * var(--u)); }
-.format { left: calc(641 * var(--u)); top: calc(823 * var(--u)); width: calc(240 * var(--u)); }
-.location { left: calc(608 * var(--u)); top: calc(850 * var(--u)); width: calc(295 * var(--u)); }
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
+.date { left: calc(68 * var(--u)); top: calc(73 * var(--u)); width: calc(159 * var(--u)); }
+.format { left: calc(33 * var(--u)); top: calc(100 * var(--u)); width: calc(240 * var(--u)); }
+.location { left: 0; top: calc(127 * var(--u)); width: calc(295 * var(--u)); }

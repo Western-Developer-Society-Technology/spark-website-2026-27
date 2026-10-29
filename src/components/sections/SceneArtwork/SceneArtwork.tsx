@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 /* eslint-disable @next/next/no-img-element -- Figma artwork keeps its original SVG bounds. */
-import { ShaderFill } from "@/lib/custom-effect-runtime";
+import { ShaderFill } from "@/lib/custom-effect-runtime/components/ShaderFill";
 import artwork from "./artworkAssets";
 import nativeArtwork from "./nativeArtworkAssets";
 import {
@@ -103,7 +103,7 @@ function EclipseArtwork({ wordmark }: Pick<SceneArtworkProps, "wordmark">) {
 
 function MountainArtwork() {
   return (
-    <>
+    <div className={styles.mountains} data-scenery="mountains">
       <div className={styles.farMountain} data-node-id="112:3">
         <div className={styles.farMountainPaintBounds}>
           <img alt="" className={styles.absoluteImage} src={artwork.imgVector15} />
@@ -161,7 +161,7 @@ function MountainArtwork() {
           <img alt="" className={styles.image} src={artwork.imgVector18} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -264,28 +264,8 @@ function CloudArtwork({ shootingTrails, lastYearHeading }: {
         </div>
         <NativeGroup nodeId="116:218" />
       </div>
-      <div className={styles.yellowCloudGroup} data-node-id="116:223" data-name="Cloud 3">
-        <div className={styles.yellowCloudBase} data-node-id="116:224">
-          <div className={styles.upperRightCloudRotation}>
-            <div className={styles.yellowCloudBaseShape} data-name="Cloud 4">
-              <div className={styles.yellowCloudBasePaintBounds}>
-                <img alt="" className={styles.image} src={artwork.imgCloud5} />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.yellowCloudGroup} data-node-id="116:226" data-name="Mask group">
-          <div className={styles.yellowCloudMaskFrame} data-node-id="116:229">
-            <div className={styles.upperRightCloudRotation}>
-              <div className={styles.yellowCloudMaskFrameMask} style={{ maskImage: `url("${artwork.imgCloud6}")` }} data-name="Cloud 5">
-                <div className={styles.yellowCloudMaskFramePaintBounds}>
-                  <img alt="" className={styles.image} src={artwork.imgCloud7} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Export the complete cloud so its native blur and noise share the same mask. */}
+      <NativeGroup nodeId="116:223" />
       <div className={styles.pinkShootingStar} data-node-id="116:231" data-name="Shooting star 4">
         <div className={styles.pinkTrail} data-node-id="116:232">
           <div className={styles.pinkTrailRotation}>
@@ -404,73 +384,79 @@ function FaqArtwork({ faqPanel, sparklers }: {
         </div>
         <NativeGroup nodeId="116:151" />
       </div>
-      <div className={styles.boatGroup} data-node-id="116:156" data-animation="boat">
-        <div className={styles.boatHull} data-node-id="116:157">
-          <div className={styles.boatHullRotation}>
-            <div className={styles.boatHullShape}>
-              <div className={styles.boatHullPaintBounds}>
-                <img alt="" className={styles.image} src={artwork.imgVector11} />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.orangeSparklerGroup} data-node-id="116:158">
-          <div className={styles.orangeSparklerStem} data-node-id="116:159">
-            <div className={styles.orangeSparklerStemRotation}>
-              <div className={styles.orangeSparklerStemShape}>
-                <div className={styles.orangeSparklerStemPaintBounds}>
-                  <img alt="" className={styles.image} src={artwork.imgLine2} />
+      <div className={styles.boatDrift} data-animation="boat-drift">
+        <div className={styles.boatGroup} data-node-id="116:156" data-animation="boat">
+          <div className={styles.boatHull} data-node-id="116:157">
+            <div className={styles.boatHullRotation}>
+              <div className={styles.boatHullShape}>
+                <div className={styles.boatHullPaintBounds}>
+                  <img alt="" className={styles.image} src={artwork.imgVector11} />
                 </div>
               </div>
             </div>
           </div>
-          <div className={styles.orangeSparkler} data-node-id="116:160">
-            <div className={styles.orangeSparklerRotation}>
-              <div className={styles.orangeSparklerShape} data-name="ASCII Frame">
-                {sparklers["116:160"]}
+          <div className={styles.orangeSparklerGroup} data-node-id="116:158">
+            <div className={styles.orangeSparklerStem} data-node-id="116:159">
+              <div className={styles.orangeSparklerStemRotation}>
+                <div className={styles.orangeSparklerStemShape}>
+                  <div className={styles.orangeSparklerStemPaintBounds}>
+                    <img alt="" className={styles.image} src={artwork.imgLine2} />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className={styles.purpleSparklerGroup} data-node-id="116:162">
-          <div className={styles.purpleSparklerStem} data-node-id="116:163">
-            <div className={styles.purpleSparklerStemRotation}>
-              <div className={styles.purpleSparklerStemShape}>
-                <div className={styles.purpleSparklerStemPaintBounds}>
-                  <img alt="" className={styles.image} src={artwork.imgLine3} />
+            <div className={styles.orangeSparkler} data-node-id="116:160">
+              <div className={styles.orangeSparklerRotation}>
+                <div className={styles.orangeSparklerShape} data-name="ASCII Frame">
+                  {sparklers["116:160"]}
                 </div>
               </div>
             </div>
           </div>
-          <div className={styles.purpleSparkler} data-node-id="116:164">
-            <div className={styles.purpleSparklerRotation}>
-              <div className={styles.purpleSparklerShape} data-name="ASCII Frame">
-                {sparklers["116:164"]}
+          <div className={styles.purpleSparklerGroup} data-node-id="116:162">
+            <div className={styles.purpleSparklerStem} data-node-id="116:163">
+              <div className={styles.purpleSparklerStemRotation}>
+                <div className={styles.purpleSparklerStemShape}>
+                  <div className={styles.purpleSparklerStemPaintBounds}>
+                    <img alt="" className={styles.image} src={artwork.imgLine3} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.purpleSparkler} data-node-id="116:164">
+              <div className={styles.purpleSparklerRotation}>
+                <div className={styles.purpleSparklerShape} data-name="ASCII Frame">
+                  {sparklers["116:164"]}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className={styles.boatCharacter} data-node-id="116:166">
-          <div className={styles.boatCharacterRotation}>
-            <div className={styles.boatCharacterShape}>
-              <img alt="" className={styles.absoluteImage} src={artwork.imgGroup1363} />
+          <div className={styles.boatCharacter} data-node-id="116:166">
+            <div className={styles.boatCharacterRotation}>
+              <div className={styles.boatCharacterShape}>
+                <img alt="" className={styles.absoluteImage} src={artwork.imgGroup1363} />
+              </div>
             </div>
           </div>
-        </div>
-        <div className={styles.boatOar} data-node-id="116:170">
-          <div className={styles.boatHullRotation}>
-            <div className={styles.boatOarShape}>
-              <div className={styles.boatOarPaintBounds}>
-                <img alt="" className={styles.image} src={artwork.imgVector12} />
+          <div className={styles.boatOar} data-node-id="116:170">
+            <div className={styles.boatHullRotation}>
+              <div className={styles.boatOarShape}>
+                <div className={styles.boatOarPaintBounds}>
+                  <img alt="" className={styles.image} src={artwork.imgVector12} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className={styles.floatingYellowStar} data-node-id="116:171" data-animation="yellow-star">
-        <div className={styles.floatingYellowStarRotation}>
-          <div className={styles.boatCharacterShape}>
-            <img alt="" className={styles.absoluteImage} src={artwork.imgGroup1364} />
+      <div className={styles.floatingYellowStarWaterViewport}>
+        <div className={styles.floatingYellowStar} data-node-id="116:171" data-animation="yellow-star">
+          <div className={styles.floatingYellowStarBody} data-animation="yellow-star-balance">
+            <div className={styles.floatingYellowStarRotation}>
+              <div className={styles.boatCharacterShape}>
+                <img alt="" className={styles.absoluteImage} src={artwork.imgGroup1364} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -500,6 +486,21 @@ function CampfireArtwork({ campfire }: { campfire: Campfire }) {
           </div>
         </div>
       </div>
+      {/* All flame grids share the logs' center and one baseline. */}
+      <div className={styles.campfireFlames}>
+        <div className={styles.campfireSmallFlame} data-node-id="121:74" data-name="ASCII Frame">
+          {campfire["121:74"]}
+        </div>
+        <div className={styles.campfireLargeFlame} data-node-id="121:54" data-name="ASCII Frame">
+          {campfire["121:54"]}
+        </div>
+        <div className={styles.campfireLargeFlame} data-node-id="121:57" data-name="ASCII Frame">
+          {campfire["121:57"]}
+        </div>
+        <div className={styles.campfireSmallFlame} data-node-id="121:61" data-name="ASCII Frame">
+          {campfire["121:61"]}
+        </div>
+      </div>
       <div className={styles.campfireLeftLog} data-node-id="116:261">
         <ShaderFill className={styles.shader} mask={`url("${artwork.campfireLeftLogMask}")`} shader={campfireLogShader} />
         <div className={styles.campfireLeftLogPaintBounds}>
@@ -527,30 +528,6 @@ function CampfireArtwork({ campfire }: { campfire: Campfire }) {
         <div className={styles.campfireFrontCharacterRotation}>
           <div className={styles.campfireFrontCharacterShape}>
             <img alt="" className={styles.absoluteImage} src={artwork.imgGroup1367} />
-          </div>
-        </div>
-      </div>
-      <div className={styles.campfireLowFlame} data-node-id="121:54">
-        <div className={styles.orangeSparklerRotation}>
-          <div className={styles.campfireLowFlameShape} data-name="ASCII Frame">
-            {campfire["121:54"]}
-          </div>
-        </div>
-      </div>
-      <div className={styles.campfireMiddleFlame} data-node-id="121:57">
-        <div className={styles.campfireMiddleFlameRotation}>
-          <div className={styles.campfireLowFlameShape} data-name="ASCII Frame">
-            {campfire["121:57"]}
-            <div className={styles.campfireInnerFlame} data-node-id="121:61" data-name="ASCII Frame">
-              {campfire["121:61"]}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={styles.campfireSmoke} data-node-id="121:74">
-        <div className={styles.campfireMiddleFlameRotation}>
-          <div className={styles.campfireSmokeShape} data-name="ASCII Frame">
-            {campfire["121:74"]}
           </div>
         </div>
       </div>

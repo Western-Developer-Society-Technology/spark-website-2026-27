@@ -113,6 +113,20 @@ const nativeArtwork = {
       "height": 452.72039794921875
     }
   },
+  "116:223": {
+    "src": "/images/figma/yellow-cloud-native.webp",
+    "left": 810,
+    "top": 3034.9998779296875,
+    "width": 738,
+    "height": 400,
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "paintBounds": {
+      "left": -40.564453125,
+      "top": -36.551170349121094,
+      "width": 832.462890625,
+      "height": 476.2838439941406
+    }
+  },
   "116:127": {
     "src": "/images/figma/faq-left-cloud-noise-native.webp",
     "left": -246,

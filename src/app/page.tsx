@@ -6,7 +6,6 @@ import HeroAscii from "@/components/sections/Hero/HeroAscii";
 import About from "@/components/sections/About/About";
 import Faq from "@/components/sections/Faq/Faq";
 import AsciiArt from "@/components/ui/AsciiArt";
-import type { AsciiArtMode } from "@/lib/ascii-art";
 
 const SHOOTING_TRAILS = {
   "116:185": "116:186",
@@ -22,10 +21,10 @@ const CAMPFIRE = {
   "121:74": "121:75",
 };
 
-function asciiSlots(nodes: Record<string, string>, mode: AsciiArtMode) {
+function asciiSlots(nodes: Record<string, string>) {
   return Object.fromEntries(Object.entries(nodes).map(([frame, text]) => [
     frame,
-    <AsciiArt nodeId={text} mode={mode} key={text} />,
+    <AsciiArt nodeId={text} key={text} />,
   ]));
 }
 
@@ -40,9 +39,9 @@ export default function Home() {
         lastYearHeading={<LastYearHeading />}
         sectionContent={<SceneContent />}
         faqPanel={<Faq />}
-        shootingTrails={asciiSlots(SHOOTING_TRAILS, "trail")}
-        sparklers={asciiSlots(SPARKLERS, "sparkler")}
-        campfire={asciiSlots(CAMPFIRE, "fire")}
+        shootingTrails={asciiSlots(SHOOTING_TRAILS)}
+        sparklers={asciiSlots(SPARKLERS)}
+        campfire={asciiSlots(CAMPFIRE)}
       />
     </Scene>
   );

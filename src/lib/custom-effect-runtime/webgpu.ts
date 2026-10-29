@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 // Module-level singleton. Acquiring a GPUDevice is expensive and a single device can
-// back every ShaderEffect on the page, so we acquire it once and hand the same promise
+// back every ShaderFill on the page, so we acquire it once and hand the same promise
 // to all callers rather than one device per component.
 let devicePromise: Promise<GPUDevice> | null = null
 
@@ -30,7 +30,7 @@ function acquireDevice(): Promise<GPUDevice> {
 }
 
 /**
- * Shares one WebGPU device across every ShaderEffect. The device is initialized once and
+ * Shares one WebGPU device across every ShaderFill. The device is initialized once and
  * never destroyed for the page lifetime, so multiple effects can render against it.
  * Returns the device once ready (null until then) and any acquisition error.
  */

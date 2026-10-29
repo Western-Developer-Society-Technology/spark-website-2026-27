@@ -6,10 +6,7 @@
 }
 
 .eclipseGroup {
-  position: absolute;
   display: contents;
-  left: calc(62 * var(--u));
-  top: calc(297 * var(--u));
 }
 
 .eclipseHalo {
@@ -86,6 +83,12 @@
   max-width: none;
   width: 100%;
   height: 100%;
+}
+
+.mountains {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
 .farMountain {
@@ -238,10 +241,7 @@
 }
 
 .cloudSection {
-  position: absolute;
   display: contents;
-  left: calc(-742 * var(--u));
-  top: calc(2230 * var(--u));
 }
 
 .cloudBackground {
@@ -317,10 +317,7 @@
 }
 
 .peachShootingStar {
-  position: absolute;
   display: contents;
-  left: calc(-732 * var(--u));
-  top: calc(2623 * var(--u));
 }
 
 .peachTrail {
@@ -391,10 +388,7 @@
 }
 
 .blueShootingStar {
-  position: absolute;
   display: contents;
-  left: calc(-742 * var(--u));
-  top: calc(3008.8 * var(--u));
 }
 
 .blueTrail {
@@ -436,10 +430,7 @@
 }
 
 .yellowShootingStar {
-  position: absolute;
   display: contents;
-  left: calc(658 * var(--u));
-  top: calc(2325 * var(--u));
 }
 
 .yellowTrail {
@@ -482,10 +473,7 @@
 }
 
 .blueCloudGroup {
-  position: absolute;
   display: contents;
-  left: calc(35 * var(--u));
-  top: calc(3339 * var(--u));
 }
 
 .blueCloudBase {
@@ -501,68 +489,8 @@
   inset: -11.55% -5.07% -12.02% -7.72%;
 }
 
-.yellowCloudGroup {
-  position: absolute;
-  display: contents;
-  left: calc(810 * var(--u));
-  top: calc(3035 * var(--u));
-}
-
-.yellowCloudBase {
-  position: absolute;
-  display: flex;
-  height: calc(400 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(810 * var(--u));
-  top: calc(3035 * var(--u));
-  width: calc(738 * var(--u));
-}
-
-.yellowCloudBaseShape {
-  height: calc(400 * var(--u));
-  position: relative;
-  width: calc(738 * var(--u));
-}
-
-.yellowCloudBasePaintBounds {
-  position: absolute;
-  inset: -9.14% -5.5% -9.93% -7.3%;
-}
-
-.yellowCloudMaskFrame {
-  position: absolute;
-  display: flex;
-  height: calc(391 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(822 * var(--u));
-  top: calc(3086 * var(--u));
-  width: calc(713 * var(--u));
-}
-
-.yellowCloudMaskFrameMask {
-  height: calc(391 * var(--u));
-  mask-mode: alpha;
-  mask-composite: intersect;
-  mask-clip: no-clip;
-  mask-repeat: no-repeat;
-  mask-position: calc(-52.564 * var(--u)) calc(-87.551 * var(--u));
-  mask-size: calc(832.462 * var(--u)) calc(476.284 * var(--u));
-  position: relative;
-  width: calc(713 * var(--u));
-}
-
-.yellowCloudMaskFramePaintBounds {
-  position: absolute;
-  inset: -22.51% -12.34%;
-}
-
 .pinkShootingStar {
-  position: absolute;
   display: contents;
-  left: calc(725 * var(--u));
-  top: calc(3235 * var(--u));
 }
 
 .pinkTrail {
@@ -605,10 +533,7 @@
 }
 
 .pinkCloudGroup {
-  position: absolute;
   display: contents;
-  left: calc(771 * var(--u));
-  top: calc(3594 * var(--u));
 }
 
 .pinkCloudBase {
@@ -634,10 +559,7 @@
 }
 
 .lastYearGroup {
-  position: absolute;
   display: contents;
-  left: calc(796 * var(--u));
-  top: calc(2602 * var(--u));
 }
 
 .lastYearCloudBase {
@@ -691,10 +613,7 @@
 }
 
 .faqScene {
-  position: absolute;
   display: contents;
-  left: calc(-637 * var(--u));
-  top: calc(3695 * var(--u));
 }
 
 .faqBackdrop {
@@ -750,10 +669,7 @@
 }
 
 .faqLeftCloud {
-  position: absolute;
   display: contents;
-  left: calc(-246 * var(--u));
-  top: calc(5020 * var(--u));
 }
 
 .faqLeftCloudBase {
@@ -770,10 +686,7 @@
 }
 
 .faqRightCloud {
-  position: absolute;
   display: contents;
-  left: calc(852 * var(--u));
-  top: calc(4990 * var(--u));
 }
 
 .faqRightCloudBase {
@@ -790,10 +703,7 @@
 }
 
 .faqMiddleCloud {
-  position: absolute;
   display: contents;
-  left: calc(318 * var(--u));
-  top: calc(5002 * var(--u));
 }
 
 .faqMiddleCloudBase {
@@ -819,10 +729,7 @@
 }
 
 .faqWideCloud {
-  position: absolute;
   display: contents;
-  left: calc(-637 * var(--u));
-  top: calc(5058 * var(--u));
 }
 
 .faqWideCloudBase {
@@ -838,9 +745,18 @@
   inset: -13.14% -1.48% -12.78% -2.01%;
 }
 
+.boatDrift {
+  position: absolute;
+  left: calc(954 * var(--u));
+  top: calc(4784 * var(--u));
+  width: calc(507.043 * var(--u));
+  height: calc(465.291 * var(--u));
+}
+
 .boatGroup {
   position: absolute;
   inset: 0;
+  transform-origin: calc(267.00013 * var(--u)) calc(344.7501 * var(--u));
 }
 
 .boatHull {
@@ -849,8 +765,8 @@
   height: calc(234.234 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(1007.71 * var(--u));
-  top: calc(5011.63 * var(--u));
+  left: calc(53.71 * var(--u));
+  top: calc(227.63 * var(--u));
   width: calc(426.574 * var(--u));
 }
 
@@ -871,12 +787,7 @@
 }
 
 .orangeSparklerGroup {
-  position: absolute;
   display: contents;
-  height: calc(361.283 * var(--u));
-  left: calc(1052 * var(--u));
-  top: calc(4784 * var(--u));
-  width: calc(342.407 * var(--u));
 }
 
 .orangeSparklerStem {
@@ -885,8 +796,8 @@
   height: calc(185.977 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(1230.34 * var(--u));
-  top: calc(4944.25 * var(--u));
+  left: calc(276.34 * var(--u));
+  top: calc(160.25 * var(--u));
   width: calc(27.763 * var(--u));
 }
 
@@ -912,8 +823,8 @@
   height: calc(321.435 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(1064.48 * var(--u));
-  top: calc(4784 * var(--u));
+  left: calc(110.48 * var(--u));
+  top: 0;
   width: calc(329.929 * var(--u));
 }
 
@@ -933,12 +844,7 @@
 }
 
 .purpleSparklerGroup {
-  position: absolute;
   display: contents;
-  height: calc(406.319 * var(--u));
-  left: calc(954 * var(--u));
-  top: calc(4785 * var(--u));
-  width: calc(377.179 * var(--u));
 }
 
 .purpleSparklerStem {
@@ -947,8 +853,8 @@
   height: calc(187.896 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(1139.32 * var(--u));
-  top: calc(4962.03 * var(--u));
+  left: calc(185.32 * var(--u));
+  top: calc(178.03 * var(--u));
   width: calc(131.208 * var(--u));
 }
 
@@ -974,8 +880,8 @@
   height: calc(356.062 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(954 * var(--u));
-  top: calc(4785 * var(--u));
+  left: 0;
+  top: calc(1 * var(--u));
   width: calc(369.175 * var(--u));
 }
 
@@ -1000,8 +906,8 @@
   height: calc(302.291 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(1162 * var(--u));
-  top: calc(4947 * var(--u));
+  left: calc(208 * var(--u));
+  top: calc(163 * var(--u));
   width: calc(299.043 * var(--u));
 }
 
@@ -1022,8 +928,8 @@
   height: calc(116.459 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(1214.62 * var(--u));
-  top: calc(5129.41 * var(--u));
+  left: calc(260.62 * var(--u));
+  top: calc(345.41 * var(--u));
   width: calc(216.263 * var(--u));
 }
 
@@ -1038,6 +944,15 @@
   inset: -6.43% -5.45% -5.15% 0;
 }
 
+.floatingYellowStarWaterViewport {
+  position: absolute;
+  left: 0;
+  top: calc(4800 * var(--u));
+  width: calc(600 * var(--u));
+  height: calc(665 * var(--u));
+  overflow: hidden;
+}
+
 .floatingYellowStar {
   position: absolute;
   display: flex;
@@ -1045,8 +960,17 @@
   align-items: center;
   justify-content: center;
   left: calc(90 * var(--u));
-  top: calc(4983 * var(--u));
+  top: calc(183 * var(--u));
   width: calc(394.719 * var(--u));
+}
+
+.floatingYellowStarBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 75%;
 }
 
 .floatingYellowStarRotation {
@@ -1055,10 +979,7 @@
 }
 
 .faqFrontCloud {
-  position: absolute;
   display: contents;
-  left: calc(-609 * var(--u));
-  top: calc(5196 * var(--u));
 }
 
 .faqFrontCloudBase {
@@ -1089,10 +1010,7 @@
 }
 
 .campfireGroup {
-  position: absolute;
   display: contents;
-  left: calc(888.02 * var(--u));
-  top: calc(1699 * var(--u));
 }
 
 .campfireLeftCharacter {
@@ -1192,68 +1110,34 @@
   width: calc(210.286 * var(--u));
 }
 
-.campfireLowFlame {
+.campfireFlames {
   position: absolute;
-  display: flex;
-  height: calc(226.996 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(1017.02 * var(--u));
-  top: calc(1817 * var(--u));
-  width: calc(232.994 * var(--u));
+  /* Center the flame on the crossed logs and overlap their visible wood. */
+  left: calc(1135.52 * var(--u));
+  top: calc(1970 * var(--u));
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }
 
-.campfireLowFlameShape {
-  border-width: 0;
-  border-color: #674b3b;
-  border-style: solid;
-  height: calc(178.959 * var(--u));
-  position: relative;
-  border-radius: calc(6.101 * var(--u));
+.campfireLargeFlame,
+.campfireSmallFlame {
+  position: absolute;
+  left: 0;
+  translate: -50% 0;
+}
+
+.campfireLargeFlame {
   width: calc(188.11 * var(--u));
+  height: calc(178.959 * var(--u));
+  /* Subtract the source's empty lower rows to align its occupied baseline. */
+  bottom: calc(-30.514 * var(--u));
 }
 
-.campfireMiddleFlame {
-  position: absolute;
-  display: flex;
-  height: calc(195.722 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(1051 * var(--u));
-  top: calc(1777 * var(--u));
-  width: calc(203.98 * var(--u));
-}
-
-.campfireMiddleFlameRotation {
-  flex: none;
-  rotate: 5.35deg;
-}
-
-.campfireInnerFlame {
-  position: absolute;
-  height: calc(137.558 * var(--u));
-  left: calc(-19.49 * var(--u));
-  border-radius: calc(4.689 * var(--u));
-  top: calc(-27.3 * var(--u));
+.campfireSmallFlame {
   width: calc(144.592 * var(--u));
-}
-
-.campfireSmoke {
-  position: absolute;
-  display: flex;
-  height: calc(150.443 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(1077 * var(--u));
-  top: calc(1699 * var(--u));
-  width: calc(156.79 * var(--u));
-}
-
-.campfireSmokeShape {
   height: calc(137.558 * var(--u));
-  position: relative;
-  border-radius: calc(4.689 * var(--u));
-  width: calc(144.592 * var(--u));
+  bottom: calc(-23.458 * var(--u));
 }
 
 .sponsorLogoRowOne {

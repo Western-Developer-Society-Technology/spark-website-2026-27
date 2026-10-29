@@ -1,52 +1,45 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { HERO_DURATION, HERO_MOTION, type HeroMotion } from "./hero-motion";
+import { WATER_MOTION } from "./water-motion";
 import styles from "./Scene.module.css";
 
-type HeroMotion = {
-  id: string;
-  times: number[];
-  easing: string[];
-} & (
-  | { property: "translate"; values: (number | [number, number])[] }
-  | { property: "rotate" | "scale" | "filter" | "opacity"; values: number[] }
-);
-
-type SceneProps = {
-  children: ReactNode;
+type SceneProps = { children: ReactNode };
+type MotionRegion = "hero" | "water";
+type ManagedMotion = {
+  animation: Animation;
+  keyframes: (unit: number) => Keyframe[];
+  region: MotionRegion;
 };
 
-// The four-second timeline is from the existing motion reference, frame 6:30.
-// Map its authored layers to the corresponding layers in the approved frame 111:2.
-const HERO_MOTION: HeroMotion[] = [
-  { id: "111:95", property: "rotate", values: [-15, -15, 0, 0], times: [0, .0436, .9277, 1], easing: ["linear", "cubic-bezier(.15,.198,.315,.765)", "linear"] },
-  { id: "111:95", property: "scale", values: [.8, .8, 1, 1], times: [0, .0171, .4317, 1], easing: ["linear", "cubic-bezier(.48,0,.19,.99)", "linear"] },
-  { id: "111:95", property: "translate", values: [34.5, 0, 0], times: [0, .4141, 1], easing: ["cubic-bezier(.48,0,.19,.99)", "linear"] },
-  { id: "111:96", property: "translate", values: [286, 0, 0], times: [0, .5366, 1], easing: ["cubic-bezier(.48,0,.19,.99)", "linear"] },
-  { id: "111:96", property: "filter", values: [26.4, 26.4, 0, 0], times: [0, .2257, .5366, 1], easing: ["linear", "cubic-bezier(.5,0,.5,1)", "linear"] },
-  { id: "111:97", property: "translate", values: [33, 0, 0], times: [0, .4141, 1], easing: ["cubic-bezier(.48,0,.19,.99)", "linear"] },
-  { id: "111:98", property: "scale", values: [1, 1, 1.06, 1.06, 1, 1], times: [0, .0693, .2984, .4413, .8749, 1], easing: ["linear", "cubic-bezier(.5,0,.5,1)", "linear", "cubic-bezier(.5,0,.19,.99)", "linear"] },
-  { id: "111:98", property: "translate", values: [[71,153.5],[71,153.5],[-.2,5.66],[-8.3,-7.51],[5,0],[5,0]], times: [0, .0693, .2984, .4413, .8749, 1], easing: ["linear", "linear", "linear", "cubic-bezier(.5,0,.19,.99)", "linear"] },
-  { id: "111:99", property: "translate", values: [133.5, 0, 0], times: [0, .4141, 1], easing: ["cubic-bezier(.483,0,.192,.985)", "linear"] },
-  { id: "111:108", property: "opacity", values: [0, 0, 1, 1], times: [0, .5799, .7061, 1], easing: ["linear", "cubic-bezier(.5,0,.5,1)", "linear"] },
-  { id: "111:108", property: "translate", values: [133.5, 0, 0], times: [0, .4141, 1], easing: ["cubic-bezier(.483,0,.192,.985)", "linear"] },
-  { id: "111:107", property: "opacity", values: [0, 0, 1, 1], times: [0, .4536, .5799, 1], easing: ["linear", "cubic-bezier(.5,0,.5,1)", "linear"] },
-  { id: "111:107", property: "translate", values: [286, 0, 0], times: [0, .5366, 1], easing: ["cubic-bezier(.48,0,.19,.99)", "linear"] },
-  { id: "111:100", property: "opacity", values: [0, 0, 1, 1, .76, .76], times: [0, .1457, .291, .3646, .8749, 1], easing: ["linear", "cubic-bezier(.48,0,.19,.99)", "cubic-bezier(.48,0,.19,.99)", "cubic-bezier(.5,0,.19,.99)", "linear"] },
-  { id: "111:100", property: "scale", values: [.62, .62, 1.09, 1.09, .84, .84], times: [0, .1533, .3443, .4035, .8749, 1], easing: ["linear", "cubic-bezier(.48,0,.19,.99)", "cubic-bezier(.48,0,.19,.99)", "cubic-bezier(.5,0,.189,.987)", "linear"] },
-  { id: "111:100", property: "translate", values: [154.81, 0, 0], times: [0, .4141, 1], easing: ["cubic-bezier(.48,0,.19,.99)", "linear"] },
-];
-
-function motionValue(motion: HeroMotion, index: number, unit: number): string | number {
-  if (motion.property === "translate") {
-    const value = motion.values[index];
-    return Array.isArray(value) ? `${value[0] * unit}px ${value[1] * unit}px` : `0px ${value * unit}px`;
-  }
-  const { property } = motion;
-  const value = motion.values[index];
-  if (property === "filter") return `blur(${value * unit}px)`;
-  if (property === "rotate") return `${value}deg`;
-  return value;
+function heroKeyframes(motion: HeroMotion, unit: number): Keyframe[] {
+  const finalValue = motion.frames.at(-1)?.[1];
+  return motion.frames.map(([time, value, easing]) => {
+    let resolved: string | number = String(value);
+    if (Array.isArray(value)) {
+      // The reference's final pose differs from the approved static draft.
+      // Express its movement relative to that pose, so it settles on the
+      // draft's native bounds without a jump when the intro completes.
+      const final = Array.isArray(finalValue) ? finalValue : [0, 0];
+      if (motion.property === "translate") {
+        resolved = `${(value[0] - final[0]) * unit}px ${(value[1] - final[1]) * unit}px`;
+      } else {
+        resolved = `${value[0] / (final[0] || 1)} ${value[1] / (final[1] || 1)}`;
+      }
+    } else if (typeof value === "number") {
+      if (motion.property === "rotate") resolved = `${value}deg`;
+      else if (motion.property === "filter") {
+        // The approved draft's SVG already contains its resting blur. Add only
+        // the excess from the intro, so the supplied asset stays sharp at rest.
+        const blur = Math.sqrt(Math.max(0, value ** 2 - (motion.bakedBlur ?? 0) ** 2));
+        resolved = `blur(${blur * unit}px)`;
+      } else if (motion.property === "opacity" && typeof finalValue === "number" && finalValue !== 0) {
+        resolved = value / finalValue;
+      } else resolved = value;
+    }
+    return { [motion.property]: resolved, offset: time / HERO_DURATION, easing };
+  });
 }
 
 export default function Scene({ children }: SceneProps) {
@@ -56,88 +49,139 @@ export default function Scene({ children }: SceneProps) {
     const root = rootRef.current;
     if (!root) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let animations: Animation[] = [];
-    let animationGroups: Record<string, Animation[]> = {};
-    let visibleRegions: Record<string, boolean> = {};
-    let intersectionObserver: IntersectionObserver | undefined;
+    const motions: ManagedMotion[] = [];
+    const visibleRegions: Record<MotionRegion, boolean> = { hero: false, water: false };
+    let unit = root.clientWidth / 1512;
+    let ready = false;
+    let disposed = false;
+    let heroFinished = reducedMotion.matches;
 
-    const configureMotion = () => {
-      animations.forEach((animation) => animation.cancel());
-      animations = [];
-      animationGroups = {};
-      visibleRegions = {};
-      intersectionObserver?.disconnect();
-      if (reducedMotion.matches) return;
-
-      const unit = root.clientWidth / 1512;
-      HERO_MOTION.forEach((motion) => {
-        const { id, property, values, times, easing } = motion;
-        const element = root.querySelector<HTMLElement>(`[data-node-id="${id}"]`);
-        if (!element) return;
-        const animation = element.animate(values.map((_, index) => ({
-          [property]: motionValue(motion, index, unit),
-          offset: times[index],
-          easing: easing[index] ?? "linear",
-        })), { duration: 4000, iterations: Infinity });
-        animations.push(animation);
-      });
-      animationGroups.hero = [...animations];
-      const heroAnimationCount = animations.length;
-
-      // These note-only movements have no authored keyframes. Their timing is
-      // centralized here so the design team can tune it without changing artwork.
-      const boat = root.querySelector<HTMLElement>('[data-animation="boat"]');
-      if (boat) animations.push(boat.animate([
-        { translate: "0px 0px", offset: 0 },
-        { translate: `${-800 * unit}px 0px`, offset: .5 },
-        { translate: "0px 0px", offset: 1 },
-      ], { duration: 16000, iterations: Infinity, easing: "ease-in-out" }));
-
-      const star = root.querySelector<HTMLElement>('[data-animation="yellow-star"]');
-      if (star) animations.push(star.animate([
-        { rotate: "0deg", translate: "0px 0px", offset: 0 },
-        { rotate: "3deg", translate: "0px 0px", offset: .25 },
-        { rotate: "-3deg", translate: "0px 0px", offset: .5 },
-        { rotate: "0deg", translate: `0px ${100 * unit}px`, offset: .7 },
-        { rotate: "3deg", translate: "0px 0px", offset: .85 },
-        { rotate: "0deg", translate: "0px 0px", offset: 1 },
-      ], { duration: 8000, iterations: Infinity, easing: "ease-in-out" }));
-
-      animationGroups.water = animations.slice(heroAnimationCount);
-      animations.forEach((animation) => animation.pause());
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!(entry.target instanceof HTMLElement)) return;
-          const region = entry.target.dataset.motionRegion;
-          if (!region) return;
-          visibleRegions[region] = entry.isIntersecting;
-          animationGroups[region]?.forEach((animation) => entry.isIntersecting && !document.hidden ? animation.play() : animation.pause());
-        });
-      });
-      intersectionObserver = observer;
-      root.querySelectorAll<HTMLElement>("[data-motion-region]").forEach((region) => observer.observe(region));
+    const completeHero = () => {
+      heroFinished = true;
+      root.dataset.loadState = "complete";
+      // Every final keyframe is the underlying draft pose. Release the effects
+      // instead of retaining identity transforms and blur layers while scrolling.
+      for (let index = motions.length - 1; index >= 0; index -= 1) {
+        if (motions[index].region !== "hero") continue;
+        motions[index].animation.onfinish = null;
+        motions[index].animation.cancel();
+        motions.splice(index, 1);
+      }
     };
 
-    configureMotion();
-    const resizeObserver = new ResizeObserver(configureMotion);
-    resizeObserver.observe(root);
-    reducedMotion.addEventListener("change", configureMotion);
-    const handleVisibility = () => Object.entries(animationGroups).forEach(([region, group]) => {
-      group.forEach((animation) => !document.hidden && visibleRegions[region] ? animation.play() : animation.pause());
+    const syncPlayback = () => {
+      const timelineTime = document.timeline.currentTime;
+      motions.forEach(({ animation, region }) => {
+        // Calling play() on a finished one-shot animation would replay the intro.
+        if (animation.playState === "finished") return;
+        if (ready && !reducedMotion.matches && !document.hidden && visibleRegions[region]) {
+          const currentTime = Number(animation.currentTime ?? 0);
+          animation.play();
+          if (typeof timelineTime === "number") animation.startTime = timelineTime - currentTime;
+        } else animation.pause();
+      });
+    };
+
+    const addMotion = (
+      element: HTMLElement,
+      keyframes: ManagedMotion["keyframes"],
+      region: MotionRegion,
+      options: KeyframeAnimationOptions,
+    ) => {
+      const animation = element.animate(keyframes(unit), options);
+      animation.pause();
+      animation.currentTime = 0;
+      motions.push({ animation, keyframes, region });
+      return animation;
+    };
+
+    if (!heroFinished) {
+      HERO_MOTION.forEach((motion) => {
+        const selector = `[data-node-id="${motion.nodeId}"]`;
+        const element = root.querySelector<HTMLElement>(selector);
+        if (!element) return;
+        const animation = addMotion(element, (widthUnit) => heroKeyframes(motion, widthUnit), "hero", {
+          duration: HERO_DURATION,
+          iterations: 1,
+          fill: "both",
+        });
+        animation.onfinish = () => {
+          if (motions.filter(({ region }) => region === "hero").every(({ animation: item }) => item.playState === "finished")) {
+            completeHero();
+          }
+        };
+      });
+    }
+    root.dataset.loadState = heroFinished ? "complete" : "running";
+
+    const updateScenery = () => {
+      const hasScrolled = window.scrollY > 0 ? "true" : "false";
+      if (root.dataset.hasScrolled !== hasScrolled) root.dataset.hasScrolled = hasScrolled;
+    };
+    updateScenery();
+    window.addEventListener("scroll", updateScenery, { passive: true });
+
+    WATER_MOTION.forEach(({ selector, keyframes, options }) => {
+      const element = root.querySelector<HTMLElement>(selector);
+      if (element) addMotion(element, keyframes, "water", options);
     });
-    document.addEventListener("visibilitychange", handleVisibility);
+
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!(entry.target instanceof HTMLElement)) return;
+        const region = entry.target.dataset.motionRegion as MotionRegion;
+        visibleRegions[region] = entry.isIntersecting;
+      });
+      syncPlayback();
+    });
+    root.querySelectorAll<HTMLElement>("[data-motion-region]").forEach((region) => intersectionObserver.observe(region));
+
+    // Update distances without recreating animations or resetting their clocks.
+    const resizeObserver = new ResizeObserver(() => {
+      const nextUnit = root.clientWidth / 1512;
+      if (Math.abs(nextUnit - unit) < .000001) return;
+      unit = nextUnit;
+      motions.forEach(({ animation, keyframes }) => {
+        if (animation.effect instanceof KeyframeEffect) animation.effect.setKeyframes(keyframes(unit));
+      });
+    });
+    resizeObserver.observe(root);
+
+    const handleReducedMotion = () => {
+      if (reducedMotion.matches) {
+        completeHero();
+        motions.forEach(({ animation }) => {
+          animation.pause();
+          animation.currentTime = 0;
+        });
+      }
+      syncPlayback();
+    };
+    reducedMotion.addEventListener("change", handleReducedMotion);
+    document.addEventListener("visibilitychange", syncPlayback);
+
+    // Start with fonts and the actual hero artwork ready, rather than letting a
+    // late SVG decode miss the authored reveal. Below-the-fold images don't delay it.
+    const heroImages = [...root.querySelectorAll<HTMLImageElement>('[data-node-id="111:94"] img')];
+    Promise.all([document.fonts.ready, ...heroImages.map((img) => img.decode().catch(() => undefined))]).then(() => {
+      if (disposed) return;
+      ready = true;
+      syncPlayback();
+    });
 
     return () => {
-      animations.forEach((animation) => animation.cancel());
+      disposed = true;
+      motions.forEach(({ animation }) => animation.cancel());
       resizeObserver.disconnect();
-      intersectionObserver?.disconnect();
-      reducedMotion.removeEventListener("change", configureMotion);
-      document.removeEventListener("visibilitychange", handleVisibility);
+      intersectionObserver.disconnect();
+      reducedMotion.removeEventListener("change", handleReducedMotion);
+      document.removeEventListener("visibilitychange", syncPlayback);
+      window.removeEventListener("scroll", updateScenery);
     };
   }, []);
 
   return (
-    <main className={styles.site} ref={rootRef}>
+    <main className={styles.site} ref={rootRef} data-load-state="pending" data-has-scrolled="false">
       <div className={styles.stage}>
         <div className={styles.heroMotionRegion} data-motion-region="hero" aria-hidden="true" />
         <div className={styles.waterMotionRegion} data-motion-region="water" aria-hidden="true" />

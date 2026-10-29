@@ -1,7 +1,7 @@
 // ASCII characters and text geometry exported from Figma node 111:2.
 // Repeated Figma layers share the same unchanged source string.
 
-export type AsciiArtMode = "static" | "cursor" | "trail" | "sparkler" | "fire";
+export type AsciiArtMode = "cursor" | "trail" | "sparkler" | "fire";
 
 export interface AsciiArtMetadata {
   text: string;

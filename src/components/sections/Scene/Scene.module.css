@@ -23,3 +23,47 @@
 
 .heroMotionRegion { top: 0; height: calc(1735 * var(--u)); }
 .waterMotionRegion { top: calc(4784 * var(--u)); height: calc(836 * var(--u)); }
+
+@media (scripting: enabled) {
+  .site[data-has-scrolled="false"] [data-scenery="mountains"] {
+    visibility: hidden;
+  }
+}
+
+/* Match the first authored frame before hydration creates the Web Animations.
+   With scripting disabled the approved static composition remains visible. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .site[data-load-state="pending"] [data-node-id="111:95"] {
+    rotate: -15.000000417413029deg;
+    scale: .800000011920929 .7999998927116394;
+    translate: 0 calc(34.5 * var(--u));
+  }
+  .site[data-load-state="pending"] [data-node-id="111:96"] {
+    translate: 0 calc(286 * var(--u));
+    filter: blur(calc(26.399999618530273 * var(--u)));
+  }
+  .site[data-load-state="pending"] [data-node-id="111:97"] {
+    translate: 0 calc(33 * var(--u));
+  }
+  .site[data-load-state="pending"] [data-node-id="111:98"] {
+    translate: calc(66 * var(--u)) calc(153.5 * var(--u));
+    scale: 1 1.0000001192093038;
+  }
+  .site[data-load-state="pending"] [data-node-id="111:99"] {
+    translate: 0 calc(133.5 * var(--u));
+    filter: blur(calc(49.204573728833196 * var(--u)));
+  }
+  .site[data-load-state="pending"] [data-node-id="111:100"] {
+    opacity: 0;
+    scale: .738095266816298 .7380954763111554;
+    translate: 0 calc(154.80963134765625 * var(--u));
+  }
+  .site[data-load-state="pending"] [data-node-id="111:107"] {
+    opacity: 0;
+    translate: 0 calc(286 * var(--u));
+  }
+  .site[data-load-state="pending"] [data-node-id="111:108"] {
+    opacity: 0;
+    translate: 0 calc(133.5 * var(--u));
+  }
+}

@@ -8,6 +8,9 @@ interface AsciiCell {
   character: string;
   column: number;
   row: number;
+  index: number;
+  palette: string;
+  phase: number;
 }
 
 interface AsciiBounds {
@@ -29,15 +32,25 @@ interface Point {
   y: number;
 }
 
+interface FireCrackle {
+  column: number;
+  row: number;
+  tailColumn: number;
+  tailRow: number;
+  phase: number;
+  burst: number;
+  direction: number;
+}
+
 interface AsciiMetrics {
-  fontSize: number;
   lineHeight: number;
   characterWidth: number;
   width: number;
   height: number;
   canvasWidth: number;
   canvasHeight: number;
-  padding: number;
+  paddingX: number;
+  paddingY: number;
   baseline: number;
 }
 
@@ -52,15 +65,14 @@ interface AsciiArtStyle extends CSSProperties {
 
 interface AsciiArtProps {
   nodeId: string;
-  mode?: AsciiArtMode;
 }
 
-const TAU = Math.PI * 2;
 const FIRE_CHARACTERS = ".,:;*x%#@";
 
 // Animation rates are implementation choices; Figma specifies the direction and
 // interaction of these effects, but does not specify their duration or easing.
 const EFFECT_FRAME_MS = 1000 / 24;
+const TEXT_FRAME_MS = 1000 / 12;
 const CURSOR_FADE_MS = 260;
 
 function fraction(value: number) {
@@ -71,14 +83,59 @@ function seed(value: number) {
   return fraction(Math.sin(value * 127.1 + 311.7) * 43758.5453);
 }
 
+function characterPalette(character: string) {
+  // Keep each substitution close to the source glyph's ink density. Moving
+  // through these characters animates the art without moving its silhouette.
+  return [".`',", ":;", "^'`", "-_~", "<>", "iIl1!|", "@%#", "+*x", "()", "/\\"]
+    .find((palette) => palette.includes(character)) ?? character;
+}
+
 function occupiedCells(text: string): AsciiCell[] {
-  return text.split("\n").flatMap((line, row) =>
-    Array.from(line).flatMap((character, column) =>
-      character.trim() && character !== "\u200b"
-        ? [{ character, column, row }]
-        : [],
-    ),
-  );
+  const cells: AsciiCell[] = [];
+  let row = 0;
+  let column = 0;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (character === "\n") {
+      row += 1;
+      column = 0;
+      continue;
+    }
+    if (character.trim() && character !== "\u200b") {
+      cells.push({
+        character,
+        column,
+        row,
+        index,
+        palette: characterPalette(character),
+        phase: seed(column * 17 + row * 31),
+      });
+    }
+    column += 1;
+  }
+  return cells;
+}
+
+function animatedText(art: PreparedAsciiArt, mode: AsciiArtMode | undefined, time: number) {
+  const characters = art.text.split("");
+  const centerColumn = (art.bounds.left + art.bounds.right) / 2;
+  const centerRow = (art.bounds.top + art.bounds.bottom) / 2;
+  const speed = mode === "sparkler" ? 11 : mode === "trail" ? 9 : 6;
+  for (const cell of art.cells) {
+    const { character, column, row, palette, phase } = cell;
+    const travel = mode === "sparkler"
+      ? Math.hypot((column - centerColumn) * 0.6, row - centerRow) * 0.7
+      : mode === "trail"
+        ? column * 0.16 + row * 0.2
+        : column * 0.035 + row * 0.06;
+    const step = Math.floor(time * speed - travel + phase * 3);
+    // Each wave returns to the exact source character, keeping its original
+    // detail legible between substitutions. No blank cell becomes occupied.
+    if ((step + Math.floor(phase * 7)) % 4 === 0) continue;
+    const index = ((palette.indexOf(character) + step) % palette.length + palette.length) % palette.length;
+    characters[cell.index] = palette[index];
+  }
+  return characters.join("");
 }
 
 function cellBounds(cells: AsciiCell[]): AsciiBounds {
@@ -133,6 +190,50 @@ function staticFire(art: AsciiArtMetadata, bounds: AsciiBounds) {
   ).join("\n");
 }
 
+function fireCrackles(time: number, bounds: AsciiBounds): FireCrackle[] {
+  const crackles: FireCrackle[] = [];
+  const cycle = Math.floor(time / 2.4);
+  const height = bounds.bottom - bounds.top;
+  const center = (bounds.left + bounds.right) / 2;
+
+  // Uneven pauses and a small group of related embers read as one log crackle.
+  // The previous cycle lets an occasional late burst finish without cutting out.
+  for (let event = cycle - 1; event <= cycle; event += 1) {
+    const delay = 0.15 + seed(event * 13.7) * 0.6;
+    const count = seed(event * 3.9) > 0.6 ? 3 : 2;
+    const origin = center + (seed(event * 19.1) - 0.5) * 10;
+    for (let index = 0; index < count; index += 1) {
+      const identity = event * 23.3 + index * 7.1;
+      const age = time - event * 2.4 - delay - index * 0.095;
+      const flight = 0.85 + seed(identity + 1) * 0.32;
+      const burstDuration = 0.32;
+      if (age < 0 || age >= flight + burstDuration) continue;
+      const phase = Math.min(age / flight, 1);
+      const burst = Math.max(0, (age - flight) / burstDuration);
+      const direction = seed(identity + 2) > 0.5 ? 1 : -1;
+      const drift = direction * (2 + seed(identity + 3) * 3);
+      const start = bounds.bottom - height * (0.48 + seed(identity + 4) * 0.15);
+      const rise = height * (0.7 + seed(identity + 5) * 0.2);
+      const position = (progress: number) => ({
+        column: origin + index * direction + drift * (progress + Math.sin(progress * Math.PI) * 0.35),
+        row: start - rise * (0.45 * progress + 0.55 * progress * progress),
+      });
+      const head = position(phase);
+      const tail = position(Math.max(0, phase - 0.13));
+      crackles.push({
+        column: Math.round(head.column),
+        row: Math.round(head.row),
+        tailColumn: Math.round(tail.column),
+        tailRow: Math.round(tail.row),
+        phase,
+        burst,
+        direction,
+      });
+    }
+  }
+  return crackles;
+}
+
 function localPoint(point: Point, markers: [HTMLElement, HTMLElement, HTMLElement]): Point | null {
   const origin = markers[0].getBoundingClientRect();
   const horizontal = markers[1].getBoundingClientRect();
@@ -160,7 +261,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
   const axisYRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!artwork || mode === "static") return;
+    if (!artwork) return;
 
     const mountedElement = elementRef.current;
     const mountedCanvas = canvasRef.current;
@@ -175,6 +276,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
     const source = mountedSource;
     const markers: [HTMLElement, HTMLElement, HTMLElement] = [origin, axisX, axisY];
     const { cells, bounds } = art;
+    const emitsCrackles = mode === "fire" && art.nodeId === "121:55";
     const drawingContext = canvas.getContext("2d");
     if (!drawingContext) return;
     const context = drawingContext;
@@ -184,6 +286,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
     let intersecting = false;
     let frame = 0;
     let lastDraw = 0;
+    let lastTextDraw = 0;
     let lastFrame = 0;
     let metrics: AsciiMetrics | null = null;
     let pointer: Point | null = null;
@@ -192,6 +295,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
     let localPointer: Point | null = null;
 
     const lines = art.text.split("\n");
+    const sourceText = mode === "fire" ? art.fireText ?? staticFire(art, bounds) : art.text;
     const white = mixColor(art.color, 0.8);
     const highlight = mixColor(art.color, 0.45);
     const identifierSeed = Array.from(art.nodeId).reduce(
@@ -207,7 +311,9 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       cancelAnimationFrame(frame);
       frame = 0;
       lastFrame = 0;
+      lastTextDraw = 0;
       element.dataset.running = "false";
+      source.textContent = sourceText;
       clear();
     }
 
@@ -222,33 +328,34 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       const descent = measurement.fontBoundingBoxDescent ?? fontSize * 0.2;
       const width = characterWidth * art.columns;
       const height = lineHeight * art.rows;
-      const padding = mode === "trail" ? fontSize * 5 : 0;
-      const canvasWidth = mode === "cursor" ? characterWidth * 31 : width + padding * 2;
+      const paddingX = mode === "trail" ? fontSize * 5 : emitsCrackles ? characterWidth * 8 : 0;
+      const paddingY = emitsCrackles ? lineHeight * 16 : mode === "trail" ? fontSize * 5 : 0;
+      const canvasWidth = mode === "cursor" ? characterWidth * 31 : width + paddingX * 2;
       const canvasHeight =
         mode === "cursor"
           ? lineHeight * 21
           : mode === "trail"
-            ? (bounds.bottom + 1) * lineHeight + padding * 2
-            : height;
+            ? (bounds.bottom + 1) * lineHeight + paddingY * 2
+            : height + paddingY;
       const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.max(1, Math.ceil(canvasWidth * pixelRatio));
       canvas.height = Math.max(1, Math.ceil(canvasHeight * pixelRatio));
       canvas.style.width = `${canvasWidth}px`;
       canvas.style.height = `${canvasHeight}px`;
-      canvas.style.left = `${-padding}px`;
-      canvas.style.top = `${-padding}px`;
+      canvas.style.left = `${-paddingX}px`;
+      canvas.style.top = `${-paddingY}px`;
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       context.font = `${computed.fontWeight} ${fontSize}px "Roboto Mono"`;
       context.textBaseline = "alphabetic";
       metrics = {
-        fontSize,
         lineHeight,
         characterWidth,
         width,
         height,
         canvasWidth,
         canvasHeight,
-        padding,
+        paddingX,
+        paddingY,
         baseline: (lineHeight - ascent - descent) / 2 + ascent,
       };
       needsPointerRead = true;
@@ -262,13 +369,13 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       context.globalAlpha = opacity;
       context.fillText(
         character,
-        column * metrics.characterWidth + metrics.padding,
-        row * metrics.lineHeight + metrics.baseline + metrics.padding,
+        column * metrics.characterWidth + metrics.paddingX,
+        row * metrics.lineHeight + metrics.baseline + metrics.paddingY,
       );
     }
 
     function drawCursor(elapsed: number) {
-      if (!metrics) return false;
+      if (!metrics) return;
       if (needsPointerRead) {
         localPointer = pointer ? localPoint(pointer, markers) : null;
         needsPointerRead = false;
@@ -284,7 +391,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       const blend = 1 - Math.exp((-elapsed * 3) / CURSOR_FADE_MS);
       cursorStrength += (target - cursorStrength) * blend;
       clear();
-      if (!point || cursorStrength < 0.005) return false;
+      if (!point || cursorStrength < 0.005) return;
 
       const centerColumn = Math.floor(point.x / metrics.characterWidth);
       const centerRow = Math.floor(point.y / metrics.lineHeight);
@@ -308,7 +415,6 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
           );
         }
       }
-      return nearby ? cursorStrength < 0.995 : cursorStrength > 0.005;
     }
 
     function drawTrail(time: number) {
@@ -329,28 +435,6 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       }
     }
 
-    function drawSparkler(time: number) {
-      const centerColumn = (bounds.left + bounds.right) / 2;
-      const centerRow = (bounds.top + bounds.bottom) / 2;
-      for (let index = 0; index < 38; index += 1) {
-        const phase = fraction(time * (0.65 + seed(index) * 0.3) + seed(index * 7));
-        const angle = seed(index * 13 + identifierSeed) * TAU;
-        const distance = 1 + phase * (12 + seed(index * 3) * 15);
-        glyph(
-          phase < 0.22 ? "*" : index % 2 ? "+" : ".",
-          centerColumn + Math.cos(angle) * distance,
-          centerRow + Math.sin(angle) * distance * 0.6 + phase * phase * 3,
-          index % 4 ? art.color : white,
-          Math.sin(Math.PI * phase) * 0.95,
-        );
-      }
-      for (let index = 0; index < 16; index += 1) {
-        const cell = cells[Math.floor(seed(index * 3.9) * cells.length)];
-        const brightness = Math.max(0, Math.sin(time * 9 + index * 4));
-        glyph(cell.character, cell.column, cell.row, white, brightness * 0.8);
-      }
-    }
-
     function drawFire(time: number) {
       for (let row = bounds.top; row <= bounds.bottom; row += 1) {
         for (let column = bounds.left; column <= bounds.right; column += 1) {
@@ -358,13 +442,22 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
           if (character !== " ") glyph(character, column, row, art.color);
         }
       }
-      for (let index = 0; index < 6; index += 1) {
-        const phase = fraction(time * 0.3 + seed(index * 9 + identifierSeed));
-        const spread = (seed(index * 5) - 0.5) * (bounds.right - bounds.left) * 0.45;
-        const column =
-          (bounds.left + bounds.right) / 2 + spread + Math.sin(time * 1.7 + index) * phase * 2;
-        const row = bounds.bottom - phase * (bounds.bottom - bounds.top + 4);
-        glyph(phase < 0.35 ? "+" : ".", column, row, art.color, Math.sin(phase * Math.PI));
+      if (!emitsCrackles) return;
+      for (const crackle of fireCrackles(time, bounds)) {
+        const { column, row, tailColumn, tailRow, phase, burst, direction } = crackle;
+        if (phase < 1) {
+          const character = ["+", "x", "*"][Math.floor(time * 15 + column) % 3];
+          glyph(character, column, row, phase > 0.82 ? white : highlight, Math.min(1, phase * 7) * 0.95);
+          glyph(".", tailColumn, tailRow, art.color, Math.min(0.5, phase));
+        } else {
+          const fade = (1 - burst) ** 1.5;
+          const spread = 1 + Math.round(burst * 2);
+          // A white-hot centre breaks into a few orange glyphs, then disappears.
+          glyph(burst < 0.3 ? "*" : "+", column, row, white, fade);
+          glyph("+", column - spread, row - 1, highlight, fade * 0.9);
+          glyph("x", column + spread, row + direction, art.color, fade * 0.9);
+          glyph(".", column + direction, row - spread, art.color, fade * 0.7);
+        }
       }
     }
 
@@ -376,20 +469,23 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       }
       const elapsed = lastFrame ? now - lastFrame : 16;
       lastFrame = now;
-      let continuing = true;
+      const time = now / 1000 + seed(identifierSeed) * 10;
+      if (mode !== "fire" && now - lastTextDraw >= TEXT_FRAME_MS) {
+        source.textContent = animatedText(art, mode, time);
+        element.dataset.running = "true";
+        lastTextDraw = now;
+      }
       if (mode === "cursor") {
-        continuing = drawCursor(elapsed);
+        drawCursor(elapsed);
       } else if (now - lastDraw >= EFFECT_FRAME_MS) {
         clear();
-        const time = now / 1000 + seed(identifierSeed) * 10;
         if (mode === "trail") drawTrail(time);
-        else if (mode === "sparkler") drawSparkler(time);
         else if (mode === "fire") drawFire(time);
         element.dataset.running = "true";
         lastDraw = now;
       }
       context.globalAlpha = 1;
-      if (continuing) frame = requestAnimationFrame(tick);
+      frame = requestAnimationFrame(tick);
     }
 
     function start() {
@@ -477,9 +573,9 @@ const PREPARED_ART: Partial<Record<string, PreparedAsciiArt>> = Object.fromEntri
   }),
 );
 
-export default function AsciiArt({ nodeId, mode }: AsciiArtProps) {
+export default function AsciiArt({ nodeId }: AsciiArtProps) {
   const art = PREPARED_ART[nodeId];
-  const selectedMode = mode ?? art?.mode;
+  const selectedMode = art?.mode;
   const { element, source, canvas, origin, axisX, axisY } = useAsciiMotion(art, selectedMode);
 
   if (!art) return null;

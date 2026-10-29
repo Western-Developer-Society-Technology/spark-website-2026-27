@@ -11,7 +11,7 @@ const ASCII_LAYERS = [
 export default function HeroAscii() {
   return ASCII_LAYERS.map(({ frameId, textId, className }) => (
     <div className={styles[className]} data-node-id={frameId} key={frameId} aria-hidden="true">
-      <AsciiArt nodeId={textId} mode="cursor" />
+      <AsciiArt nodeId={textId} />
     </div>
   ));
 }
