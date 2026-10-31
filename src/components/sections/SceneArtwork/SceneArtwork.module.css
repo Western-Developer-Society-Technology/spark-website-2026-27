@@ -1037,6 +1037,7 @@
 }
 
 .campfireLeftLog {
+  --campfire-log-mask: url("/images/figma/campfire-left-log-mask.svg");
   position: absolute;
   height: calc(91 * var(--u));
   left: calc(1040.02 * var(--u));
@@ -1061,9 +1062,40 @@
 }
 
 .campfireRightLogShape {
+  --campfire-log-mask: url("/images/figma/campfire-right-log-mask.svg");
   height: calc(91 * var(--u));
   position: relative;
   width: calc(164 * var(--u));
+}
+
+.campfireLeftLog::before,
+.campfireRightLogShape::before,
+.campfireLeftLog::after,
+.campfireRightLogShape::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mask-image: var(--campfire-log-mask);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+.campfireLeftLog::before,
+.campfireRightLogShape::before {
+  /* Keep solid wood beneath the texture while WebGPU initializes or is unavailable. */
+  background: #5b3826;
+}
+
+.campfireLeftLog::after,
+.campfireRightLogShape::after {
+  /* Warm only the wood touching the flame, retaining the visible grain and ends. */
+  background: radial-gradient(
+    ellipse 37% 32% at 58% 36%,
+    rgb(255 117 20 / 40%),
+    rgb(233 85 0 / 18%) 42%,
+    transparent 100%
+  );
 }
 
 .campfireRightCharacter {
@@ -1112,9 +1144,9 @@
 
 .campfireFlames {
   position: absolute;
-  /* Center the flame on the crossed logs and overlap their visible wood. */
+  /* Let the irregular roots cross the front of the wood at the intersection. */
   left: calc(1135.52 * var(--u));
-  top: calc(1970 * var(--u));
+  top: calc(1979 * var(--u));
   width: 0;
   height: 0;
   pointer-events: none;
@@ -1122,6 +1154,8 @@
 
 .campfireLargeFlame,
 .campfireSmallFlame {
+  /* Grow the original flame 12%, retaining crisp glyphs and the logs' anchor. */
+  --u: calc(112cqw / 1512);
   position: absolute;
   left: 0;
   translate: -50% 0;

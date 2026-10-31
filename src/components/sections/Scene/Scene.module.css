@@ -24,6 +24,77 @@
 .heroMotionRegion { top: 0; height: calc(1735 * var(--u)); }
 .waterMotionRegion { top: calc(4784 * var(--u)); height: calc(836 * var(--u)); }
 
+.starTrigger {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Give each exported display:contents group its own small animation surface.
+   Offsets below preserve every star/trail's authored position and the clouds'
+   original paint order. Overflow lets the long ASCII tails extend naturally. */
+.site :is([data-node-id="116:184"], [data-node-id="116:208"], [data-node-id="116:201"], [data-node-id="116:231"]) {
+  display: block;
+  position: absolute;
+  left: calc(var(--star-left) * var(--u));
+  top: calc(var(--star-top) * var(--u));
+  width: calc(var(--star-width) * var(--u));
+  height: calc(var(--star-height) * var(--u));
+  pointer-events: none;
+}
+
+.site [data-node-id="116:184"] {
+  --star-left: 277.61;
+  --star-top: 2623;
+  --star-width: 475.648;
+  --star-height: 442.983;
+}
+
+.site [data-node-id="116:208"] {
+  --star-left: 658;
+  --star-top: 2770;
+  --star-width: 582.876;
+  --star-height: 560.975;
+}
+
+.site [data-node-id="116:201"] {
+  --star-left: 196;
+  --star-top: 3008.8;
+  --star-width: 522.924;
+  --star-height: 500.091;
+}
+
+.site [data-node-id="116:231"] {
+  --star-left: 725;
+  --star-top: 3235;
+  --star-width: 577.893;
+  --star-height: 555.304;
+}
+
+.site :is([data-node-id="116:187"], [data-node-id="116:211"], [data-node-id="116:204"], [data-node-id="116:234"]) {
+  left: 0;
+  top: 0;
+}
+
+.site [data-node-id="116:185"] {
+  left: calc(-1009.61 * var(--u));
+  top: calc(32.82 * var(--u));
+}
+
+.site [data-node-id="116:209"] {
+  left: calc(330 * var(--u));
+  top: calc(-445 * var(--u));
+}
+
+.site [data-node-id="116:202"] {
+  left: calc(-938 * var(--u));
+  top: calc(204.2 * var(--u));
+}
+
+.site [data-node-id="116:232"] {
+  left: calc(364.7 * var(--u));
+  top: calc(228.1 * var(--u));
+}
+
 @media (scripting: enabled) {
   .site[data-has-scrolled="false"] [data-scenery="mountains"] {
     visibility: hidden;
@@ -33,6 +104,11 @@
 /* Match the first authored frame before hydration creates the Web Animations.
    With scripting disabled the approved static composition remains visible. */
 @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .site[data-stars-state="pending"] :is([data-node-id="116:184"], [data-node-id="116:208"], [data-node-id="116:201"], [data-node-id="116:231"]),
+  .site [data-star-state="pending"] {
+    visibility: hidden;
+  }
+
   .site[data-load-state="pending"] [data-node-id="111:95"] {
     rotate: -15.000000417413029deg;
     scale: .800000011920929 .7999998927116394;

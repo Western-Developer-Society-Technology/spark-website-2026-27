@@ -486,21 +486,6 @@ function CampfireArtwork({ campfire }: { campfire: Campfire }) {
           </div>
         </div>
       </div>
-      {/* All flame grids share the logs' center and one baseline. */}
-      <div className={styles.campfireFlames}>
-        <div className={styles.campfireSmallFlame} data-node-id="121:74" data-name="ASCII Frame">
-          {campfire["121:74"]}
-        </div>
-        <div className={styles.campfireLargeFlame} data-node-id="121:54" data-name="ASCII Frame">
-          {campfire["121:54"]}
-        </div>
-        <div className={styles.campfireLargeFlame} data-node-id="121:57" data-name="ASCII Frame">
-          {campfire["121:57"]}
-        </div>
-        <div className={styles.campfireSmallFlame} data-node-id="121:61" data-name="ASCII Frame">
-          {campfire["121:61"]}
-        </div>
-      </div>
       <div className={styles.campfireLeftLog} data-node-id="116:261">
         <ShaderFill className={styles.shader} mask={`url("${artwork.campfireLeftLogMask}")`} shader={campfireLogShader} />
         <div className={styles.campfireLeftLogPaintBounds}>
@@ -515,6 +500,21 @@ function CampfireArtwork({ campfire }: { campfire: Campfire }) {
               <img alt="" className={styles.absoluteImage} src={artwork.imgVector20} />
             </div>
           </div>
+        </div>
+      </div>
+      {/* The original dense flames extend over the wood with an uneven underside. */}
+      <div className={styles.campfireFlames}>
+        <div className={styles.campfireSmallFlame} data-node-id="121:74" data-name="ASCII Frame">
+          {campfire["121:74"]}
+        </div>
+        <div className={styles.campfireLargeFlame} data-node-id="121:54" data-name="ASCII Frame">
+          {campfire["121:54"]}
+        </div>
+        <div className={styles.campfireLargeFlame} data-node-id="121:57" data-name="ASCII Frame">
+          {campfire["121:57"]}
+        </div>
+        <div className={styles.campfireSmallFlame} data-node-id="121:61" data-name="ASCII Frame">
+          {campfire["121:61"]}
         </div>
       </div>
       <div className={styles.campfireRightCharacter} data-node-id="121:41">

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 import { ASCII_ART, type AsciiArtMetadata, type AsciiArtMode } from "../../../lib/ascii-art";
+import { sampleFire } from "@/lib/fire-field";
 import styles from "./AsciiArt.module.css";
 
 interface AsciiCell {
@@ -30,6 +31,15 @@ interface PreparedAsciiArt extends AsciiArtMetadata {
 interface Point {
   x: number;
   y: number;
+}
+
+interface AsciiGeometry {
+  origin: Point;
+  ax: number;
+  ay: number;
+  bx: number;
+  by: number;
+  determinant: number;
 }
 
 interface FireCrackle {
@@ -66,8 +76,6 @@ interface AsciiArtStyle extends CSSProperties {
 interface AsciiArtProps {
   nodeId: string;
 }
-
-const FIRE_CHARACTERS = ".,:;*x%#@";
 
 // Animation rates are implementation choices; Figma specifies the direction and
 // interaction of these effects, but does not specify their duration or easing.
@@ -154,39 +162,16 @@ function mixColor(color: string, amount: number) {
   return `rgb(${channels.map((channel) => Math.round(channel + (255 - channel) * amount)).join(" ")})`;
 }
 
-// Keep the replacement fire in the supplied sparkler's occupied grid. Its
-// original line count, column count, typography, offsets and color are retained.
-function fireCharacter(column: number, row: number, bounds: AsciiBounds, time: number) {
-  const height = bounds.bottom - bounds.top;
-  const elevation = (bounds.bottom - row) / height;
-  if (elevation < 0 || elevation > 1) return " ";
-
-  const center = (bounds.left + bounds.right) / 2;
-  const halfWidth = (bounds.right - bounds.left) / 2;
-  const x = (column - center) / halfWidth;
-  const bend =
-    Math.sin(elevation * 7 - time * 2.2) * elevation * 0.16 +
-    Math.sin(elevation * 13 - time * 3.1) * elevation * 0.09;
-  const envelope = Math.pow(1 - elevation, 0.8) * 0.88 + 0.025;
-  const tongues =
-    Math.sin(x * 13 + elevation * 8 - time * 4.2) * 0.12 +
-    Math.sin(x * 23 - elevation * 11 + time * 3.5) * 0.07;
-  const intensity = (envelope - Math.abs(x - bend) + tongues) / 0.45;
-  if (intensity <= 0.02) return " ";
-
-  const flicker = seed(column * 17 + row * 31 + Math.floor(time * 14));
-  const index = Math.min(
-    FIRE_CHARACTERS.length - 1,
-    Math.floor(Math.max(0, intensity) * 5 + flicker * 2),
-  );
-  return FIRE_CHARACTERS[index];
-}
-
 function staticFire(art: AsciiArtMetadata, bounds: AsciiBounds) {
   return Array.from({ length: art.rows }, (_, row) =>
-    Array.from({ length: art.columns }, (_, column) =>
-      fireCharacter(column, row, bounds, 0),
-    ).join(""),
+    Array.from({ length: art.columns }, (_, column) => {
+      const { character, opacity } = sampleFire(column, row, bounds, 0);
+      // Text cannot express per-glyph alpha. Thin just the softened contact
+      // edge so the paused flame does not regain a solid bottom row.
+      if (opacity < 0.15) return " ";
+      if (opacity < 0.4) return ".";
+      return opacity < 0.7 ? ":" : character;
+    }).join(""),
   ).join("\n");
 }
 
@@ -234,7 +219,7 @@ function fireCrackles(time: number, bounds: AsciiBounds): FireCrackle[] {
   return crackles;
 }
 
-function localPoint(point: Point, markers: [HTMLElement, HTMLElement, HTMLElement]): Point | null {
+function measureGeometry(markers: [HTMLElement, HTMLElement, HTMLElement]): AsciiGeometry | null {
   const origin = markers[0].getBoundingClientRect();
   const horizontal = markers[1].getBoundingClientRect();
   const vertical = markers[2].getBoundingClientRect();
@@ -244,8 +229,20 @@ function localPoint(point: Point, markers: [HTMLElement, HTMLElement, HTMLElemen
   const by = (vertical.y - origin.y) / 100;
   const determinant = ax * by - ay * bx;
   if (Math.abs(determinant) < 0.0001) return null;
-  const x = point.x - origin.x;
-  const y = point.y - origin.y;
+  return {
+    origin: { x: origin.x + window.scrollX, y: origin.y + window.scrollY },
+    ax,
+    ay,
+    bx,
+    by,
+    determinant,
+  };
+}
+
+function localPoint(point: Point, geometry: AsciiGeometry): Point {
+  const { origin, ax, ay, bx, by, determinant } = geometry;
+  const x = point.x + window.scrollX - origin.x;
+  const y = point.y + window.scrollY - origin.y;
   return {
     x: (x * by - y * bx) / determinant,
     y: (y * ax - x * ay) / determinant,
@@ -289,8 +286,10 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
     let lastTextDraw = 0;
     let lastFrame = 0;
     let metrics: AsciiMetrics | null = null;
+    let geometry: AsciiGeometry | null = null;
     let pointer: Point | null = null;
     let cursorStrength = 0;
+    let cursorDrawn = false;
     let needsPointerRead = false;
     let localPointer: Point | null = null;
 
@@ -315,10 +314,14 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       element.dataset.running = "false";
       source.textContent = sourceText;
       clear();
+      cursorDrawn = false;
     }
 
     function measure() {
       const computed = getComputedStyle(source);
+      // Cursor artwork is fixed in document space. Cache its transform before
+      // canvas writes, so scrolling never forces layout after a text animation.
+      if (mode === "cursor") geometry = measureGeometry(markers);
       const fontSize = parseFloat(computed.fontSize);
       const lineHeight = parseFloat(computed.lineHeight);
       context.font = `${computed.fontWeight} ${fontSize}px "Roboto Mono"`;
@@ -377,7 +380,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
     function drawCursor(elapsed: number) {
       if (!metrics) return;
       if (needsPointerRead) {
-        localPointer = pointer ? localPoint(pointer, markers) : null;
+        localPointer = pointer && geometry ? localPoint(pointer, geometry) : null;
         needsPointerRead = false;
       }
       const point = localPointer;
@@ -390,8 +393,15 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       const target = nearby ? 1 : 0;
       const blend = 1 - Math.exp((-elapsed * 3) / CURSOR_FADE_MS);
       cursorStrength += (target - cursorStrength) * blend;
+      if (!point || cursorStrength < 0.005) {
+        if (cursorDrawn) {
+          clear();
+          cursorDrawn = false;
+        }
+        return;
+      }
       clear();
-      if (!point || cursorStrength < 0.005) return;
+      cursorDrawn = true;
 
       const centerColumn = Math.floor(point.x / metrics.characterWidth);
       const centerRow = Math.floor(point.y / metrics.lineHeight);
@@ -436,10 +446,12 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
     }
 
     function drawFire(time: number) {
-      for (let row = bounds.top; row <= bounds.bottom; row += 1) {
+      for (let row = bounds.top; row < art.rows; row += 1) {
         for (let column = bounds.left; column <= bounds.right; column += 1) {
-          const character = fireCharacter(column, row, bounds, time);
-          if (character !== " ") glyph(character, column, row, art.color);
+          const { character, opacity } = sampleFire(column, row, bounds, time);
+          if (character !== " ") {
+            glyph(character, column, row, art.color, opacity);
+          }
         }
       }
       if (!emitsCrackles) return;
@@ -598,7 +610,9 @@ export default function AsciiArt({ nodeId }: AsciiArtProps) {
       aria-hidden="true"
       style={artStyle}
     >
-      <pre ref={source} className={styles.source}>{selectedMode === "fire" ? art.fireText ?? staticFire(art, art.bounds) : art.text}</pre>
+      <pre ref={source} className={styles.source}>
+        {selectedMode === "fire" ? art.fireText ?? staticFire(art, art.bounds) : art.text}
+      </pre>
       <canvas ref={canvas} className={styles.canvas} />
       <i ref={origin} className={styles.marker} />
       <i ref={axisX} className={`${styles.marker} ${styles.axisX}`} />

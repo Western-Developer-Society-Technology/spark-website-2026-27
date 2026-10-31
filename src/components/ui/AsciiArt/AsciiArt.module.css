@@ -23,6 +23,9 @@
   letter-spacing: inherit;
   white-space: pre;
   overflow-wrap: normal;
+  /* Keep changing glyphs on their own bounded layer above the static scenery. */
+  contain: layout paint;
+  transform: translateZ(0);
 }
 
 .canvas {
