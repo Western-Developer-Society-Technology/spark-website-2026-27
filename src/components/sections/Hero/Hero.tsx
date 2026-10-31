@@ -1,7 +1,7 @@
 import { ArtworkImage } from "@/components/ui/Artwork";
 import artwork from "./artwork";
 import Eclipse from "./Eclipse";
-import HeroAscii from "./HeroAscii";
+import HeroAscii, { HeroStreaks } from "./HeroAscii";
 import styles from "./Hero.module.css";
 
 /** After the rise, the "A" gives way to the star while "SP" and "RK" part around it. */
@@ -22,8 +22,9 @@ export default function Hero() {
   return (
     <>
       <div className={styles.motionRegion} data-motion-region="hero" aria-hidden="true" />
-      <HeroAscii />
       <Eclipse />
+      <HeroStreaks />
+      <HeroAscii />
       <div className={styles.ground} data-node-id="111:106" />
       <section className={styles.hero} aria-label="Spark Hackathon and Case Competition">
         <p className={styles.tagline} data-node-id="111:107">where ideas ignite</p>
