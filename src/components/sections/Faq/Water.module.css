@@ -1,0 +1,234 @@
+/* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.boatDrift {
+  position: absolute;
+  left: calc(954 * var(--u));
+  top: calc(4784 * var(--u));
+  width: calc(507.043 * var(--u));
+  height: calc(465.291 * var(--u));
+}
+
+.boatGroup {
+  position: absolute;
+  inset: 0;
+  transform-origin: calc(267.00013 * var(--u)) calc(344.7501 * var(--u));
+}
+
+.boatHull {
+  position: absolute;
+  display: flex;
+  height: calc(234.234 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(53.71 * var(--u));
+  top: calc(227.63 * var(--u));
+  width: calc(426.574 * var(--u));
+}
+
+.boatHullRotation {
+  flex: none;
+  rotate: 1.75deg;
+}
+
+.boatHullShape {
+  height: calc(221.5 * var(--u));
+  position: relative;
+  width: calc(420 * var(--u));
+}
+
+.boatHullPaintBounds {
+  position: absolute;
+  inset: -0.84% -0.68% -2.26% -0.46%;
+}
+
+.orangeSparklerGroup {
+  display: contents;
+}
+
+.orangeSparklerStem {
+  position: absolute;
+  display: flex;
+  height: calc(185.977 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(276.34 * var(--u));
+  top: calc(160.25 * var(--u));
+  width: calc(27.763 * var(--u));
+}
+
+.orangeSparklerStemRotation {
+  flex: none;
+  rotate: 81.51deg;
+}
+
+.orangeSparklerStemShape {
+  height: 0;
+  position: relative;
+  width: calc(188.038 * var(--u));
+}
+
+.orangeSparklerStemPaintBounds {
+  position: absolute;
+  inset: calc(-6.6 * var(--u)) 0 calc(-1.72 * var(--u)) 0;
+}
+
+.orangeSparkler {
+  position: absolute;
+  display: flex;
+  height: calc(321.435 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(110.48 * var(--u));
+  top: 0;
+  width: calc(329.929 * var(--u));
+}
+
+.orangeSparklerRotation {
+  flex: none;
+  rotate: 17.39deg;
+}
+
+.orangeSparklerShape {
+  border-width: 0;
+  border-color: #674b3b;
+  border-style: solid;
+  height: calc(253.413 * var(--u));
+  position: relative;
+  border-radius: calc(8.639 * var(--u));
+  width: calc(266.372 * var(--u));
+}
+
+.purpleSparklerGroup {
+  display: contents;
+}
+
+.purpleSparklerStem {
+  position: absolute;
+  display: flex;
+  height: calc(187.896 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(185.32 * var(--u));
+  top: calc(178.03 * var(--u));
+  width: calc(131.208 * var(--u));
+}
+
+.purpleSparklerStemRotation {
+  flex: none;
+  rotate: 55.07deg;
+}
+
+.purpleSparklerStemShape {
+  height: 0;
+  position: relative;
+  width: calc(229.173 * var(--u));
+}
+
+.purpleSparklerStemPaintBounds {
+  position: absolute;
+  inset: calc(-8.04 * var(--u)) 0 calc(-2.1 * var(--u)) 0;
+}
+
+.purpleSparkler {
+  position: absolute;
+  display: flex;
+  height: calc(356.062 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: calc(1 * var(--u));
+  width: calc(369.175 * var(--u));
+}
+
+.purpleSparklerRotation {
+  flex: none;
+  rotate: -9.05deg;
+}
+
+.purpleSparklerShape {
+  border-width: 0;
+  border-color: #674b3b;
+  border-style: solid;
+  height: calc(308.85 * var(--u));
+  position: relative;
+  border-radius: calc(10.529 * var(--u));
+  width: calc(324.643 * var(--u));
+}
+
+.boatCharacter {
+  position: absolute;
+  display: flex;
+  height: calc(302.291 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(208 * var(--u));
+  top: calc(163 * var(--u));
+  width: calc(299.043 * var(--u));
+}
+
+.boatCharacterRotation {
+  flex: none;
+  rotate: 0.55deg;
+}
+
+.boatCharacterShape {
+  height: calc(299.445 * var(--u));
+  position: relative;
+  width: calc(296.165 * var(--u));
+}
+
+.boatOar {
+  position: absolute;
+  display: flex;
+  height: calc(116.459 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(260.62 * var(--u));
+  top: calc(345.41 * var(--u));
+  width: calc(216.263 * var(--u));
+}
+
+.boatOarShape {
+  height: calc(110 * var(--u));
+  position: relative;
+  width: calc(213 * var(--u));
+}
+
+.boatOarPaintBounds {
+  position: absolute;
+  inset: -6.43% -5.45% -5.15% 0;
+}
+
+.floatingYellowStarWaterViewport {
+  position: absolute;
+  left: 0;
+  top: calc(4800 * var(--u));
+  width: calc(600 * var(--u));
+  height: calc(665 * var(--u));
+  overflow: hidden;
+}
+
+.floatingYellowStar {
+  position: absolute;
+  display: flex;
+  height: calc(396.313 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(90 * var(--u));
+  top: calc(183 * var(--u));
+  width: calc(394.719 * var(--u));
+}
+
+.floatingYellowStarBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 75%;
+}
+
+.floatingYellowStarRotation {
+  flex: none;
+  rotate: -24.9deg;
+}
+

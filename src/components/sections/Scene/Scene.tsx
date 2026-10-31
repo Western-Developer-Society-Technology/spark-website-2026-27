@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
-import { HERO_DURATION, HERO_MOTION, type HeroMotion } from "./hero-motion";
-import { WATER_MOTION } from "./water-motion";
-import { createStarEntrances, SHOOTING_STARS } from "./star-motion";
+import { WATER_MOTION } from "../Faq/water-motion";
+import { HERO_DURATION, HERO_MOTION, type HeroMotion } from "../Hero/hero-motion";
+import { createStarEntrances } from "../LastYear/star-motion";
 import styles from "./Scene.module.css";
 
 type SceneProps = { children: ReactNode };
@@ -187,25 +187,7 @@ export default function Scene({ children }: SceneProps) {
 
   return (
     <main className={styles.site} ref={rootRef} data-load-state="pending" data-has-scrolled="false" data-stars-state="pending">
-      <div className={styles.stage}>
-        <div className={styles.heroMotionRegion} data-motion-region="hero" aria-hidden="true" />
-        <div className={styles.waterMotionRegion} data-motion-region="water" aria-hidden="true" />
-        {SHOOTING_STARS.map((star) => (
-          <div
-            key={star.id}
-            className={styles.starTrigger}
-            data-star-trigger={star.id}
-            aria-hidden="true"
-            style={{
-              left: `calc(${star.left} * var(--u))`,
-              top: `calc(${star.top} * var(--u))`,
-              width: `calc(${star.width} * var(--u))`,
-              height: `calc(${star.height} * var(--u))`,
-            }}
-          />
-        ))}
-        {children}
-      </div>
+      <div className={styles.stage}>{children}</div>
     </main>
   );
 }

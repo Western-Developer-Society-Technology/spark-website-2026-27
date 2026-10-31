@@ -1,0 +1,140 @@
+/* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.mountains {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+@media (scripting: enabled) {
+  :global([data-has-scrolled="false"]) .mountains {
+    visibility: hidden;
+  }
+}
+
+.farMountain {
+  position: absolute;
+  height: calc(648 * var(--u));
+  left: calc(-31 * var(--u));
+  top: calc(864 * var(--u));
+  width: calc(1574 * var(--u));
+}
+
+.farMountainPaintBounds {
+  position: absolute;
+  inset: -0.2% -0.32% -0.85% -0.35%;
+}
+
+.smallMountainStar {
+  position: absolute;
+  display: flex;
+  height: calc(414.403 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(870 * var(--u));
+  top: calc(1247 * var(--u));
+  width: calc(414.561 * var(--u));
+}
+
+.smallMountainStarRotation {
+  flex: none;
+  rotate: 109.3deg;
+}
+
+.smallMountainStarShape {
+  height: calc(325.377 * var(--u));
+  position: relative;
+  width: calc(325.12 * var(--u));
+}
+
+.smallMountainStarPaintBounds {
+  position: absolute;
+  inset: -42.25% -58.56% -52.75% -42.63%;
+}
+
+.middleMountain {
+  position: absolute;
+  height: calc(648 * var(--u));
+  left: calc(-23 * var(--u));
+  top: calc(937 * var(--u));
+  width: calc(1574 * var(--u));
+}
+
+.middleMountainPaintBounds {
+  position: absolute;
+  inset: -11.15% -4.04% -8.18% -4.07%;
+}
+
+.largeMountainStar {
+  position: absolute;
+  display: flex;
+  height: calc(606.136 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(745 * var(--u));
+  top: calc(1426 * var(--u));
+  width: calc(606.017 * var(--u));
+}
+
+.largeMountainStarRotation {
+  flex: none;
+  rotate: -30.96deg;
+}
+
+.largeMountainStarShape {
+  height: calc(441.925 * var(--u));
+  position: relative;
+  width: calc(441.579 * var(--u));
+}
+
+.largeMountainStarPaintBounds {
+  position: absolute;
+  inset: -34.15% -50.43% -44.64% -34.51%;
+}
+
+.leftMountainStar {
+  position: absolute;
+  display: flex;
+  height: calc(327.532 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(249 * var(--u));
+  top: calc(1257 * var(--u));
+  width: calc(327.468 * var(--u));
+}
+
+.leftMountainStarShape {
+  height: calc(238.799 * var(--u));
+  position: relative;
+  width: calc(238.612 * var(--u));
+}
+
+.leftMountainStarPaintBounds {
+  position: absolute;
+  inset: -53.4% -69.73% -63.89% -53.78%;
+}
+
+.nearMountain {
+  position: absolute;
+  height: calc(1121 * var(--u));
+  left: calc(-42 * var(--u));
+  top: calc(984 * var(--u));
+  width: calc(1574.004 * var(--u));
+}
+
+.nearMountainPaintBounds {
+  position: absolute;
+  inset: -5.87% -3.53% -3.53% -3.53%;
+}
+
+.mountainForeground {
+  position: absolute;
+  height: calc(956.5 * var(--u));
+  left: calc(-63 * var(--u));
+  top: calc(1389.5 * var(--u));
+  width: calc(1603.5 * var(--u));
+}
+
+.mountainForegroundPaintBounds {
+  position: absolute;
+  inset: -8.98% -5.68% -9.51% -5.67%;
+}

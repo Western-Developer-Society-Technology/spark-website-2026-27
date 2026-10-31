@@ -1,0 +1,16 @@
+.footer { display: contents; }
+
+.footer h2 {
+  position: absolute;
+  left: calc(211 * var(--u));
+  width: calc(258 * var(--u));
+  top: calc(7167 * var(--u));
+  font-size: calc(46.400532 * var(--u));
+  font-weight: 800;
+  line-height: calc(60 * var(--u));
+  letter-spacing: calc(-0.464005 * var(--u));
+  background: linear-gradient(89.98889627541516deg, #fff 19.611%, #ff560f 106.78%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}

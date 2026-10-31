@@ -1,0 +1,90 @@
+/* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.eclipseGroup {
+  display: contents;
+}
+
+.eclipseHalo {
+  position: absolute;
+  height: calc(1144 * var(--u));
+  left: calc(176 * var(--u));
+  top: calc(465 * var(--u));
+  width: calc(1161 * var(--u));
+}
+
+.eclipseHaloPaintBounds {
+  position: absolute;
+  inset: -42.11% -47.95% -42.27% -40.31%;
+}
+
+.eclipseOuterRing {
+  position: absolute;
+  height: calc(1315 * var(--u));
+  left: calc(89 * var(--u));
+  top: calc(420 * var(--u));
+  width: calc(1334 * var(--u));
+}
+
+.eclipseOuterRingPaintBounds {
+  position: absolute;
+  inset: -7.6% -7.5%;
+}
+
+.eclipseInnerGlow {
+  position: absolute;
+  height: calc(1099 * var(--u));
+  left: calc(130 * var(--u));
+  top: calc(465 * var(--u));
+  width: calc(1090 * var(--u));
+}
+
+.eclipseInnerGlowPaintBounds {
+  position: absolute;
+  inset: -9.1% -9.17%;
+}
+
+.eclipseCore {
+  position: absolute;
+  height: calc(1205 * var(--u));
+  left: calc(145 * var(--u));
+  top: calc(480 * var(--u));
+  width: calc(1222 * var(--u));
+}
+
+.eclipseCorePaintBounds {
+  position: absolute;
+  inset: -0.58% -0.57%;
+}
+
+.eclipseStar {
+  position: absolute;
+  height: calc(550.381 * var(--u));
+  left: calc(62 * var(--u));
+  top: calc(333 * var(--u));
+  width: calc(553.852 * var(--u));
+}
+
+/* Match the first authored frame before hydration creates the Web Animations.
+   With scripting disabled the approved static composition remains visible. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  :global([data-load-state="pending"]) .eclipseHalo {
+    rotate: -15.000000417413029deg;
+    scale: .800000011920929 .7999998927116394;
+    translate: 0 calc(34.5 * var(--u));
+  }
+  :global([data-load-state="pending"]) .eclipseOuterRing {
+    translate: 0 calc(33 * var(--u));
+  }
+  :global([data-load-state="pending"]) .eclipseInnerGlow {
+    translate: calc(66 * var(--u)) calc(153.5 * var(--u));
+    scale: 1 1.0000001192093038;
+  }
+  :global([data-load-state="pending"]) .eclipseCore {
+    translate: 0 calc(133.5 * var(--u));
+    filter: blur(calc(49.204573728833196 * var(--u)));
+  }
+  :global([data-load-state="pending"]) .eclipseStar {
+    opacity: 0;
+    scale: .738095266816298 .7380954763111554;
+    translate: 0 calc(154.80963134765625 * var(--u));
+  }
+}

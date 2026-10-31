@@ -1,3 +1,21 @@
+.motionRegion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(1735 * var(--u));
+  pointer-events: none;
+}
+
+.ground {
+  position: absolute;
+  background: #0a0a0a;
+  height: calc(831 * var(--u));
+  left: 0;
+  top: calc(1273 * var(--u));
+  width: calc(1512 * var(--u));
+}
+
 .hero {
   display: contents;
   font-family: var(--font-sans);
@@ -85,3 +103,20 @@
 .date { left: calc(68 * var(--u)); top: calc(73 * var(--u)); width: calc(159 * var(--u)); }
 .format { left: calc(33 * var(--u)); top: calc(100 * var(--u)); width: calc(240 * var(--u)); }
 .location { left: 0; top: calc(127 * var(--u)); width: calc(295 * var(--u)); }
+
+/* Match the first authored frame before hydration creates the Web Animations.
+   With scripting disabled the approved static composition remains visible. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  :global([data-load-state="pending"]) .wordmark {
+    translate: 0 calc(286 * var(--u));
+    filter: blur(calc(26.399999618530273 * var(--u)));
+  }
+  :global([data-load-state="pending"]) .tagline {
+    opacity: 0;
+    translate: 0 calc(286 * var(--u));
+  }
+  :global([data-load-state="pending"]) .details {
+    opacity: 0;
+    translate: 0 calc(133.5 * var(--u));
+  }
+}

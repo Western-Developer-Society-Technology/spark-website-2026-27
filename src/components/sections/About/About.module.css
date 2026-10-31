@@ -1,15 +1,18 @@
-.about { display: contents; }
+/* The anchor stays on the stage's --u grid so the block keeps its place on
+   the artwork; everything inside scales freely with clamp(). */
+.about {
+  position: absolute;
+  top: calc(1683 * var(--u));
+  left: max(1.25rem, 11.64cqw);
+  right: max(1.25rem, 11.64cqw);
+}
 
 .heading {
-  position: absolute;
-  left: calc(176 * var(--u));
-  top: calc(1683 * var(--u));
-  width: calc(474.629272 * var(--u));
-  font-size: calc(42.929924 * var(--u));
+  max-width: 11.9em;
+  font-size: clamp(1.75rem, 1rem + 1.8cqw, 4.5rem);
   font-weight: 800;
-  /* Figma's two line boxes measure 112px in total. */
-  line-height: calc(56 * var(--u));
-  letter-spacing: calc(-0.429299 * var(--u));
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   background: linear-gradient(89.98905699185383deg, #fff 19.611%, #ff560f 106.78%);
   background-clip: text;
   -webkit-background-clip: text;
@@ -17,15 +20,12 @@
 }
 
 .copy {
-  position: absolute;
-  left: calc(176 * var(--u));
-  top: calc(1825 * var(--u));
-  width: calc(534 * var(--u));
-  color: #bdbdbd;
-  font-size: calc(22.063156 * var(--u));
+  max-width: clamp(28em, 50%, 34em);
+  margin-top: clamp(0.75rem, 1.25cqw, 1.5rem);
+  color: #d4d4d4;
+  font-size: clamp(0.9rem, 0.8125rem + 0.5cqw, 1.4rem);
   font-weight: 400;
-  /* Figma's seven line boxes measure 203px in total. */
-  line-height: calc(29 * var(--u));
-  letter-spacing: calc(-0.220632 * var(--u));
-  text-align: justify;
+  line-height: 1.625;
+  letter-spacing: -0.0138em;
+  text-align: left;
 }

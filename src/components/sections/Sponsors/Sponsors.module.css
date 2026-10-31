@@ -1,0 +1,88 @@
+/* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.sponsorBackground {
+  position: absolute;
+  /* The FAQ's foreground clouds render earlier but overlap this backdrop's top edge. */
+  z-index: -1;
+  background: #f7f7f7;
+  height: calc(1412 * var(--u));
+  left: 0;
+  top: calc(5666 * var(--u));
+  width: calc(1512 * var(--u));
+}
+
+.sponsors { display: contents; }
+
+.sponsors h2 {
+  position: absolute;
+  left: calc(163 * var(--u));
+  width: calc(195 * var(--u));
+  top: calc(5740 * var(--u));
+  color: #000;
+  font-size: calc(46.400532 * var(--u));
+  font-weight: 800;
+  line-height: calc(60 * var(--u));
+  letter-spacing: calc(-0.464005 * var(--u));
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sponsorLogoRowOne,
+.sponsorLogoRowTwo,
+.sponsorLogoRowThree,
+.sponsorLogoRowFour {
+  position: absolute;
+  height: calc(227.426 * var(--u));
+  left: calc(104 * var(--u));
+  width: calc(511 * var(--u));
+}
+
+.sponsorLogoRowOne { top: calc(5770 * var(--u)); }
+.sponsorLogoRowTwo { top: calc(5916 * var(--u)); }
+.sponsorLogoRowThree { top: calc(6069 * var(--u)); }
+.sponsorLogoRowFour { top: calc(6222 * var(--u)); }
+
+.sponsorImage {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.sponsorMessageRowOne,
+.sponsorMessageRowTwo,
+.sponsorMessageRowThree,
+.sponsorMessageRowFour {
+  position: absolute;
+  height: calc(361 * var(--u));
+  left: calc(508 * var(--u));
+  width: calc(641 * var(--u));
+}
+
+.sponsorMessageRowOne { top: calc(5703 * var(--u)); }
+.sponsorMessageRowTwo { top: calc(5849 * var(--u)); }
+.sponsorMessageRowThree { top: calc(5995 * var(--u)); }
+.sponsorMessageRowFour { top: calc(6141 * var(--u)); }
+
+.sponsorMessagePaintBounds {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sponsorMessageImage {
+  position: absolute;
+  max-width: none;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}

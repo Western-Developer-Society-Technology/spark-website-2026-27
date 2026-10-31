@@ -1,0 +1,429 @@
+/* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.starTrigger {
+  position: absolute;
+  pointer-events: none;
+}
+
+.cloudSection {
+  display: contents;
+}
+
+.cloudBackground {
+  position: absolute;
+  height: calc(2087 * var(--u));
+  left: 0;
+  top: calc(2230 * var(--u));
+  width: calc(1512 * var(--u));
+}
+
+.tallLeftCloud {
+  position: absolute;
+  height: calc(1935 * var(--u));
+  left: calc(-21 * var(--u));
+  top: calc(2291 * var(--u));
+  width: calc(1151 * var(--u));
+}
+
+.upperRightCloud {
+  position: absolute;
+  display: flex;
+  height: calc(841 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(597 * var(--u));
+  top: calc(2310 * var(--u));
+  width: calc(928 * var(--u));
+}
+
+.flipped {
+  flex: none;
+  rotate: 180deg;
+  scale: 1 -1;
+}
+
+.upperRightCloudShape {
+  height: calc(841 * var(--u));
+  position: relative;
+  width: calc(928 * var(--u));
+}
+
+.lowerRightCloud {
+  position: absolute;
+  display: flex;
+  height: calc(1597 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(551 * var(--u));
+  top: calc(3230 * var(--u));
+  width: calc(1096 * var(--u));
+}
+
+.lowerRightCloudShape {
+  height: calc(1597 * var(--u));
+  position: relative;
+  width: calc(1096 * var(--u));
+}
+
+.lowerLeftCloud {
+  position: absolute;
+  height: calc(1004 * var(--u));
+  left: calc(-76 * var(--u));
+  top: calc(3853 * var(--u));
+  width: calc(961 * var(--u));
+}
+
+.middleLeftCloud {
+  position: absolute;
+  height: calc(941 * var(--u));
+  left: calc(-104 * var(--u));
+  top: calc(2814 * var(--u));
+  width: calc(961 * var(--u));
+}
+
+/* Each shooting star is its own small animation surface. Children are offset
+   from its bounds, preserving every star/trail's authored position and the
+   clouds' original paint order. Overflow lets the long ASCII tails extend. */
+.shootingStar {
+  position: absolute;
+  pointer-events: none;
+}
+
+.peachShootingStar {
+  left: calc(277.61 * var(--u));
+  top: calc(2623 * var(--u));
+  width: calc(475.648 * var(--u));
+  height: calc(442.983 * var(--u));
+}
+
+.peachTrail {
+  position: absolute;
+  display: flex;
+  height: calc(828.401 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(-1009.61 * var(--u));
+  top: calc(32.82 * var(--u));
+  width: calc(1165.19 * var(--u));
+}
+
+.peachTrailRotation {
+  flex: none;
+  rotate: 4.44deg;
+}
+
+.trailShape {
+  height: calc(744.682 * var(--u));
+  overflow: clip;
+  position: relative;
+  border-radius: calc(12.989 * var(--u));
+  width: calc(1110.903 * var(--u));
+}
+
+.peachStar {
+  position: absolute;
+  height: calc(442.983 * var(--u));
+  left: 0;
+  top: 0;
+  width: calc(475.648 * var(--u));
+}
+
+.peachCloudBase {
+  position: absolute;
+  height: calc(352 * var(--u));
+  left: calc(-76 * var(--u));
+  top: calc(2847 * var(--u));
+  width: calc(747 * var(--u));
+}
+
+.peachCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.84% -5.2% -12.06% -7.22%;
+}
+
+.smallCloudAccent {
+  position: absolute;
+  display: flex;
+  height: calc(83.5 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(405 * var(--u));
+  top: calc(3853 * var(--u));
+  width: calc(191.5 * var(--u));
+}
+
+.smallCloudAccentShape {
+  height: calc(83.5 * var(--u));
+  position: relative;
+  width: calc(191.5 * var(--u));
+}
+
+.smallCloudAccentPaintBounds {
+  position: absolute;
+  inset: -49.98% -19.29% -59.72% -18.49%;
+}
+
+.blueShootingStar {
+  left: calc(196 * var(--u));
+  top: calc(3008.8 * var(--u));
+  width: calc(522.924 * var(--u));
+  height: calc(500.091 * var(--u));
+}
+
+.blueTrail {
+  position: absolute;
+  display: flex;
+  height: calc(1029.047 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(-938 * var(--u));
+  top: calc(204.2 * var(--u));
+  width: calc(1276.432 * var(--u));
+}
+
+.blueTrailRotation {
+  flex: none;
+  rotate: -16.47deg;
+}
+
+.blueStar {
+  position: absolute;
+  display: flex;
+  height: calc(500.091 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: calc(522.924 * var(--u));
+}
+
+.blueStarRotation {
+  flex: none;
+  rotate: -7.45deg;
+}
+
+.blueStarShape {
+  height: calc(442.983 * var(--u));
+  position: relative;
+  width: calc(469.473 * var(--u));
+}
+
+.yellowShootingStar {
+  left: calc(658 * var(--u));
+  top: calc(2770 * var(--u));
+  width: calc(582.876 * var(--u));
+  height: calc(560.975 * var(--u));
+}
+
+.yellowTrail {
+  position: absolute;
+  display: flex;
+  height: calc(1225.443 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(330 * var(--u));
+  top: calc(-445 * var(--u));
+  width: calc(1337.072 * var(--u));
+}
+
+.yellowTrailRotation {
+  flex: none;
+  rotate: 147.45deg;
+  scale: 1 -1;
+}
+
+.yellowStar {
+  position: absolute;
+  display: flex;
+  height: calc(560.975 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: calc(582.876 * var(--u));
+}
+
+.yellowStarRotation {
+  flex: none;
+  rotate: -16.7deg;
+}
+
+.yellowStarShape {
+  height: calc(442.983 * var(--u));
+  position: relative;
+  width: calc(475.648 * var(--u));
+}
+
+.blueCloudGroup {
+  display: contents;
+}
+
+.blueCloudBase {
+  position: absolute;
+  height: calc(377.186 * var(--u));
+  left: calc(40.07 * var(--u));
+  top: calc(3339 * var(--u));
+  width: calc(670.932 * var(--u));
+}
+
+.blueCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.55% -5.07% -12.02% -7.72%;
+}
+
+.pinkShootingStar {
+  left: calc(725 * var(--u));
+  top: calc(3235 * var(--u));
+  width: calc(577.893 * var(--u));
+  height: calc(555.304 * var(--u));
+}
+
+.pinkTrail {
+  position: absolute;
+  display: flex;
+  height: calc(779.231 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(364.7 * var(--u));
+  top: calc(228.1 * var(--u));
+  width: calc(1133.76 * var(--u));
+}
+
+.pinkTrailRotation {
+  flex: none;
+  rotate: -178.2deg;
+  scale: 1 -1;
+}
+
+.pinkStar {
+  position: absolute;
+  display: flex;
+  height: calc(555.304 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: calc(577.893 * var(--u));
+}
+
+.pinkStarRotation {
+  flex: none;
+  rotate: -15.72deg;
+}
+
+.pinkStarShape {
+  height: calc(442.984 * var(--u));
+  position: relative;
+  width: calc(475.647 * var(--u));
+}
+
+.pinkCloudGroup {
+  display: contents;
+}
+
+.pinkCloudBase {
+  position: absolute;
+  display: flex;
+  height: calc(376.5 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(771 * var(--u));
+  top: calc(3594 * var(--u));
+  width: calc(662 * var(--u));
+}
+
+.pinkCloudBaseShape {
+  height: calc(376.5 * var(--u));
+  position: relative;
+  width: calc(662 * var(--u));
+}
+
+.pinkCloudBasePaintBounds {
+  position: absolute;
+  inset: -11.32% -6.11% -11.21% -6.44%;
+}
+
+.lastYearGroup {
+  display: contents;
+}
+
+.lastYearCloudBase {
+  position: absolute;
+  display: flex;
+  height: calc(119 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(796 * var(--u));
+  top: calc(2602 * var(--u));
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudBaseShape {
+  height: calc(119 * var(--u));
+  position: relative;
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudBasePaintBounds {
+  position: absolute;
+  inset: -33.56% -12.85% -38.75% -17.02%;
+}
+
+.lastYearCloudMaskFrame {
+  position: absolute;
+  display: flex;
+  height: calc(119 * var(--u));
+  align-items: center;
+  justify-content: center;
+  left: calc(800.31 * var(--u));
+  top: calc(2629.43 * var(--u));
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudMaskFrameMask {
+  height: calc(119 * var(--u));
+  mask-mode: alpha;
+  mask-composite: intersect;
+  mask-clip: no-clip;
+  mask-repeat: no-repeat;
+  mask-position: calc(-39.661 * var(--u)) calc(-67.358 * var(--u));
+  mask-size: calc(357.148 * var(--u)) calc(205.046 * var(--u));
+  position: relative;
+  width: calc(275 * var(--u));
+}
+
+.lastYearCloudMaskFramePaintBounds {
+  position: absolute;
+  inset: -73.95% -32%;
+}
+
+.lastYear { display: contents; }
+
+.lastYear h2 {
+  position: absolute;
+  top: calc(2648 * var(--u));
+  left: calc(849 * var(--u));
+  width: calc(191 * var(--u));
+  color: #4a1d07;
+  font-size: calc(40 * var(--u));
+  font-weight: 800;
+  line-height: calc(52 * var(--u));
+  letter-spacing: calc(-0.4 * var(--u));
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Hide the stars until their scroll-triggered entrance takes over.
+   With scripting disabled the approved static composition remains visible. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  :global([data-stars-state="pending"]) .shootingStar,
+  .shootingStar[data-star-state="pending"] {
+    visibility: hidden;
+  }
+}
