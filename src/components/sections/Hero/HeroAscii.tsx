@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { HERO_DURATION } from "./hero-motion";
 import styles from "./HeroAscii.module.css";
 
 /** Bright glow uses dense marks, the fade mixes in light ones, and the darkest edge uses only light ones. */
@@ -46,20 +47,38 @@ const PEACH_RAMP: readonly ColorStop[] = [[0, 255, 246, 232], [0.25, 255, 222, 2
 
 /** Curved shooting-star glows on the 1512 grid, each a chain of quadratic curves from head to tail. */
 const STREAKS = [
-  { curves: [[[-20, 92], [520, 96], [680, 150]], [[680, 150], [920, 250], [1230, 620]]], width: 40, blur: 22, ramp: ORANGE_RAMP },
-  { curves: [[[1540, 146], [1000, 150], [580, 270]]], width: 42, blur: 22, ramp: PEACH_RAMP },
-  { curves: [[[-20, 280], [260, 262], [330, 305]], [[330, 305], [375, 345], [350, 565]]], width: 44, blur: 22, ramp: PEACH_RAMP },
-] as const satisfies readonly { curves: readonly (readonly [Point, Point, Point])[]; width: number; blur: number; ramp: readonly ColorStop[] }[];
+  { curves: [[[-20, 92], [520, 96], [680, 150]], [[680, 150], [920, 250], [1230, 620]]], width: 70, ramp: ORANGE_RAMP },
+  { curves: [[[1540, 146], [1000, 150], [580, 270]]], width: 58, ramp: PEACH_RAMP },
+  { curves: [[[-20, 280], [260, 262], [330, 305]], [[330, 305], [375, 345], [350, 565]]], width: 55, ramp: PEACH_RAMP },
+] as const satisfies readonly { curves: readonly (readonly [Point, Point, Point])[]; width: number; ramp: readonly ColorStop[] }[];
 const STREAK_STEPS = 48;
 /** The tail narrows to this fraction of the head's width. */
 const STREAK_TAIL_WIDTH = 0.35;
-/** A wide soft halo under a narrower, tighter core; widths and blurs are fractions of each streak's. */
+/** Halo blur on the 1512 grid. */
+const STREAK_BLUR = 22;
+/** A wide soft halo under a narrower, tighter core; widths and blurs are fractions of the streak's. */
 const STREAK_LAYERS = [
   { width: 1, blur: 1, alpha: 0.7 },
   { width: 0.4, blur: 0.35, alpha: 0.95 },
 ] as const;
 /** The streaks are soft, so they render below CSS resolution and get upscaled. */
 const STREAK_RESOLUTION = 0.5;
+/** Average flight speed in grid units per second. */
+const STREAK_SPEED = 1500;
+/** Fraction of the eclipse intro at which the streaks fly in. */
+const STREAK_ENTER_AT = 0.3;
+/** Seconds the streaks rest in place, once all have arrived, before flying off. */
+const STREAK_HOLD = 2.5;
+/** Seconds between each streak entering, and again between each one leaving. */
+const STREAK_STAGGER = 0.15;
+/** Rough seconds between repeat flights per streak; each wait is jittered by ±STREAK_JITTER so they never sync up. */
+const STREAK_PERIODS = [5, 3.5, 7.5] as const;
+const STREAK_JITTER = 0.5;
+/** Entering and repeat flights start mid-sky, so they fade in over this fraction of the flight. */
+const STREAK_FADE_IN = 0.18;
+/** Extra travel past the screen edge so the soft tail fully clears it. */
+const STREAK_EXIT_MARGIN = 160;
+const PATH_SAMPLES_PER_CURVE = 64;
 
 type Cell = {
   x: number;
@@ -67,6 +86,8 @@ type Cell = {
   phase: number;
   hold: number;
   strength: number;
+  /** Last sampled RGB, so the colour string is only rebuilt when it changes. */
+  packed: number;
   color: string;
   glyphs: string;
 };
@@ -109,92 +130,252 @@ function rampColor(ramp: readonly ColorStop[], progress: number) {
   return `rgb(${from.map((channel, index) => Math.round(channel + (to[index] - channel) * mix)).join(" ")})`;
 }
 
-/** Short segments along each streak, tapering and darkening toward the tail. */
-const STREAK_SEGMENTS = STREAKS.map((streak) => {
-  const curves = streak.curves;
-  const spans = curves.map(([start, , end]) => Math.hypot(end[0] - start[0], end[1] - start[1]));
-  const total = spans.reduce((sum, span) => sum + span, 0);
-  const points = Array.from({ length: STREAK_STEPS + 1 }, (_, step) => {
-    let distance = (step / STREAK_STEPS) * total;
-    let index = 0;
-    while (index < curves.length - 1 && distance > spans[index]) {
-      distance -= spans[index];
-      index += 1;
-    }
-    return quadratic(curves[index], Math.min(1, distance / spans[index]));
-  });
-  return points.slice(1).map((to, index) => {
-    const progress = index / STREAK_STEPS;
-    return {
-      from: points[index],
-      to,
-      width: streak.width * (1 - (1 - STREAK_TAIL_WIDTH) * progress),
-      color: rampColor(streak.ramp, progress),
-    };
-  });
-});
-
 /**
- * Paints every streak into `target`, whose canvas spans the 1512×1273 grid. Segments are stroked sharp on a
- * scratch canvas and blurred once per layer, since a canvas filter would otherwise run on every stroke.
+ * Each streak's flight path runs from its tail through its head and then straight on past the screen edge.
+ * A streak is a window of its own length sliding along that path; at rest its head sits at `length`.
  */
-function paintStreaks(target: CanvasRenderingContext2D) {
-  const { width, height } = target.canvas;
-  const unit = width / 1512;
-  const scratch = document.createElement("canvas");
-  scratch.width = width;
-  scratch.height = height;
-  const scratchContext = scratch.getContext("2d");
-  if (!scratchContext) return;
-
-  target.save();
-  target.globalCompositeOperation = "screen";
-  STREAKS.forEach((streak, index) => {
-    STREAK_LAYERS.forEach((layer) => {
-      scratchContext.setTransform(1, 0, 0, 1, 0, 0);
-      scratchContext.clearRect(0, 0, width, height);
-      scratchContext.setTransform(unit, 0, 0, unit, 0, 0);
-      scratchContext.lineCap = "round";
-      STREAK_SEGMENTS[index].forEach(({ from, to, width: segmentWidth, color }) => {
-        scratchContext.strokeStyle = color;
-        scratchContext.lineWidth = segmentWidth * layer.width;
-        scratchContext.beginPath();
-        scratchContext.moveTo(from[0], from[1]);
-        scratchContext.lineTo(to[0], to[1]);
-        scratchContext.stroke();
-      });
-      target.filter = `blur(${streak.blur * layer.blur * unit}px)`;
-      target.globalAlpha = layer.alpha;
-      target.drawImage(scratch, 0, 0);
-    });
+const STREAK_PATHS = STREAKS.map((streak) => {
+  const headToTail: Point[] = [];
+  streak.curves.forEach((curve, index) => {
+    for (let step = index === 0 ? 0 : 1; step <= PATH_SAMPLES_PER_CURVE; step += 1) {
+      headToTail.push(quadratic(curve, step / PATH_SAMPLES_PER_CURVE));
+    }
   });
-  target.restore();
+  const points = headToTail.reverse();
+  const distances = [0];
+  for (let index = 1; index < points.length; index += 1) {
+    const [x0, y0] = points[index - 1];
+    const [x1, y1] = points[index];
+    distances.push(distances[index - 1] + Math.hypot(x1 - x0, y1 - y0));
+  }
+  const length = distances[distances.length - 1];
+  const [headX, headY] = points[points.length - 1];
+  const [beforeX, beforeY] = points[points.length - 2];
+  const run = Math.hypot(headX - beforeX, headY - beforeY) || 1;
+  const exit = length + STREAK_EXIT_MARGIN;
+  points.push([headX + ((headX - beforeX) / run) * exit, headY + ((headY - beforeY) / run) * exit]);
+  distances.push(length + exit);
+  return {
+    points,
+    distances,
+    length,
+    end: length + exit,
+    colors: Array.from({ length: STREAK_STEPS }, (_, step) => rampColor(streak.ramp, step / STREAK_STEPS)),
+    widths: Array.from({ length: STREAK_STEPS }, (_, step) => streak.width * (1 - (1 - STREAK_TAIL_WIDTH) * (step / STREAK_STEPS))),
+  };
+});
+type StreakPath = (typeof STREAK_PATHS)[number];
+
+/** Written by HeroStreaks every frame it moves; the ASCII sampler reads it to light up along the live streaks. */
+const liveStreaks = {
+  version: 0,
+  heads: STREAK_PATHS.map(() => 0),
+  alphas: STREAK_PATHS.map(() => 0),
+};
+
+function pointAt({ points, distances }: StreakPath, distance: number): Point {
+  let low = 0;
+  let high = distances.length - 1;
+  while (high - low > 1) {
+    const middle = (low + high) >> 1;
+    if (distances[middle] <= distance) low = middle;
+    else high = middle;
+  }
+  const mix = Math.min(1, Math.max(0, (distance - distances[low]) / (distances[high] - distances[low] || 1)));
+  const [x0, y0] = points[low];
+  const [x1, y1] = points[high];
+  return [x0 + (x1 - x0) * mix, y0 + (y1 - y0) * mix];
 }
 
+/** Strokes every live streak sharp, tail first so the head paints on top; blur is applied by the caller. */
+function strokeStreaks(context: CanvasRenderingContext2D, unit: number, widthFactor: number) {
+  context.save();
+  context.setTransform(unit, 0, 0, unit, 0, 0);
+  context.lineCap = "round";
+  STREAK_PATHS.forEach((path, index) => {
+    const head = liveStreaks.heads[index];
+    const alpha = liveStreaks.alphas[index];
+    if (alpha <= 0) return;
+    context.globalAlpha = alpha;
+    const step = path.length / STREAK_STEPS;
+    for (let segment = STREAK_STEPS - 1; segment >= 0; segment -= 1) {
+      const near = head - segment * step;
+      if (near <= 0) continue;
+      const [fromX, fromY] = pointAt(path, Math.max(0, near - step));
+      const [toX, toY] = pointAt(path, near);
+      context.strokeStyle = path.colors[segment];
+      context.lineWidth = path.widths[segment] * widthFactor;
+      context.beginPath();
+      context.moveTo(fromX, fromY);
+      context.lineTo(toX, toY);
+      context.stroke();
+    }
+  });
+  context.restore();
+}
+
+/**
+ * `enter` flies in from the tail end and settles at rest, `exit` speeds up from rest and leaves, and
+ * `loop` crosses the whole path at speed.
+ */
+type FlightKind = "enter" | "exit" | "loop";
+type Flight = { kind: FlightKind; start: number; from: number; to: number; duration: number };
+
+const FLIGHT_EASING: Record<FlightKind, (progress: number) => number> = {
+  enter: (progress) => Math.sin((progress * Math.PI) / 2),
+  exit: (progress) => 1 - Math.cos((progress * Math.PI) / 2),
+  loop: (progress) => progress,
+};
+
+function streakLayerStyle(layer: (typeof STREAK_LAYERS)[number]) {
+  return { filter: `blur(calc(${STREAK_BLUR * layer.blur} * var(--u)))`, opacity: layer.alpha };
+}
+
+/**
+ * Streaks fly in head-first halfway through the eclipse intro, rest for a few seconds, then fly off one after
+ * another. Afterwards each one reappears mid-sky on its own jittered timer and flies the whole path again.
+ */
 export function HeroStreaks() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const haloRef = useRef<HTMLCanvasElement>(null);
+  const coreRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-    if (!canvas || !context) return;
+    const mountedRoot = rootRef.current;
+    const halo = haloRef.current;
+    const core = coreRef.current;
+    const haloContext = halo?.getContext("2d");
+    const coreContext = core?.getContext("2d");
+    if (!mountedRoot || !halo || !core || !haloContext || !coreContext) return;
+    const root = mountedRoot;
+    const layers = [
+      { canvas: halo, context: haloContext, width: STREAK_LAYERS[0].width },
+      { canvas: core, context: coreContext, width: STREAK_LAYERS[1].width },
+    ];
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const flights: (Flight | null)[] = STREAK_PATHS.map(() => null);
+    const nextFlight: { at: number; kind: FlightKind }[] = STREAK_PATHS.map(() => ({ at: Infinity, kind: "loop" }));
+    const flightCounts = STREAK_PATHS.map(() => 0);
+    const resting = motionPreference.matches;
+    let launched = false;
+    let frame = 0;
+    let intersecting = true;
 
-    function render() {
-      if (!canvas || !context) return;
-      const width = Math.max(1, Math.round(canvas.clientWidth * STREAK_RESOLUTION));
-      if (width === canvas.width) return;
-      canvas.width = width;
-      canvas.height = Math.max(1, Math.round((width * 1273) / 1512));
-      paintStreaks(context);
+    liveStreaks.heads = STREAK_PATHS.map((path) => (resting ? path.length : 0));
+    liveStreaks.alphas = STREAK_PATHS.map(() => (resting ? 1 : 0));
+
+    function paint() {
+      for (const { canvas, context, width } of layers) {
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        strokeStreaks(context, canvas.width / 1512, width);
+      }
+      liveStreaks.version += 1;
     }
 
-    const resizeObserver = new ResizeObserver(render);
-    resizeObserver.observe(canvas);
-    render();
-    return () => resizeObserver.disconnect();
+    function resize() {
+      const width = Math.max(1, Math.round(root.clientWidth * STREAK_RESOLUTION));
+      if (width === halo?.width) return;
+      const height = Math.max(1, Math.round((width * 1273) / 1512));
+      for (const { canvas } of layers) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      paint();
+    }
+
+    function fly(index: number, kind: FlightKind, start: number) {
+      const path = STREAK_PATHS[index];
+      const from = kind === "exit" ? path.length : 0;
+      const to = kind === "enter" ? path.length : path.end;
+      const flight = { kind, start, from, to, duration: ((to - from) / STREAK_SPEED) * 1000 };
+      flights[index] = flight;
+      flightCounts[index] += 1;
+      return flight;
+    }
+
+    function scheduleLoop(index: number, now: number) {
+      const jitter = 1 + (seed(index * 31.7 + flightCounts[index] * 5.3) * 2 - 1) * STREAK_JITTER;
+      nextFlight[index] = { at: now + STREAK_PERIODS[index % STREAK_PERIODS.length] * jitter * 1000, kind: "loop" };
+    }
+
+    /** Enters every streak in turn, then lines up their exits once the last one has arrived and rested. */
+    function launch(now: number) {
+      launched = true;
+      const arrivals = STREAK_PATHS.map((_, index) => {
+        const flight = fly(index, "enter", now + index * STREAK_STAGGER * 1000);
+        return flight.start + flight.duration;
+      });
+      const leaveAt = Math.max(...arrivals) + STREAK_HOLD * 1000;
+      STREAK_PATHS.forEach((_, index) => {
+        nextFlight[index] = { at: leaveAt + index * STREAK_STAGGER * 1000, kind: "exit" };
+      });
+    }
+
+    function tick(now: number) {
+      frame = requestAnimationFrame(tick);
+      if (resting) return;
+      if (!launched) {
+        const loadState = root.closest("[data-load-state]")?.getAttribute("data-load-state") ?? "complete";
+        if (loadState === "pending") return;
+        if (loadState === "running") {
+          // The intro waits paused for fonts and artwork, so follow its own clock rather than wall time.
+          const intro = document.querySelector(`[data-node-id="${ECLIPSE_SOURCE_IDS[0]}"]`)?.getAnimations()[0];
+          if (intro && Number(intro.currentTime ?? 0) < HERO_DURATION * STREAK_ENTER_AT) return;
+        }
+        launch(now);
+      }
+
+      let changed = false;
+      STREAK_PATHS.forEach((_, index) => {
+        if (!flights[index] && now >= nextFlight[index].at) fly(index, nextFlight[index].kind, now);
+        const flight = flights[index];
+        if (!flight) return;
+        const progress = (now - flight.start) / flight.duration;
+        if (progress < 0) return;
+        changed = true;
+        if (progress >= 1) {
+          flights[index] = null;
+          liveStreaks.heads[index] = flight.to;
+          if (flight.kind === "enter") return;
+          liveStreaks.alphas[index] = 0;
+          scheduleLoop(index, now);
+          return;
+        }
+        liveStreaks.heads[index] = flight.from + (flight.to - flight.from) * FLIGHT_EASING[flight.kind](progress);
+        liveStreaks.alphas[index] = flight.kind === "exit" ? 1 : Math.min(1, progress / STREAK_FADE_IN);
+      });
+      if (changed) paint();
+    }
+
+    function updateActivity() {
+      cancelAnimationFrame(frame);
+      frame = intersecting ? requestAnimationFrame(tick) : 0;
+    }
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(root);
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      intersecting = entry.isIntersecting;
+      updateActivity();
+    });
+    intersectionObserver.observe(root);
+    resize();
+    updateActivity();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+    };
   }, []);
 
-  return <canvas ref={canvasRef} className={styles.streaks} aria-hidden="true" />;
+  return (
+    <div ref={rootRef} className={styles.streaks} aria-hidden="true">
+      <canvas ref={haloRef} className={styles.streakLayer} style={streakLayerStyle(STREAK_LAYERS[0])} />
+      <canvas ref={coreRef} className={styles.streakLayer} style={streakLayerStyle(STREAK_LAYERS[1])} />
+    </div>
+  );
 }
 
 export default function HeroAscii() {
@@ -210,9 +391,17 @@ export default function HeroAscii() {
     const sample = document.createElement("canvas");
     const samplingContext = sample.getContext("2d", { willReadFrequently: true });
     if (!samplingContext) return;
-    const streakLayer = document.createElement("canvas");
-    streakLayer.width = 0;
-    const streakContext = streakLayer.getContext("2d");
+    // Helper canvases stay in software like `sample`, so compositing them never reads back from the GPU.
+    const base = document.createElement("canvas");
+    const mask = document.createElement("canvas");
+    const scratch = document.createElement("canvas");
+    const eclipseContext = base.getContext("2d", { willReadFrequently: true });
+    const starContext = mask.getContext("2d", { willReadFrequently: true });
+    const streakingContext = scratch.getContext("2d", { willReadFrequently: true });
+    if (!eclipseContext || !starContext || !streakingContext) return;
+    const baseContext = eclipseContext;
+    const maskContext = starContext;
+    const scratchContext = streakingContext;
 
     const overlay = mountedOverlay;
     const canvas = mountedCanvas;
@@ -227,11 +416,12 @@ export default function HeroAscii() {
     let overlayWidth = 0;
     let overlayHeight = 0;
     let lastSample = 0;
+    let lastStreakVersion = -1;
     let lastDraw = 0;
     let lastGridKey = "";
 
     /** Paints an ellipse layer at its untransformed layout box, then applies its live translate/rotate/scale. */
-    function drawLayer(nodeId: string, scale: number, silhouette = false) {
+    function drawLayer(target: CanvasRenderingContext2D, nodeId: string, scale: number, silhouette = false) {
       const node = document.querySelector<HTMLElement>(`[data-node-id="${nodeId}"]`);
       const image = node?.querySelector("img");
       const parent = image?.parentElement;
@@ -247,63 +437,83 @@ export default function HeroAscii() {
       const centerX = node.offsetLeft + node.offsetWidth / 2;
       const centerY = node.offsetTop + node.offsetHeight / 2;
 
-      sampleContext.save();
-      sampleContext.scale(scale, scale);
-      sampleContext.translate(centerX + translateX, centerY + translateY);
-      sampleContext.rotate((rotate * Math.PI) / 180);
-      sampleContext.scale(scaleX, scaleY);
-      sampleContext.translate(-node.offsetWidth / 2, -node.offsetHeight / 2);
+      target.save();
+      target.scale(scale, scale);
+      target.translate(centerX + translateX, centerY + translateY);
+      target.rotate((rotate * Math.PI) / 180);
+      target.scale(scaleX, scaleY);
+      target.translate(-node.offsetWidth / 2, -node.offsetHeight / 2);
       if (silhouette) {
-        sampleContext.filter = "brightness(0)";
-        sampleContext.globalAlpha = parseFloat(style.opacity) || 0;
+        target.filter = "brightness(0)";
+        target.globalAlpha = parseFloat(style.opacity) || 0;
       } else if (blur) {
-        sampleContext.filter = `blur(${parseFloat(blur) * scale}px)`;
+        target.filter = `blur(${parseFloat(blur) * scale}px)`;
       }
-      sampleContext.drawImage(
+      target.drawImage(
         image,
         paintBounds.offsetLeft,
         paintBounds.offsetTop,
         paintBounds.offsetWidth,
         paintBounds.offsetHeight,
       );
-      sampleContext.restore();
+      target.restore();
     }
 
-    /** Mirrors HeroStreaks, painted once per sample size and blended with `screen` over the eclipse. */
+    /** Mirrors HeroStreaks' live pose: each layer stroked sharp, then blurred once and blended with `screen`. */
     function drawStreaks(width: number, height: number) {
-      if (streakLayer.width !== width || streakLayer.height !== height) {
-        streakLayer.width = width;
-        streakLayer.height = height;
-        if (streakContext) paintStreaks(streakContext);
-      }
+      const unit = width / 1512;
       sampleContext.save();
       sampleContext.globalCompositeOperation = "screen";
-      sampleContext.drawImage(streakLayer, 0, 0);
+      STREAK_LAYERS.forEach((layer) => {
+        scratchContext.setTransform(1, 0, 0, 1, 0, 0);
+        scratchContext.clearRect(0, 0, width, height);
+        strokeStreaks(scratchContext, unit, layer.width);
+        sampleContext.filter = `blur(${STREAK_BLUR * layer.blur * unit}px)`;
+        sampleContext.globalAlpha = layer.alpha;
+        sampleContext.drawImage(scratch, 0, 0);
+      });
       sampleContext.restore();
     }
 
-    /** Re-renders the glow under the overlay and caches each cell's colour and strength. */
+    /**
+     * Caches the eclipse and star mask (re-rendered only while the intro moves), composites the live streaks
+     * between them, and stores each cell's colour and strength.
+     */
     function sampleField(now: number, force: boolean) {
       const loadState = overlay.closest("[data-load-state]")?.getAttribute("data-load-state");
       const moving = loadState === "running" || loadState === "pending";
-      if (!force && (!moving || now - lastSample < 80)) return;
-      lastSample = now;
-
       const width = Math.max(1, Math.round(overlayWidth * SAMPLE_SCALE));
       const height = Math.max(1, Math.round(overlayHeight * SAMPLE_SCALE));
-      if (sample.width !== width || sample.height !== height) {
-        sample.width = width;
-        sample.height = height;
+      const resized = sample.width !== width || sample.height !== height;
+      const refreshBase = force || resized || (moving && now - lastSample >= 80);
+      if (!refreshBase && liveStreaks.version === lastStreakVersion) return;
+      lastStreakVersion = liveStreaks.version;
+
+      if (resized) {
+        for (const target of [sample, base, mask, scratch]) {
+          target.width = width;
+          target.height = height;
+        }
       }
+      const scale = width / Math.max(1, overlayWidth);
+      if (refreshBase) {
+        lastSample = now;
+        baseContext.setTransform(1, 0, 0, 1, 0, 0);
+        baseContext.fillStyle = "#0a0a0a";
+        baseContext.fillRect(0, 0, width, height);
+        ECLIPSE_SOURCE_IDS.forEach((nodeId) => drawLayer(baseContext, nodeId, scale));
+        maskContext.setTransform(1, 0, 0, 1, 0, 0);
+        maskContext.clearRect(0, 0, width, height);
+        for (let pass = 0; pass < STAR_MASK_PASSES; pass += 1) drawLayer(maskContext, ECLIPSE_STAR_ID, scale, true);
+      }
+
       sampleContext.setTransform(1, 0, 0, 1, 0, 0);
       sampleContext.filter = "none";
       sampleContext.globalAlpha = 1;
-      sampleContext.fillStyle = "#0a0a0a";
-      sampleContext.fillRect(0, 0, width, height);
-      const scale = width / Math.max(1, overlayWidth);
-      ECLIPSE_SOURCE_IDS.forEach((nodeId) => drawLayer(nodeId, scale));
+      sampleContext.globalCompositeOperation = "source-over";
+      sampleContext.drawImage(base, 0, 0);
       drawStreaks(width, height);
-      for (let pass = 0; pass < STAR_MASK_PASSES; pass += 1) drawLayer(ECLIPSE_STAR_ID, scale, true);
+      sampleContext.drawImage(mask, 0, 0);
 
       const field = sampleContext.getImageData(0, 0, width, height).data;
       for (const cell of cells) {
@@ -316,6 +526,9 @@ export default function HeroAscii() {
         const brightness = Math.max(r, g, b) / 255;
         cell.strength = Math.min(1, Math.max(0, (brightness - BRIGHTNESS_HIDE) / (BRIGHTNESS_FULL - BRIGHTNESS_HIDE)));
         cell.glyphs = glyphsFor(cell.strength);
+        const packed = (r << 16) | (g << 8) | b;
+        if (packed === cell.packed) continue;
+        cell.packed = packed;
         const lift = COLOR_LIFT * cell.strength;
         cell.color = `rgb(${Math.round(r + (255 - r) * lift)} ${Math.round(g + (255 - g) * lift)} ${Math.round(b + (255 - b) * lift)})`;
       }
@@ -353,6 +566,7 @@ export default function HeroAscii() {
               phase: seed(identity + 3.7),
               hold: Math.floor(seed(identity + 8.2) * 1000),
               strength: 0,
+              packed: -1,
               color: "",
               glyphs: LIGHT_GLYPHS,
             });
