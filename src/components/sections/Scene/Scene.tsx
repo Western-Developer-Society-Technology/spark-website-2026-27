@@ -102,10 +102,15 @@ export default function Scene({ children }: SceneProps) {
 
     if (!heroFinished) {
       HERO_MOTION.forEach((motion) => {
-        const selector = `[data-node-id="${motion.nodeId}"]`;
+        const selector = `[data-node-id="${motion.nodeId}"]${motion.part ? ` [data-part="${motion.part}"]` : ""}`;
         const element = root.querySelector<HTMLElement>(selector);
         if (!element) return;
-        const animation = addMotion(element, (widthUnit) => heroKeyframes(motion, widthUnit), "hero", {
+        // Text with a size cap scales its motion by its own capped unit instead.
+        const elementUnit = (widthUnit: number) => {
+          const textUnit = parseFloat(getComputedStyle(element).getPropertyValue("--text-u"));
+          return textUnit > 0 ? textUnit : widthUnit;
+        };
+        const animation = addMotion(element, (widthUnit) => heroKeyframes(motion, elementUnit(widthUnit)), "hero", {
           duration: HERO_DURATION,
           iterations: 1,
           fill: "both",
@@ -167,8 +172,9 @@ export default function Scene({ children }: SceneProps) {
 
     // Start with fonts and the actual hero artwork ready, rather than letting a
     // late SVG decode miss the authored reveal. Below-the-fold images don't delay it.
-    const heroImages = [...root.querySelectorAll<HTMLImageElement>('[data-node-id="111:94"] img')];
-    Promise.all([document.fonts.ready, ...heroImages.map((img) => img.decode().catch(() => undefined))]).then(() => {
+    const heroImages = [...root.querySelectorAll<HTMLImageElement>('[data-node-id="111:94"] img, [data-node-id="111:96"] img')];
+    const wordmarkFont = document.fonts.load('1em "Eternalo"').catch(() => undefined);
+    Promise.all([document.fonts.ready, wordmarkFont, ...heroImages.map((img) => img.decode().catch(() => undefined))]).then(() => {
       if (disposed) return;
       ready = true;
       syncPlayback();

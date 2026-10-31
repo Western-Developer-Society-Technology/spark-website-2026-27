@@ -1,10 +1,8 @@
-import type { ReactNode } from "react";
 import { ArtworkImage } from "@/components/ui/Artwork";
 import artwork from "./artwork";
 import styles from "./Eclipse.module.css";
 
-/** `children` (the wordmark) rises between the halo and the outer ring. */
-export default function Eclipse({ children }: { children: ReactNode }) {
+export default function Eclipse() {
   return (
     <div className={styles.eclipseGroup} data-node-id="111:94">
       <div className={styles.eclipseHalo} data-node-id="111:95">
@@ -12,7 +10,6 @@ export default function Eclipse({ children }: { children: ReactNode }) {
           <ArtworkImage src={artwork.imgEllipse1} />
         </div>
       </div>
-      {children}
       <div className={styles.eclipseOuterRing} data-node-id="111:97">
         <div className={styles.eclipseOuterRingPaintBounds}>
           <ArtworkImage src={artwork.imgEllipse2} />

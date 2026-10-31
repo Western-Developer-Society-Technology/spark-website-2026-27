@@ -4,7 +4,8 @@ const artwork = {
   "imgEllipse2": "/images/figma/rendered/ellipse-2.webp",
   "imgEllipse4": "/images/figma/rendered/ellipse-4.webp",
   "imgEllipse3": "/images/figma/rendered/ellipse-3.webp",
-  "imgGroup1352": "/images/figma/rendered/group-1352.webp"
+  "imgGroup1352": "/images/figma/rendered/group-1352.webp",
+  "imgGroup1363": "/images/figma/rendered/group-1363.webp"
 } as const;
 
 export default artwork;

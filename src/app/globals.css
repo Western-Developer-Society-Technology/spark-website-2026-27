@@ -14,10 +14,19 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Eternalo";
+  src: url("/fonts/eternalo.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
 :root {
   --background: #0a0a0a;
   --font-sans: "Host Grotesk", Arial, sans-serif;
   --font-mono: "Roboto Mono", monospace;
+  --font-display: "Eternalo", serif;
   color-scheme: dark;
 }
 

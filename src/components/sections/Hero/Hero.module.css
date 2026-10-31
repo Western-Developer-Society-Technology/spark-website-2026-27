@@ -1,3 +1,11 @@
+/* Registered so its computed value is a resolved length; Scene reads it to
+   scale the text's intro motion with the text rather than the page. */
+@property --text-u {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 .motionRegion {
   position: absolute;
   top: 0;
@@ -22,56 +30,117 @@
   font-weight: 400;
 }
 
+/* The hero text scales with the page like everything else until the wordmark
+   reaches --wordmark-max-width, then holds that size. Each block stays centred
+   and anchored to the eclipse while the artwork around it keeps growing. */
+.wordmark,
+.tagline,
+.details {
+  --wordmark-max-width: 560px;
+  --text-u: min(var(--u), calc(var(--wordmark-max-width) / 458));
+}
+
+/* Painted above the eclipse and every later section. Its baseline is pinned
+   418 units down the page, so it keeps its place on the eclipse rim. */
 .wordmark {
   position: absolute;
-  left: calc(527 * var(--u));
-  top: calc(297 * var(--u));
-  width: calc(458 * var(--u));
-  height: calc(240 * var(--u));
+  z-index: 2;
+  left: calc(756 * var(--u) - 229 * var(--text-u));
+  top: calc(418 * var(--u) - 191 * var(--text-u));
+  width: calc(458 * var(--text-u));
+  height: calc(240 * var(--text-u));
+  font-family: var(--font-display);
+  font-size: calc(210.53 * var(--text-u));
+  font-weight: 400;
+  /* Puts the baseline 191 units down, where the Figma text layer sits. */
+  line-height: calc(240 * var(--text-u));
+  white-space: nowrap;
 }
 
-.wordmark img {
+/* Each part carries the full-height gradient so they read as one fill. */
+.wordmarkSp,
+.wordmarkA,
+.wordmarkRk {
   position: absolute;
-  top: calc(47.842041 * var(--u));
-  width: calc(451 * var(--u));
-  height: auto;
+  top: 0;
+  background: rgb(255, 241, 233);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
+/* Glyph origins come from the font's kerning (P→A −124, A→R −17 units).
+   SP and RK rest 20 and 24 units out from those origins to make room for the star. */
+.wordmarkSp { left: calc(-20 * var(--text-u)); }
+.wordmarkA { left: calc(165.06 * var(--text-u)); opacity: 0; }
+.wordmarkRk { left: calc(283.58 * var(--text-u)); }
+
+/* group-1363 scaled so the star body is 160 units, centred on the cap height
+   between P and R and overlapping each by ~12 units. */
+.wordmarkStar {
+  position: absolute;
+  left: calc(107.63 * var(--text-u));
+  top: calc(3.96 * var(--text-u));
+  width: calc(229.15 * var(--text-u));
+  height: calc(231.68 * var(--text-u));
+}
+
+/* A round hover target over the star body, not its transparent corners. */
+.wordmarkStar::after {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  pointer-events: auto;
+}
+
+/* The intro animates the star's own scale, so the hover scales its image. */
+.wordmarkStar img {
+  transition: scale 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  .wordmarkStar:hover img {
+    scale: 1.08;
+  }
+}
+
+/* Keeps its distance above the wordmark's baseline. */
 .tagline {
   position: absolute;
-  left: calc(671 * var(--u));
-  top: calc(297 * var(--u));
-  font-size: calc(20.863676 * var(--u));
-  width: calc(171 * var(--u));
-  letter-spacing: calc(-0.208637 * var(--u));
-  line-height: calc(28 * var(--u));
+  left: calc(756.5 * var(--u) - 85.5 * var(--text-u));
+  top: calc(418 * var(--u) - 191 * var(--text-u));
+  font-size: calc(20.863676 * var(--text-u));
+  width: calc(171 * var(--text-u));
+  letter-spacing: calc(-0.208637 * var(--text-u));
+  line-height: calc(28 * var(--text-u));
   color: #fff;
   white-space: nowrap;
 }
 
 .apply {
   position: absolute;
-  left: calc(81 * var(--u));
+  left: calc(81 * var(--text-u));
   top: 0;
-  width: calc(132 * var(--u));
-  height: calc(50 * var(--u));
-  border: calc(1 * var(--u)) solid #fff;
-  border-radius: calc(55 * var(--u));
+  width: calc(132 * var(--text-u));
+  height: calc(50 * var(--text-u));
+  border: calc(1 * var(--text-u)) solid #fff;
+  border-radius: calc(55 * var(--text-u));
   background: linear-gradient(137.54479951485564deg, #ffd2d1 17.68%, #e54b04 93.521%);
   color: #000;
-  font-size: calc(17.386396 * var(--u));
+  font-size: calc(17.386396 * var(--text-u));
   font-weight: 500;
-  letter-spacing: calc(-0.17386 * var(--u));
+  letter-spacing: calc(-0.17386 * var(--text-u));
   cursor: pointer;
   pointer-events: auto;
 }
 
 .details {
   position: absolute;
-  left: calc(608 * var(--u));
+  left: calc(755.5 * var(--u) - 147.5 * var(--text-u));
   top: calc(723 * var(--u));
-  width: calc(295 * var(--u));
-  height: calc(150 * var(--u));
+  width: calc(295 * var(--text-u));
+  height: calc(150 * var(--text-u));
   pointer-events: none;
 }
 
@@ -82,9 +151,9 @@
 
 .apply span {
   position: absolute;
-  left: calc(23 * var(--u));
-  top: calc(13 * var(--u));
-  width: calc(84 * var(--u));
+  left: calc(23 * var(--text-u));
+  top: calc(13 * var(--text-u));
+  width: calc(84 * var(--text-u));
   white-space: nowrap;
   line-height: normal;
 }
@@ -94,29 +163,45 @@
 .location {
   position: absolute;
   color: #e3c4b7;
-  font-size: calc(17.386396 * var(--u));
-  letter-spacing: calc(-0.17386 * var(--u));
+  font-size: calc(17.386396 * var(--text-u));
+  letter-spacing: calc(-0.17386 * var(--text-u));
   line-height: normal;
   white-space: nowrap;
 }
 
-.date { left: calc(68 * var(--u)); top: calc(73 * var(--u)); width: calc(159 * var(--u)); }
-.format { left: calc(33 * var(--u)); top: calc(100 * var(--u)); width: calc(240 * var(--u)); }
-.location { left: 0; top: calc(127 * var(--u)); width: calc(295 * var(--u)); }
+.date { left: calc(68 * var(--text-u)); top: calc(73 * var(--text-u)); width: calc(159 * var(--text-u)); }
+.format { left: calc(33 * var(--text-u)); top: calc(100 * var(--text-u)); width: calc(240 * var(--text-u)); }
+.location { left: 0; top: calc(127 * var(--text-u)); width: calc(295 * var(--text-u)); }
 
 /* Match the first authored frame before hydration creates the Web Animations.
    With scripting disabled the approved static composition remains visible. */
 @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
   :global([data-load-state="pending"]) .wordmark {
-    translate: 0 calc(286 * var(--u));
-    filter: blur(calc(26.399999618530273 * var(--u)));
+    opacity: 0;
+    translate: 0 calc(60 * var(--text-u));
+    filter: blur(calc(12 * var(--text-u)));
+  }
+  :global([data-load-state="pending"]) .wordmarkSp {
+    translate: calc(20 * var(--text-u)) 0;
+  }
+  :global([data-load-state="pending"]) .wordmarkA {
+    opacity: 1;
+  }
+  :global([data-load-state="pending"]) .wordmarkRk {
+    translate: calc(-24 * var(--text-u)) 0;
+  }
+  :global([data-load-state="pending"]) .wordmarkStar {
+    opacity: 0;
+    scale: .3;
+    translate: calc(-11.25 * var(--text-u)) 0;
+    filter: blur(calc(16 * var(--text-u)));
   }
   :global([data-load-state="pending"]) .tagline {
     opacity: 0;
-    translate: 0 calc(286 * var(--u));
+    translate: 0 calc(286 * var(--text-u));
   }
   :global([data-load-state="pending"]) .details {
     opacity: 0;
-    translate: 0 calc(133.5 * var(--u));
+    translate: 0 calc(133.5 * var(--text-u));
   }
 }
