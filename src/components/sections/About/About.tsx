@@ -4,7 +4,8 @@ import styles from "./About.module.css";
 
 export default function About() {
   return (
-    <>
+    <div className={styles.aboutStage} data-about-stage>
+      <div className={styles.motionRegion} data-motion-region="about" aria-hidden="true" />
       <Mountains />
       <section className={styles.about} aria-labelledby="about-heading">
         <h2 id="about-heading" className={styles.heading} data-node-id="111:191">
@@ -18,6 +19,6 @@ export default function About() {
         </p>
       </section>
       <Campfire />
-    </>
+    </div>
   );
 }

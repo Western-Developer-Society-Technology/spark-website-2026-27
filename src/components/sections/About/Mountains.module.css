@@ -5,23 +5,12 @@
   pointer-events: none;
 }
 
-@media (scripting: enabled) {
-  :global([data-has-scrolled="false"]) .mountains {
-    visibility: hidden;
-  }
-}
-
 .farMountain {
   position: absolute;
-  height: calc(648 * var(--u));
-  left: calc(-31 * var(--u));
+  height: calc(655 * var(--u));
+  left: 0;
   top: calc(864 * var(--u));
-  width: calc(1574 * var(--u));
-}
-
-.farMountainPaintBounds {
-  position: absolute;
-  inset: -0.2% -0.32% -0.85% -0.35%;
+  width: calc(1512 * var(--u));
 }
 
 .smallMountainStar {
@@ -53,15 +42,10 @@
 
 .middleMountain {
   position: absolute;
-  height: calc(648 * var(--u));
-  left: calc(-23 * var(--u));
+  height: calc(774 * var(--u));
+  left: 0;
   top: calc(937 * var(--u));
-  width: calc(1574 * var(--u));
-}
-
-.middleMountainPaintBounds {
-  position: absolute;
-  inset: -11.15% -4.04% -8.18% -4.07%;
+  width: calc(1512 * var(--u));
 }
 
 .largeMountainStar {
@@ -115,15 +99,10 @@
 
 .nearMountain {
   position: absolute;
-  height: calc(1121 * var(--u));
-  left: calc(-42 * var(--u));
+  height: calc(1227 * var(--u));
+  left: 0;
   top: calc(984 * var(--u));
-  width: calc(1574.004 * var(--u));
-}
-
-.nearMountainPaintBounds {
-  position: absolute;
-  inset: -5.87% -3.53% -3.53% -3.53%;
+  width: calc(1512 * var(--u));
 }
 
 .mountainForeground {

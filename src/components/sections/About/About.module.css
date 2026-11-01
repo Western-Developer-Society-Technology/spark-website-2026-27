@@ -1,6 +1,48 @@
+/* Stage offset for the whole about block. Lower = farther down; tuned so mountains
+   sit just below the fold at scroll 0 but still overlap the hero artwork on scroll. */
+.aboutStage {
+  --about-lift: 82;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  translate: 0 calc(-1 * var(--about-lift) * var(--u));
+}
+
+@media (scripting: enabled) {
+  .aboutStage:not([data-scenery-ready]) {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .aboutStage[data-scenery-ready] {
+    visibility: visible;
+    animation: aboutSceneryFadeIn 0.45s ease both;
+  }
+}
+
+@keyframes aboutSceneryFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.motionRegion {
+  position: absolute;
+  top: calc(1683 * var(--u));
+  left: 0;
+  width: 100%;
+  height: calc(820 * var(--u));
+  pointer-events: none;
+}
+
 /* The anchor stays on the stage's --u grid so the block keeps its place on
    the artwork; everything inside scales freely with clamp(). */
 .about {
+  pointer-events: auto;
   position: absolute;
   top: calc(1683 * var(--u));
   left: max(1.25rem, 11.64cqw);

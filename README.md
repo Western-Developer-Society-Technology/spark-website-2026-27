@@ -32,9 +32,9 @@ Open `http://localhost:3000`.
 
 The source is [Figma frame 111:2](https://www.figma.com/design/5GAyrAwARCYIyJ4EWMQNWC/Spark-Hackathon-Site-26-27--Copy-?node-id=111-2&m=dev), measuring **1512 × 7709**. The shared `--u` coordinate unit scales this composition proportionally; no separate mobile frame was supplied. Artwork order, transforms, masks, and paint bounds retain the Figma structure. Native cloud exports use lossless WebP because the SVG exports omit their grain effects.
 
-`Scene/hero-motion.ts` preserves the four-second load timing from frame `6:30`, mapped onto the selected composition without the extra orbit curves. The background stays black, and mountains appear after scrolling. `Scene/water-motion.ts` controls boat travel, bobbing, and the floating star's balance and recovery sequence. ASCII characters animate in place, with shooting trails and fire crackles. Motion respects reduced-motion preferences and pauses offscreen or when the tab is hidden.
+`Scene/hero-motion.ts` preserves the four-second load timing from frame `6:30`, mapped onto the selected composition without the extra orbit curves. The background stays black. About mountains use PNG layers with scroll parallax in `Scene/scroll-scenery.ts`. `Scene/water-motion.ts` controls boat travel, bobbing, and the floating star's balance and recovery sequence. ASCII characters animate in place, with shooting trails and fire crackles. Motion respects reduced-motion preferences and pauses offscreen or when the tab is hidden.
 
-The two authored shaders remain unchanged. Their static fills require WebGPU; the original artwork remains as the fallback. Animated wrappers use local artwork bounds to limit graphics memory. Duplicate sponsor images are intentional: their partially transparent pixels combine to match the draft.
+Campfire log wood uses the authored rock shader via WebGPU; mountain fills are static PNGs. Animated wrappers use local artwork bounds to limit graphics memory. Duplicate sponsor images are intentional: their partially transparent pixels combine to match the draft.
 
 FAQ answers use **“Coming soon.”** The **Apply now** button intentionally has no action. Sponsor and footer content remain placeholders from the unfinished draft.
 

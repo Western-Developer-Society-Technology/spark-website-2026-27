@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
 import { WATER_MOTION } from "../Faq/water-motion";
 import { HERO_DURATION, HERO_MOTION, type HeroMotion } from "../Hero/hero-motion";
 import { createStarEntrances } from "../LastYear/star-motion";
+import { createScrollScenery } from "./scroll-scenery";
 import styles from "./Scene.module.css";
 
 type SceneProps = { children: ReactNode };
@@ -46,8 +47,16 @@ function heroKeyframes(motion: HeroMotion, unit: number): Keyframe[] {
 export default function Scene({ children }: SceneProps) {
   const rootRef = useRef<HTMLElement>(null);
 
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    return createScrollScenery(root);
+  }, []);
+
   useEffect(() => {
-    if (rootRef.current) return createStarEntrances(rootRef.current);
+    const root = rootRef.current;
+    if (!root) return;
+    return createStarEntrances(root);
   }, []);
 
   useEffect(() => {
@@ -124,13 +133,6 @@ export default function Scene({ children }: SceneProps) {
     }
     root.dataset.loadState = heroFinished ? "complete" : "running";
 
-    const updateScenery = () => {
-      const hasScrolled = window.scrollY > 0 ? "true" : "false";
-      if (root.dataset.hasScrolled !== hasScrolled) root.dataset.hasScrolled = hasScrolled;
-    };
-    updateScenery();
-    window.addEventListener("scroll", updateScenery, { passive: true });
-
     WATER_MOTION.forEach(({ selector, keyframes, options }) => {
       const element = root.querySelector<HTMLElement>(selector);
       if (element) addMotion(element, keyframes, "water", options);
@@ -187,12 +189,11 @@ export default function Scene({ children }: SceneProps) {
       intersectionObserver.disconnect();
       reducedMotion.removeEventListener("change", handleReducedMotion);
       document.removeEventListener("visibilitychange", syncPlayback);
-      window.removeEventListener("scroll", updateScenery);
     };
   }, []);
 
   return (
-    <main className={styles.site} ref={rootRef} data-load-state="pending" data-has-scrolled="false" data-stars-state="pending">
+    <main className={styles.site} ref={rootRef} data-load-state="pending" data-stars-state="pending">
       <div className={styles.stage}>{children}</div>
     </main>
   );

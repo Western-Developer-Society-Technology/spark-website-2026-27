@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import type { CustomEffectState, Shader } from './types'
 import { useWebGPUDevice } from './webgpu'
 
-// The supplied cloud and rock shaders are static, single-pass fills. They render
-// directly to the canvas and never sample an input texture.
+// The supplied rock shader is a static, single-pass fill. It renders directly to the
+// canvas and never samples an input texture.
 export function useShaderRuntime({
   canvas,
   shader,

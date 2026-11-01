@@ -1,22 +1,12 @@
-"use client";
-
 import { ArtworkImage } from "@/components/ui/Artwork";
-import ArtworkShader from "@/components/ui/Artwork/ArtworkShader";
 import artwork from "./artwork";
-import { cloudShader, farMountainShader, middleMountainShader, nearMountainShader } from "./shaders";
 import styles from "./Mountains.module.css";
 
 export default function Mountains() {
   return (
     <div className={styles.mountains}>
       <div className={styles.farMountain} data-node-id="112:3">
-        <div className={styles.farMountainPaintBounds}>
-          <ArtworkImage absolute src={artwork.imgVector15} />
-        </div>
-        {/* Native vector bounds preserve shader UVs; opaque fills cover exported interior shadows. */}
-        <ArtworkShader mask={artwork.farMountainMask} shader={cloudShader} />
-        <ArtworkShader mask={artwork.farMountainMask} shader={farMountainShader} />
-        <ArtworkImage absolute src={artwork.farMountainStroke} />
+        <ArtworkImage absolute src={artwork.mountainFar} />
       </div>
       <div className={styles.smallMountainStar} data-node-id="116:102">
         <div className={styles.smallMountainStarRotation}>
@@ -28,12 +18,7 @@ export default function Mountains() {
         </div>
       </div>
       <div className={styles.middleMountain} data-node-id="112:49">
-        <div className={styles.middleMountainPaintBounds}>
-          <ArtworkImage absolute src={artwork.imgVector16} />
-        </div>
-        <ArtworkShader mask={artwork.middleMountainMask} shader={cloudShader} />
-        <ArtworkShader mask={artwork.middleMountainMask} shader={middleMountainShader} />
-        <ArtworkImage absolute src={artwork.middleMountainStroke} />
+        <ArtworkImage absolute src={artwork.mountainMiddle} />
       </div>
       <div className={styles.largeMountainStar} data-node-id="116:87">
         <div className={styles.largeMountainStarRotation}>
@@ -54,12 +39,7 @@ export default function Mountains() {
         </div>
       </div>
       <div className={styles.nearMountain} data-node-id="112:50">
-        <div className={styles.nearMountainPaintBounds}>
-          <ArtworkImage absolute src={artwork.imgVector17} />
-        </div>
-        <ArtworkShader mask={artwork.nearMountainMask} shader={cloudShader} />
-        <ArtworkShader mask={artwork.nearMountainMask} shader={nearMountainShader} />
-        <ArtworkImage absolute src={artwork.nearMountainStroke} />
+        <ArtworkImage absolute src={artwork.mountainNear} />
       </div>
       <div className={styles.mountainForeground} data-node-id="112:51">
         <div className={styles.mountainForegroundPaintBounds}>
