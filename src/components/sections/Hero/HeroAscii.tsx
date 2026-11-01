@@ -30,13 +30,16 @@ const BRIGHTNESS_FULL = 0.45;
 /** Below 1, faint edge glyphs stay more visible as the glow fades out. */
 const EDGE_OPACITY_CURVE = 0.6;
 const COLOR_LIFT = 0.28;
+/** Above this sampled brightness, glyph colour mixes further toward white (lens flare / star glow). */
+const COLOR_WHITE_FROM = 0.38;
+const COLOR_WHITE_MIX = 0.62;
 const SKIP_RATE = 0.05;
 /** Every eclipse ellipse, in paint order. */
 const ECLIPSE_SOURCE_IDS = ["111:95", "111:97", "111:98", "111:99"] as const;
-/** The eclipse star is painted as a dark silhouette, so no glyphs appear over it. */
+/** Star artwork is sampled for glow colour; glyphs are cleared only where its alpha is high. */
 const ECLIPSE_STAR_ID = "111:100";
-/** Stacking the silhouette makes the star's faint rays and glow opaque enough to clear glyphs too. */
-const STAR_MASK_PASSES = 4;
+/** Drop glyphs on the opaque star core, but keep them in the soft outer flare. */
+const STAR_MASK_ALPHA = 0.42;
 
 type Point = readonly [number, number];
 type ColorStop = readonly [offset: number, r: number, g: number, b: number];
@@ -64,7 +67,7 @@ const STREAK_LAYERS = [
 /** The streaks are soft, so they render below CSS resolution and get upscaled. */
 const STREAK_RESOLUTION = 0.5;
 /** Average flight speed in grid units per second. */
-const STREAK_SPEED = 1500;
+const STREAK_SPEED = 1200;
 /** Fraction of the eclipse intro at which the streaks fly in. */
 const STREAK_ENTER_AT = 0.3;
 /** Seconds the streaks rest in place, once all have arrived, before flying off. */
@@ -108,6 +111,14 @@ function glyphsFor(strength: number) {
   if (strength >= DENSE_ONLY_ABOVE) return DENSE_GLYPHS;
   if (strength < LIGHT_ONLY_BELOW) return LIGHT_GLYPHS;
   return MIXED_GLYPHS;
+}
+
+/** Pulls glyph fill toward white in bright glow, especially the star flare and hot eclipse rim. */
+function glyphColor(r: number, g: number, b: number, strength: number) {
+  const brightness = Math.max(r, g, b) / 255;
+  const hot = Math.min(1, Math.max(0, (brightness - COLOR_WHITE_FROM) / (1 - COLOR_WHITE_FROM)));
+  const mix = Math.min(1, COLOR_LIFT * strength + hot * COLOR_WHITE_MIX);
+  return `rgb(${Math.round(r + (255 - r) * mix)} ${Math.round(g + (255 - g) * mix)} ${Math.round(b + (255 - b) * mix)})`;
 }
 
 function lengths(value: string) {
@@ -419,6 +430,7 @@ export default function HeroAscii() {
     let lastStreakVersion = -1;
     let lastDraw = 0;
     let lastGridKey = "";
+    let starMaskField: Uint8ClampedArray | null = null;
 
     /** Paints an ellipse layer at its untransformed layout box, then applies its live translate/rotate/scale. */
     function drawLayer(target: CanvasRenderingContext2D, nodeId: string, scale: number, silhouette = false) {
@@ -502,9 +514,11 @@ export default function HeroAscii() {
         baseContext.fillStyle = "#0a0a0a";
         baseContext.fillRect(0, 0, width, height);
         ECLIPSE_SOURCE_IDS.forEach((nodeId) => drawLayer(baseContext, nodeId, scale));
+        drawLayer(baseContext, ECLIPSE_STAR_ID, scale);
         maskContext.setTransform(1, 0, 0, 1, 0, 0);
         maskContext.clearRect(0, 0, width, height);
-        for (let pass = 0; pass < STAR_MASK_PASSES; pass += 1) drawLayer(maskContext, ECLIPSE_STAR_ID, scale, true);
+        drawLayer(maskContext, ECLIPSE_STAR_ID, scale);
+        starMaskField = maskContext.getImageData(0, 0, width, height).data;
       }
 
       sampleContext.setTransform(1, 0, 0, 1, 0, 0);
@@ -513,9 +527,9 @@ export default function HeroAscii() {
       sampleContext.globalCompositeOperation = "source-over";
       sampleContext.drawImage(base, 0, 0);
       drawStreaks(width, height);
-      sampleContext.drawImage(mask, 0, 0);
 
       const field = sampleContext.getImageData(0, 0, width, height).data;
+      const maskField = starMaskField;
       for (const cell of cells) {
         const sampleX = Math.min(width - 1, Math.max(0, Math.round(cell.x * scale)));
         const sampleY = Math.min(height - 1, Math.max(0, Math.round(cell.y * scale)));
@@ -523,14 +537,19 @@ export default function HeroAscii() {
         const r = field[index];
         const g = field[index + 1];
         const b = field[index + 2];
+        const maskAlpha = maskField ? maskField[index + 3] / 255 : 0;
+        if (maskAlpha > STAR_MASK_ALPHA) {
+          cell.strength = 0;
+          cell.packed = -1;
+          continue;
+        }
         const brightness = Math.max(r, g, b) / 255;
         cell.strength = Math.min(1, Math.max(0, (brightness - BRIGHTNESS_HIDE) / (BRIGHTNESS_FULL - BRIGHTNESS_HIDE)));
         cell.glyphs = glyphsFor(cell.strength);
         const packed = (r << 16) | (g << 8) | b;
         if (packed === cell.packed) continue;
         cell.packed = packed;
-        const lift = COLOR_LIFT * cell.strength;
-        cell.color = `rgb(${Math.round(r + (255 - r) * lift)} ${Math.round(g + (255 - g) * lift)} ${Math.round(b + (255 - b) * lift)})`;
+        cell.color = glyphColor(r, g, b, cell.strength);
       }
     }
 
