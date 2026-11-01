@@ -1,4 +1,5 @@
 import Campfire from "./Campfire";
+import AboutRidge from "./AboutRidge";
 import Mountains from "./Mountains";
 import styles from "./About.module.css";
 
@@ -19,6 +20,7 @@ export default function About() {
         </p>
       </section>
       <Campfire />
+      <AboutRidge />
     </div>
   );
 }

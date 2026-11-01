@@ -3,6 +3,8 @@ const artwork = {
   "mountainFar": "/images/mountains/mountain1.png",
   "mountainMiddle": "/images/mountains/mountain2.png",
   "mountainNear": "/images/mountains/mountain3.png",
+  "mountainRidge": "/images/mountains/mountain4.png",
+  "mountainRidgeForeground": "/images/mountains/ridge-foreground.png",
   "imgVector18": "/images/figma/rendered/vector-18.webp",
   "imgVector19": "/images/figma/vector-19.svg",
   "imgVector20": "/images/figma/vector-20.svg",

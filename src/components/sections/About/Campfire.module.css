@@ -2,6 +2,7 @@
 .campfireGroup {
   position: absolute;
   inset: 0;
+  translate: 0 calc(-1 * var(--about-content-lift, 0) * var(--u));
   /* The last-year clouds render later, and their soft upper edges reach the campfire. */
   z-index: 1;
   pointer-events: none;

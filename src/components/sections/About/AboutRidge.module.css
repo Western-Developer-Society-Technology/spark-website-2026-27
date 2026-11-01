@@ -1,0 +1,24 @@
+/* Ridge art is 1024×398, scaled to the 1512-wide stage grid. */
+.ridge {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ridgeMountain {
+  position: absolute;
+  top: calc(1920 * var(--u));
+  left: 0;
+  width: calc(1512 * var(--u));
+  height: calc(587 * var(--u));
+}
+
+/* Vector 20 foreground export: 1024×495 → 1512×731 on the stage grid. */
+.ridgeForeground {
+  position: absolute;
+  top: calc(1850 * var(--u));
+  left: 0;
+  width: calc(1512 * var(--u));
+  height: calc(731 * var(--u));
+}
