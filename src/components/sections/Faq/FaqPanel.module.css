@@ -1,30 +1,43 @@
-.faq { display: contents; }
+/* Panel max-width tokens live on .faqStage; vertical position is anchored to --faq-cloud-band. */
+.faq {
+  display: contents;
+}
+
 
 .heading {
   position: absolute;
-  top: calc(4240 * var(--u));
-  left: calc(257 * var(--u));
-  width: calc(86 * var(--u));
-  font-size: calc(46.400532 * var(--u));
+  top: calc(
+    (var(--faq-cloud-band) + var(--faq-panel-overhang)) * var(--u)
+    - var(--faq-panel-height) * var(--panel-u)
+    - var(--faq-scenery-lift) * var(--u)
+    - var(--faq-heading-above-panel) * var(--u)
+  );
+  left: calc(50% - 499 * var(--panel-u));
+  width: calc(86 * var(--panel-u));
+  font-size: calc(46.400532 * var(--panel-u));
   font-weight: 800;
-  line-height: calc(60 * var(--u));
-  letter-spacing: calc(-0.464005 * var(--u));
+  line-height: calc(60 * var(--panel-u));
+  letter-spacing: calc(-0.464005 * var(--panel-u));
   color: #fff;
 }
 
 .panel {
   position: absolute;
-  left: calc(211 * var(--u));
-  top: calc(4322 * var(--u));
-  width: calc(1090 * var(--u));
-  height: calc(808 * var(--u));
-  border: calc(16 * var(--u)) solid transparent;
-  border-radius: calc(46 * var(--u));
+  left: calc(50% - 545 * var(--panel-u));
+  top: calc(
+    (var(--faq-cloud-band) + var(--faq-panel-overhang)) * var(--u)
+    - var(--faq-panel-height) * var(--panel-u)
+    - var(--faq-scenery-lift) * var(--u)
+  );
+  width: calc(1090 * var(--panel-u));
+  height: calc(808 * var(--panel-u));
+  border: calc(16 * var(--panel-u)) solid transparent;
+  border-radius: calc(46 * var(--panel-u));
   background: transparent;
-  padding: calc(52 * var(--u)) calc(60 * var(--u));
+  padding: calc(52 * var(--panel-u)) calc(60 * var(--panel-u));
   display: grid;
-  grid-template-columns: calc(454 * var(--u)) calc(410 * var(--u));
-  column-gap: calc(76 * var(--u));
+  grid-template-columns: calc(454 * var(--panel-u)) calc(410 * var(--panel-u));
+  column-gap: calc(76 * var(--panel-u));
   align-content: start;
   color: #372317;
   pointer-events: auto;
@@ -32,12 +45,17 @@
 
 .panelArtwork {
   position: absolute;
-  left: calc(195.045898 * var(--u));
-  top: calc(4307.562988 * var(--u));
-  width: calc(1122 * var(--u));
-  height: calc(836 * var(--u));
-  backdrop-filter: blur(calc(75 * var(--u)));
-  -webkit-backdrop-filter: blur(calc(75 * var(--u)));
+  left: calc(50% - 561 * var(--panel-u));
+  top: calc(
+    (var(--faq-cloud-band) + var(--faq-panel-overhang)) * var(--u)
+    - var(--faq-panel-height) * var(--panel-u)
+    - var(--faq-scenery-lift) * var(--u)
+    - var(--faq-artwork-inset) * var(--u)
+  );
+  width: calc(1122 * var(--panel-u));
+  height: calc(996 * var(--panel-u));
+  backdrop-filter: blur(calc(75 * var(--panel-u)));
+  -webkit-backdrop-filter: blur(calc(75 * var(--panel-u)));
 }
 
 .panelArtwork img {
@@ -48,7 +66,7 @@
 .column {
   display: flex;
   flex-direction: column;
-  gap: calc(30 * var(--u));
+  gap: calc(30 * var(--panel-u));
 }
 
 .question {
@@ -62,10 +80,10 @@
   padding: 0;
   background: transparent;
   color: inherit;
-  font-size: calc(25 * var(--u));
+  font-size: calc(25 * var(--panel-u));
   font-weight: 500;
-  letter-spacing: calc(-0.25 * var(--u));
-  line-height: calc(32 * var(--u));
+  letter-spacing: calc(-0.25 * var(--panel-u));
+  line-height: calc(32 * var(--panel-u));
   white-space: pre;
   text-align: left;
   cursor: pointer;
@@ -82,7 +100,7 @@
 }
 
 .answer {
-  padding-top: calc(12 * var(--u));
-  font-size: calc(22.063156 * var(--u));
+  padding-top: calc(12 * var(--panel-u));
+  font-size: calc(22.063156 * var(--panel-u));
   line-height: 1.3;
 }

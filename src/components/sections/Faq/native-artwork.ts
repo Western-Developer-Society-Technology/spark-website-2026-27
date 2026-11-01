@@ -6,7 +6,7 @@ const nativeArtwork = {
   "116:127": {
     "src": "/images/figma/faq-left-cloud-noise-native.webp",
     "left": -246,
-    "top": 5020,
+    "top": 4958,
     "width": 854.5458374023438,
     "height": 377.1863708496094,
     "transform": "matrix(1, 0, 0, 1, 0, 0)",
@@ -20,7 +20,7 @@ const nativeArtwork = {
   "116:135": {
     "src": "/images/figma/faq-right-cloud-noise-native.webp",
     "left": 852,
-    "top": 4990,
+    "top": 4928,
     "width": 854.5458374023438,
     "height": 412.1863708496094,
     "transform": "matrix(1, 0, 0, 1, 0, 0)",
@@ -34,7 +34,7 @@ const nativeArtwork = {
   "116:143": {
     "src": "/images/figma/faq-middle-cloud-noise-native.webp",
     "left": 1139,
-    "top": 5002,
+    "top": 4940,
     "width": 814.8455810546875,
     "height": 377.1863708496094,
     "transform": "matrix(-1, 0, 0, 1, 0, 0)",
@@ -48,7 +48,7 @@ const nativeArtwork = {
   "116:151": {
     "src": "/images/figma/faq-wide-cloud-noise-native.webp",
     "left": -637,
-    "top": 5058,
+    "top": 4996,
     "width": 2502.102294921875,
     "height": 385,
     "transform": "matrix(1, 0, 0, 1, 0, 0)",
@@ -62,7 +62,7 @@ const nativeArtwork = {
   "116:178": {
     "src": "/images/figma/faq-front-cloud-noise-native.webp",
     "left": 1912,
-    "top": 5620,
+    "top": 5558,
     "width": 2502.102294921875,
     "height": 424,
     "transform": "matrix(-1, 0, 0, -1, 0, 0)",

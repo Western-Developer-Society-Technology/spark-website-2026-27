@@ -1,4 +1,36 @@
 /* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.faqStage {
+  --panel-max-width: 1122px;
+  --panel-u: min(var(--u), calc(var(--panel-max-width) / 1122));
+  /* Figma cloud band (5020) and panel bottom (5130); locks panel to clouds when width caps. */
+  --faq-cloud-band: 5020;
+  --faq-panel-overhang: 0;
+  --faq-panel-height: 808;
+  --faq-heading-above-panel: 62;
+  --faq-artwork-inset: 14.437;
+  /* Shared lift for the FAQ panel (and baseline for scenery). Tune --faq-lift-base /
+     --faq-lift-wide for gap to Last Year. --faq-scenery-lift moves clouds + panel together. */
+  --faq-lift-base: 0;
+  --faq-lift-wide: 770;
+  --faq-scenery-lift: 100;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  translate: 0 calc(
+    -1 * var(--faq-lift-base) * var(--u)
+    - var(--faq-lift-wide) * (var(--u) - var(--panel-u))
+  );
+}
+
+/* Backdrop and halo sit behind the panel; clouds/water/boat paint after it. */
+.faqSceneryLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Higher = clouds/water move up relative to backdrop; panel uses the same value in its anchor. */
+  translate: 0 calc(-1 * var(--faq-scenery-lift) * var(--u));
+}
+
 .waterMotionRegion {
   position: absolute;
   top: calc(4784 * var(--u));
