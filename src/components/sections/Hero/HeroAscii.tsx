@@ -41,6 +41,138 @@ const ECLIPSE_STAR_ID = "111:100";
 /** Drop glyphs on the opaque star core, but keep them in the soft outer flare. */
 const STAR_MASK_ALPHA = 0.42;
 
+/** Mouse trail: subtle reveal on the same ASCII grid (weaker than the hero streaks). */
+const CURSOR_TRAIL_LIFE = 1.15;
+const CURSOR_SAMPLE_SPACING = 10;
+const CURSOR_RADIUS = 64;
+/** Only glyphs this close to the live cursor sample to white; outside stays orange. */
+const CURSOR_WHITE_RADIUS = 12;
+/** Just outside the core, the head stays extra bright before settling into trail orange. */
+const CURSOR_HEAD_HALO = 30;
+const CURSOR_MAX_BOOST = 0.88;
+/** Lets the cursor tease glyphs out of very dark sky without overpowering the glow sampling. */
+const CURSOR_DARK_REVEAL = 0.8;
+const CURSOR_MAX_POINTS = 72;
+
+type TrailPoint = { x: number; y: number; t: number };
+
+/** Warm orange along the trail; `along` 0 = tail, 1 = head. */
+function trailOrange(along: number, age: number) {
+  const vivid = Math.min(1, along * 1.05 + (1 - age) * 0.15);
+  const tail = (1 - along) * 0.55 + age * 0.35;
+  const strength = Math.max(0.25, vivid - tail * 0.4);
+  return [
+    Math.round(175 + 80 * strength),
+    Math.round(52 + 68 * strength),
+    Math.round(4 + 22 * strength),
+  ] as const;
+}
+
+/** White core only under the cursor; the rim of the core already leans orange. */
+function cursorCoreColor(distToHead: number) {
+  const t = Math.min(1, distToHead / CURSOR_WHITE_RADIUS);
+  const edge = t * t;
+  return [
+    255,
+    Math.round(255 - 90 * edge),
+    Math.round(252 - 200 * edge),
+  ] as const;
+}
+
+/** Hot white-peach ring around the core; fades with distance and trail age. */
+function cursorHeadColor(distToHead: number, age: number) {
+  if (distToHead <= CURSOR_WHITE_RADIUS) return cursorCoreColor(distToHead);
+  const span = Math.max(1, CURSOR_HEAD_HALO - CURSOR_WHITE_RADIUS);
+  const t = Math.min(1, (distToHead - CURSOR_WHITE_RADIUS) / span);
+  const fresh = Math.min(1, (1 - age) ** 0.65);
+  const hot = (1 - t) * fresh;
+  return [
+    Math.round(255 - 35 * t),
+    Math.round(228 - 95 * t + 40 * hot),
+    Math.round(168 - 130 * t + 70 * hot),
+  ] as const;
+}
+
+function mixRgb(base: string, r: number, g: number, b: number, amount: number) {
+  const match = /^rgb\((\d+) (\d+) (\d+)\)$/.exec(base);
+  const br = match ? Number(match[1]) : 0;
+  const bg = match ? Number(match[2]) : 0;
+  const bb = match ? Number(match[3]) : 0;
+  const mix = Math.min(1, Math.max(0, amount));
+  return `rgb(${Math.round(br + (r - br) * mix)} ${Math.round(bg + (g - bg) * mix)} ${Math.round(bb + (b - bb) * mix)})`;
+}
+
+/** Returns extra opacity (0–1) and a warm streak colour for this cell from the fading pointer trail. */
+function trailInfluence(
+  cellX: number,
+  cellY: number,
+  trail: readonly TrailPoint[],
+  now: number,
+  bbox: { minX: number; minY: number; maxX: number; maxY: number } | null,
+) {
+  if (trail.length === 0) return null;
+  if (bbox && (cellX < bbox.minX || cellX > bbox.maxX || cellY < bbox.minY || cellY > bbox.maxY)) return null;
+
+  const lifeMs = CURSOR_TRAIL_LIFE * 1000;
+  let boost = 0;
+  let rSum = 0;
+  let gSum = 0;
+  let bSum = 0;
+  let weightSum = 0;
+  const last = trail.length - 1;
+
+  for (let index = 0; index < trail.length; index += 1) {
+    const point = trail[index];
+    const age = (now - point.t) / lifeMs;
+    if (age >= 1) continue;
+    const dx = cellX - point.x;
+    const dy = cellY - point.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist > CURSOR_RADIUS) continue;
+    const spatial = (1 - dist / CURSOR_RADIUS) ** 2;
+    const temporal = (1 - age) ** 1.4;
+    const along = last > 0 ? index / last : 1;
+    let influence = spatial * temporal * CURSOR_MAX_BOOST;
+    const isHead = index === last;
+    if (isHead) {
+      influence *= 1 + (1 - age) * 0.45;
+      if (dist <= CURSOR_HEAD_HALO) influence *= 1.12;
+    }
+    if (influence <= 0.001) continue;
+    boost = Math.max(boost, influence);
+    const [r, g, b] =
+      isHead && dist <= CURSOR_HEAD_HALO ? cursorHeadColor(dist, age) : trailOrange(along, age);
+    rSum += r * influence;
+    gSum += g * influence;
+    bSum += b * influence;
+    weightSum += influence;
+  }
+
+  if (boost <= 0.002) return null;
+  const inv = 1 / weightSum;
+  return {
+    boost,
+    r: Math.round(rSum * inv),
+    g: Math.round(gSum * inv),
+    b: Math.round(bSum * inv),
+  };
+}
+
+function trailBounds(trail: readonly TrailPoint[], pad: number) {
+  if (trail.length === 0) return null;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const point of trail) {
+    minX = Math.min(minX, point.x);
+    minY = Math.min(minY, point.y);
+    maxX = Math.max(maxX, point.x);
+    maxY = Math.max(maxY, point.y);
+  }
+  return { minX: minX - pad, minY: minY - pad, maxX: maxX + pad, maxY: maxY + pad };
+}
+
 type Point = readonly [number, number];
 type ColorStop = readonly [offset: number, r: number, g: number, b: number];
 
@@ -431,6 +563,9 @@ export default function HeroAscii() {
     let lastDraw = 0;
     let lastGridKey = "";
     let starMaskField: Uint8ClampedArray | null = null;
+    const trail: TrailPoint[] = [];
+    let lastSampleX = Number.NaN;
+    let lastSampleY = Number.NaN;
 
     /** Paints an ellipse layer at its untransformed layout box, then applies its live translate/rotate/scale. */
     function drawLayer(target: CanvasRenderingContext2D, nodeId: string, scale: number, silhouette = false) {
@@ -609,16 +744,25 @@ export default function HeroAscii() {
       if (now - lastDraw < FRAME_MS) return;
       lastDraw = now;
       sampleField(now, false);
+
+      const cutoff = now - CURSOR_TRAIL_LIFE * 1000;
+      while (trail.length > 0 && trail[0].t < cutoff) trail.shift();
+      const trailBox = trailBounds(trail, CURSOR_RADIUS);
+
       context.clearRect(0, 0, overlayWidth, overlayHeight);
       const reduced = motionPreference.matches;
       const time = now / 1000;
+      const cursorOn = !reduced;
 
       for (const cell of cells) {
-        if (cell.strength <= 0) continue;
-        let opacity = cell.strength ** EDGE_OPACITY_CURVE;
+        const trailFx = cursorOn ? trailInfluence(cell.x, cell.y, trail, now, trailBox) : null;
+        const hasGlow = cell.strength > 0;
+        if (!hasGlow && !trailFx) continue;
+
+        let opacity = hasGlow ? cell.strength ** EDGE_OPACITY_CURVE : 0;
         let cycling = false;
         let cycleIndex = 0;
-        if (!reduced) {
+        if (hasGlow && !reduced) {
           const shifted = time + cell.phase * CYCLE;
           const local = shifted % CYCLE;
           cycleIndex = Math.floor(shifted / CYCLE);
@@ -626,18 +770,48 @@ export default function HeroAscii() {
             opacity *= local / FADE_IN;
             cycling = true;
           } else if (local >= FADE_IN + HOLD + FADE_OUT) {
-            continue;
+            if (!trailFx) continue;
+            opacity = 0;
           } else if (local >= FADE_IN + HOLD) {
             opacity *= 1 - (local - FADE_IN - HOLD) / FADE_OUT;
             cycling = true;
           }
         }
+
+        if (trailFx) {
+          const cursorOpacity = trailFx.boost * (hasGlow ? 1 : CURSOR_DARK_REVEAL);
+          opacity = Math.min(1, opacity + cursorOpacity * (1 - opacity * 0.2));
+        }
+
         if (opacity < 0.03) continue;
+        const fill = trailFx
+          ? hasGlow
+            ? mixRgb(cell.color, trailFx.r, trailFx.g, trailFx.b, Math.min(1, trailFx.boost * 0.95))
+            : `rgb(${trailFx.r} ${trailFx.g} ${trailFx.b})`
+          : cell.color;
+
         context.globalAlpha = opacity;
-        context.fillStyle = cell.color;
+        context.fillStyle = fill;
         context.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       context.globalAlpha = 1;
+    }
+
+    function addTrailPoint(clientX: number, clientY: number, now: number) {
+      const rect = overlay.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
+      if (Number.isFinite(lastSampleX) && Math.hypot(x - lastSampleX, y - lastSampleY) < CURSOR_SAMPLE_SPACING) return;
+      lastSampleX = x;
+      lastSampleY = y;
+      trail.push({ x, y, t: now });
+      while (trail.length > CURSOR_MAX_POINTS) trail.shift();
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      if (disposed || !intersecting) return;
+      addTrailPoint(event.clientX, event.clientY, performance.now());
     }
 
     function start() {
@@ -664,6 +838,7 @@ export default function HeroAscii() {
     const resizeObserver = new ResizeObserver(layout);
     resizeObserver.observe(overlay);
     document.addEventListener("visibilitychange", updateActivity);
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
     layout();
     document.fonts.ready.then(() => {
       if (!disposed) layout();
@@ -684,6 +859,7 @@ export default function HeroAscii() {
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
       document.removeEventListener("visibilitychange", updateActivity);
+      window.removeEventListener("pointermove", onPointerMove);
     };
   }, []);
 
