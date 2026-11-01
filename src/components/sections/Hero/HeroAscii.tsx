@@ -207,7 +207,7 @@ const STREAK_SPEED = 1200;
 /** Fraction of the eclipse intro at which the streaks fly in. */
 const STREAK_ENTER_AT = 0.3;
 /** Seconds the streaks rest in place, once all have arrived, before flying off. */
-const STREAK_HOLD = 2.5;
+const STREAK_HOLD = 2;
 /** Seconds between each streak entering, and again between each one leaving. */
 const STREAK_STAGGER = 0.15;
 /** Rough seconds between repeat flights per streak; each wait is jittered by ±STREAK_JITTER so they never sync up. */

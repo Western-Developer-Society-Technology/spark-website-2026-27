@@ -148,15 +148,15 @@
   justify-content: center;
   width: max-content;
   max-width: 100%;
-  min-height: calc(50 * var(--text-u));
-  padding: calc(12 * var(--text-u)) calc(28 * var(--text-u));
-  border: calc(1 * var(--text-u)) solid #fff;
-  border-radius: calc(55 * var(--text-u));
+  min-height: calc(50 * var(--cta-u));
+  padding: calc(12 * var(--cta-u)) calc(28 * var(--cta-u));
+  border: calc(1 * var(--cta-u)) solid #fff;
+  border-radius: calc(55 * var(--cta-u));
   background: linear-gradient(137.54479951485564deg, #ffd2d1 17.68%, #e54b04 93.521%);
   color: #000;
-  font-size: calc(17.386396 * var(--text-u));
+  font-size: calc(17.386396 * var(--cta-u));
   font-weight: 500;
-  letter-spacing: calc(-0.17386 * var(--text-u));
+  letter-spacing: calc(-0.17386 * var(--cta-u));
   cursor: pointer;
   pointer-events: auto;
   user-select: text;
@@ -170,16 +170,17 @@
 }
 
 .details {
+  --cta-u: calc(var(--text-u) * 0.9);
   /* On short viewports, pin the block above the fold; tall screens keep the Figma Y. */
   --hero-cta-bottom: max(clamp(1.25rem, 3.5vh, 2.75rem), env(safe-area-inset-bottom, 0px));
   position: absolute;
-  left: calc(755.5 * var(--u) - 170 * var(--text-u));
+  left: calc(755.5 * var(--u) - 170 * var(--cta-u));
   top: min(
     calc(723 * var(--u)),
-    calc(100vh - var(--hero-cta-bottom) - 150 * var(--text-u))
+    calc(100vh - var(--hero-cta-bottom) - 150 * var(--cta-u))
   );
-  width: calc(340 * var(--text-u));
-  height: calc(150 * var(--text-u));
+  width: calc(340 * var(--cta-u));
+  height: calc(150 * var(--cta-u));
   z-index: 2;
   pointer-events: none;
 }
@@ -201,8 +202,8 @@
 .location {
   position: absolute;
   color: #e3c4b7;
-  font-size: calc(17.386396 * var(--text-u));
-  letter-spacing: calc(-0.17386 * var(--text-u));
+  font-size: calc(17.386396 * var(--cta-u));
+  letter-spacing: calc(-0.17386 * var(--cta-u));
   line-height: normal;
   white-space: nowrap;
   pointer-events: auto;
@@ -217,9 +218,9 @@
   color: #fff;
 }
 
-.date { left: 50%; translate: -50% 0; top: calc(73 * var(--text-u)); width: max-content; max-width: 100%; }
-.format { left: 50%; translate: -50% 0; top: calc(100 * var(--text-u)); width: max-content; max-width: 100%; }
-.location { left: 50%; translate: -50% 0; top: calc(127 * var(--text-u)); width: max-content; max-width: 100%; }
+.date { left: 50%; translate: -50% 0; top: calc(73 * var(--cta-u)); width: max-content; max-width: 100%; }
+.format { left: 50%; translate: -50% 0; top: calc(100 * var(--cta-u)); width: max-content; max-width: 100%; }
+.location { left: 50%; translate: -50% 0; top: calc(127 * var(--cta-u)); width: max-content; max-width: 100%; }
 
 /* Match the first authored frame before hydration creates the Web Animations.
    With scripting disabled the approved static composition remains visible. */
@@ -250,6 +251,6 @@
   }
   :global([data-load-state="pending"]) .details {
     opacity: 0;
-    translate: 0 calc(133.5 * var(--text-u));
+    translate: 0 calc(133.5 * var(--cta-u));
   }
 }
