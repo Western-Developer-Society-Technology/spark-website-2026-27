@@ -1,13 +1,23 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { ArtworkImage } from "@/components/ui/Artwork";
 import AsciiArt from "@/components/ui/AsciiArt";
+import { setupCampfireJumps } from "./campfire-jump";
 import artwork from "./artwork";
 import styles from "./Campfire.module.css";
 
 export default function Campfire() {
+  const groupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const group = groupRef.current;
+    if (!group) return;
+    return setupCampfireJumps(group);
+  }, []);
+
   return (
-    <div className={styles.campfireGroup} data-node-id="121:63">
+    <div ref={groupRef} className={styles.campfireGroup} data-node-id="121:63">
       <div className={styles.campfireLeftCharacter} data-node-id="121:45">
         <div className={styles.campfireLeftCharacterRotation}>
           <div className={styles.campfireLeftCharacterShape}>

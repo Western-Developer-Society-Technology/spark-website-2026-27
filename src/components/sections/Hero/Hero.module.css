@@ -140,10 +140,16 @@
 
 .apply {
   position: absolute;
-  left: calc(81 * var(--text-u));
-  top: 0;
-  width: calc(132 * var(--text-u));
-  height: calc(50 * var(--text-u));
+  left: 50%;
+  translate: -50% 0;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  max-width: 100%;
+  min-height: calc(50 * var(--text-u));
+  padding: calc(12 * var(--text-u)) calc(28 * var(--text-u));
   border: calc(1 * var(--text-u)) solid #fff;
   border-radius: calc(55 * var(--text-u));
   background: linear-gradient(137.54479951485564deg, #ffd2d1 17.68%, #e54b04 93.521%);
@@ -167,12 +173,12 @@
   /* On short viewports, pin the block above the fold; tall screens keep the Figma Y. */
   --hero-cta-bottom: max(clamp(1.25rem, 3.5vh, 2.75rem), env(safe-area-inset-bottom, 0px));
   position: absolute;
-  left: calc(755.5 * var(--u) - 147.5 * var(--text-u));
+  left: calc(755.5 * var(--u) - 170 * var(--text-u));
   top: min(
     calc(723 * var(--u)),
     calc(100vh - var(--hero-cta-bottom) - 150 * var(--text-u))
   );
-  width: calc(295 * var(--text-u));
+  width: calc(340 * var(--text-u));
   height: calc(150 * var(--text-u));
   z-index: 2;
   pointer-events: none;
@@ -184,10 +190,8 @@
 }
 
 .apply span {
-  position: absolute;
-  left: calc(23 * var(--text-u));
-  top: calc(13 * var(--text-u));
-  width: calc(84 * var(--text-u));
+  position: static;
+  width: auto;
   white-space: nowrap;
   line-height: normal;
 }
@@ -213,9 +217,9 @@
   color: #fff;
 }
 
-.date { left: calc(68 * var(--text-u)); top: calc(73 * var(--text-u)); width: calc(159 * var(--text-u)); }
-.format { left: calc(33 * var(--text-u)); top: calc(100 * var(--text-u)); width: calc(240 * var(--text-u)); }
-.location { left: 0; top: calc(127 * var(--text-u)); width: calc(295 * var(--text-u)); }
+.date { left: 50%; translate: -50% 0; top: calc(73 * var(--text-u)); width: max-content; max-width: 100%; }
+.format { left: 50%; translate: -50% 0; top: calc(100 * var(--text-u)); width: max-content; max-width: 100%; }
+.location { left: 50%; translate: -50% 0; top: calc(127 * var(--text-u)); width: max-content; max-width: 100%; }
 
 /* Match the first authored frame before hydration creates the Web Animations.
    With scripting disabled the approved static composition remains visible. */

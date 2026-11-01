@@ -34,7 +34,7 @@ export default function Hero() {
             type="button"
             data-node-id="111:110"
           >
-            <span data-node-id="111:111">Apply now</span>
+            <span data-node-id="111:111">Applications open soon</span>
           </button>
           <p className={styles.date} data-node-id="111:112">February 2-4, 2027</p>
           <p className={styles.format} data-node-id="111:113">Hackathon • Case Competition</p>
