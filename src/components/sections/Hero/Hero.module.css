@@ -136,9 +136,14 @@
 }
 
 .details {
+  /* On short viewports, pin the block above the fold; tall screens keep the Figma Y. */
+  --hero-cta-bottom: max(clamp(1.25rem, 3.5vh, 2.75rem), env(safe-area-inset-bottom, 0px));
   position: absolute;
   left: calc(755.5 * var(--u) - 147.5 * var(--text-u));
-  top: calc(723 * var(--u));
+  top: min(
+    calc(723 * var(--u)),
+    calc(100vh - var(--hero-cta-bottom) - 150 * var(--text-u))
+  );
   width: calc(295 * var(--text-u));
   height: calc(150 * var(--text-u));
   pointer-events: none;
