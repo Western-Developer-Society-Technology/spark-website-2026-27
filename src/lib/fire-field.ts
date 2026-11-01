@@ -1,9 +1,28 @@
 type FireBounds = { left: number; right: number; top: number; bottom: number };
 
-export type FireSample = { character: string; opacity: number };
+export type FireSample = { character: string; opacity: number; intensity: number };
 
-const CHARACTERS = ".,:;*x%#@";
-const EMPTY: FireSample = { character: " ", opacity: 0 };
+/** Matches hero eclipse ASCII glyph sets (HeroAscii.tsx). */
+const DENSE_GLYPHS = "#@%&8$0SXBAHK@#X";
+const LIGHT_GLYPHS = "x*=+";
+const MIXED_GLYPHS = DENSE_GLYPHS + LIGHT_GLYPHS;
+const DENSE_ONLY_ABOVE = 0.6;
+const LIGHT_ONLY_BELOW = 0.35;
+const FLIPS_PER_SECOND = 10;
+
+const EMPTY: FireSample = { character: " ", opacity: 0, intensity: 0 };
+
+function glyphsFor(strength: number) {
+  if (strength >= DENSE_ONLY_ABOVE) return DENSE_GLYPHS;
+  if (strength < LIGHT_ONLY_BELOW) return LIGHT_GLYPHS;
+  return MIXED_GLYPHS;
+}
+
+function pickFireGlyph(intensity: number, column: number, row: number, time: number) {
+  const glyphs = glyphsFor(intensity);
+  const flip = Math.floor(time * FLIPS_PER_SECOND + seed(column * 17 + row * 31) * 11);
+  return glyphs[((flip % glyphs.length) + glyphs.length) % glyphs.length];
+}
 
 function smooth(value: number) {
   const t = Math.max(0, Math.min(1, value));
@@ -38,7 +57,10 @@ export function sampleFire(column: number, row: number, bounds: FireBounds, time
   const intensity = (envelope - Math.abs(x - bend) + tongues) / 0.45;
   if (intensity <= 0.02) return EMPTY;
 
-  const flicker = seed(column * 17 + row * 31 + Math.floor(time * 14));
-  const index = Math.min(CHARACTERS.length - 1, Math.floor(Math.max(0, intensity) * 5 + flicker * 2));
-  return { character: CHARACTERS[index], opacity: smooth((underside - y) / 0.065) };
+  const clamped = Math.max(0, intensity);
+  return {
+    character: pickFireGlyph(clamped, column, row, time),
+    opacity: smooth((underside - y) / 0.065),
+    intensity: clamped,
+  };
 }

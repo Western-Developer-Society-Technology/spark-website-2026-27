@@ -23,8 +23,6 @@ Open `http://localhost:3000`.
 - `src/components/sections`: text, controls, artwork, and scene motion.
 - `src/components/ui/AsciiArt`: character animation and canvas effects.
 - `src/lib/ascii-art.ts`: supplied ASCII artwork and measurements.
-- `src/lib/custom-effects`: original Figma shader modules and formulas.
-- `src/lib/custom-effect-runtime`: static, single-pass WebGPU integration.
 - `public/images/figma`: referenced artwork, masks, and stroke overlays.
 - `public/fonts`: local fonts and their licenses.
 
@@ -34,7 +32,7 @@ The source is [Figma frame 111:2](https://www.figma.com/design/5GAyrAwARCYIyJ4EW
 
 `Scene/hero-motion.ts` preserves the four-second load timing from frame `6:30`, mapped onto the selected composition without the extra orbit curves. The background stays black. About mountains use PNG layers with scroll parallax in `Scene/scroll-scenery.ts`. `Scene/water-motion.ts` controls boat travel, bobbing, and the floating star's balance and recovery sequence. ASCII characters animate in place, with shooting trails and fire crackles. Motion respects reduced-motion preferences and pauses offscreen or when the tab is hidden.
 
-Campfire log wood uses the authored rock shader via WebGPU; mountain fills are static PNGs. Animated wrappers use local artwork bounds to limit graphics memory. Duplicate sponsor images are intentional: their partially transparent pixels combine to match the draft.
+Campfire logs and mountain fills use static PNG artwork. Animated wrappers use local artwork bounds to limit graphics memory. Duplicate sponsor images are intentional: their partially transparent pixels combine to match the draft.
 
 FAQ answers use **“Coming soon.”** The **Apply now** button intentionally has no action. Sponsor and footer content remain placeholders from the unfinished draft.
 

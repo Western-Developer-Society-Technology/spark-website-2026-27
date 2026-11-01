@@ -62,6 +62,7 @@ interface AsciiMetrics {
   paddingX: number;
   paddingY: number;
   baseline: number;
+  fireStride: number;
 }
 
 interface AsciiArtStyle extends CSSProperties {
@@ -163,11 +164,14 @@ function mixColor(color: string, amount: number) {
 }
 
 function staticFire(art: AsciiArtMetadata, bounds: AsciiBounds) {
-  return Array.from({ length: art.rows }, (_, row) =>
-    Array.from({ length: art.columns }, (_, column) => {
+  const stride = art.fireStride ?? 1;
+  const displayRows = Math.ceil((bounds.bottom - bounds.top + 1) / stride);
+  const displayColumns = Math.ceil((bounds.right - bounds.left + 1) / stride);
+  return Array.from({ length: displayRows }, (_, displayRow) =>
+    Array.from({ length: displayColumns }, (_, displayColumn) => {
+      const column = bounds.left + displayColumn * stride;
+      const row = bounds.top + displayRow * stride;
       const { character, opacity } = sampleFire(column, row, bounds, 0);
-      // Text cannot express per-glyph alpha. Thin just the softened contact
-      // edge so the paused flame does not regain a solid bottom row.
       if (opacity < 0.15) return " ";
       if (opacity < 0.4) return ".";
       return opacity < 0.7 ? ":" : character;
@@ -322,15 +326,26 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       // Cursor artwork is fixed in document space. Cache its transform before
       // canvas writes, so scrolling never forces layout after a text animation.
       if (mode === "cursor") geometry = measureGeometry(markers);
-      const fontSize = parseFloat(computed.fontSize);
-      const lineHeight = parseFloat(computed.lineHeight);
-      context.font = `${computed.fontWeight} ${fontSize}px "Roboto Mono"`;
+      const fireStride = mode === "fire" ? (art.fireStride ?? 1) : 1;
+      let fontSize = parseFloat(computed.fontSize);
+      let lineHeight = parseFloat(computed.lineHeight);
+      const fontWeight = computed.fontWeight;
+      if (mode === "fire" && fireStride > 1) {
+        fontSize *= fireStride;
+        lineHeight *= fireStride;
+      }
+      context.font = `${fontWeight} ${fontSize}px "Roboto Mono"`;
       const measurement = context.measureText("M");
       const characterWidth = measurement.width;
       const ascent = measurement.fontBoundingBoxAscent ?? fontSize * 0.8;
       const descent = measurement.fontBoundingBoxDescent ?? fontSize * 0.2;
-      const width = characterWidth * art.columns;
-      const height = lineHeight * art.rows;
+      const boundColumns = bounds.right - bounds.left + 1;
+      const boundRows = bounds.bottom - bounds.top + 1;
+      const displayColumns =
+        mode === "fire" ? Math.ceil(boundColumns / fireStride) : art.columns;
+      const displayRows = mode === "fire" ? Math.ceil(boundRows / fireStride) : art.rows;
+      const width = characterWidth * displayColumns;
+      const height = lineHeight * displayRows;
       const paddingX = mode === "trail" ? fontSize * 5 : emitsCrackles ? characterWidth * 8 : 0;
       const paddingY = emitsCrackles ? lineHeight * 16 : mode === "trail" ? fontSize * 5 : 0;
       const canvasWidth = mode === "cursor" ? characterWidth * 31 : width + paddingX * 2;
@@ -348,7 +363,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       canvas.style.left = `${-paddingX}px`;
       canvas.style.top = `${-paddingY}px`;
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-      context.font = `${computed.fontWeight} ${fontSize}px "Roboto Mono"`;
+      context.font = `${fontWeight} ${fontSize}px "Roboto Mono"`;
       context.textBaseline = "alphabetic";
       metrics = {
         lineHeight,
@@ -360,6 +375,7 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
         paddingX,
         paddingY,
         baseline: (lineHeight - ascent - descent) / 2 + ascent,
+        fireStride,
       };
       needsPointerRead = true;
       lastDraw = 0;
@@ -445,12 +461,24 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       }
     }
 
+    function fireFill(intensity: number) {
+      // Same white lift as hero ASCII hot glow (HeroAscii glyphColor).
+      const hot = Math.min(1, Math.max(0, (intensity - 0.38) / 0.62));
+      return mixColor(art.color, Math.min(0.62, 0.28 * intensity + hot * 0.62));
+    }
+
     function drawFire(time: number) {
-      for (let row = bounds.top; row < art.rows; row += 1) {
-        for (let column = bounds.left; column <= bounds.right; column += 1) {
-          const { character, opacity } = sampleFire(column, row, bounds, time);
+      const stride = art.fireStride ?? 1;
+      const toDisplay = (column: number, row: number) => ({
+        column: (column - bounds.left) / stride,
+        row: (row - bounds.top) / stride,
+      });
+      for (let row = bounds.top; row <= bounds.bottom; row += stride) {
+        for (let column = bounds.left; column <= bounds.right; column += stride) {
+          const { character, opacity, intensity } = sampleFire(column, row, bounds, time);
           if (character !== " ") {
-            glyph(character, column, row, art.color, opacity);
+            const point = toDisplay(column, row);
+            glyph(character, point.column, point.row, fireFill(intensity), opacity);
           }
         }
       }
@@ -459,16 +487,19 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
         const { column, row, tailColumn, tailRow, phase, burst, direction } = crackle;
         if (phase < 1) {
           const character = ["+", "x", "*"][Math.floor(time * 15 + column) % 3];
-          glyph(character, column, row, phase > 0.82 ? white : highlight, Math.min(1, phase * 7) * 0.95);
-          glyph(".", tailColumn, tailRow, art.color, Math.min(0.5, phase));
+          const head = toDisplay(column, row);
+          const tail = toDisplay(tailColumn, tailRow);
+          glyph(character, head.column, head.row, phase > 0.82 ? white : highlight, Math.min(1, phase * 7) * 0.95);
+          glyph(".", tail.column, tail.row, art.color, Math.min(0.5, phase));
         } else {
           const fade = (1 - burst) ** 1.5;
           const spread = 1 + Math.round(burst * 2);
+          const head = toDisplay(column, row);
           // A white-hot centre breaks into a few orange glyphs, then disappears.
-          glyph(burst < 0.3 ? "*" : "+", column, row, white, fade);
-          glyph("+", column - spread, row - 1, highlight, fade * 0.9);
-          glyph("x", column + spread, row + direction, art.color, fade * 0.9);
-          glyph(".", column + direction, row - spread, art.color, fade * 0.7);
+          glyph(burst < 0.3 ? "*" : "+", head.column, head.row, white, fade);
+          glyph("+", head.column - spread, head.row - 1, highlight, fade * 0.9);
+          glyph("x", head.column + spread, head.row + direction, art.color, fade * 0.9);
+          glyph(".", head.column + direction, head.row - spread, art.color, fade * 0.7);
         }
       }
     }

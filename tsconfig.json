@@ -14,7 +14,7 @@
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [{ "name": "next" }],
-    "types": ["node", "react", "@webgpu/types"],
+    "types": ["node", "react"],
     "paths": {
       "@/*": ["./src/*"]
     }

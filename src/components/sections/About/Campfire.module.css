@@ -8,12 +8,6 @@
   pointer-events: none;
 }
 
-.flipped {
-  flex: none;
-  rotate: 180deg;
-  scale: 1 -1;
-}
-
 .campfireLeftCharacter {
   position: absolute;
   display: flex;
@@ -37,59 +31,19 @@
   width: calc(165.628 * var(--u));
 }
 
-.campfireLeftLog {
-  --campfire-log-mask: url("/images/figma/campfire-left-log-mask.svg");
+.campfireWood {
   position: absolute;
-  height: calc(91 * var(--u));
-  left: calc(1040.02 * var(--u));
+  height: calc(94 * var(--u));
+  left: calc(1038 * var(--u));
   top: calc(1943 * var(--u));
-  width: calc(165 * var(--u));
+  width: calc(194 * var(--u));
 }
 
-.campfireLeftLogPaintBounds {
-  position: absolute;
-  inset: -1.54% -0.86% -1.45% -0.8%;
-}
-
-.campfireRightLog {
-  position: absolute;
-  display: flex;
-  height: calc(91 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(1067.02 * var(--u));
-  top: calc(1943 * var(--u));
-  width: calc(164 * var(--u));
-}
-
-.campfireRightLogShape {
-  --campfire-log-mask: url("/images/figma/campfire-right-log-mask.svg");
-  height: calc(91 * var(--u));
-  position: relative;
-  width: calc(164 * var(--u));
-}
-
-.campfireLeftLog::before,
-.campfireRightLogShape::before,
-.campfireLeftLog::after,
-.campfireRightLogShape::after {
+.campfireWood::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  mask-image: var(--campfire-log-mask);
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-}
-
-.campfireLeftLog::before,
-.campfireRightLogShape::before {
-  /* Keep solid wood beneath the texture while WebGPU initializes or is unavailable. */
-  background: #5b3826;
-}
-
-.campfireLeftLog::after,
-.campfireRightLogShape::after {
   /* Warm only the wood touching the flame, retaining the visible grain and ends. */
   background: radial-gradient(
     ellipse 37% 32% at 58% 36%,
@@ -145,9 +99,11 @@
 
 .campfireFlames {
   position: absolute;
-  /* Let the irregular roots cross the front of the wood at the intersection. */
-  left: calc(1135.52 * var(--u));
-  top: calc(1979 * var(--u));
+  /* Anchor over the log stack; tune --campfire-flame-x/y if the art shifts. */
+  --campfire-flame-x: 38;
+  --campfire-flame-y: 32;
+  left: calc((1135.52 - var(--campfire-flame-x)) * var(--u));
+  top: calc((1979 - var(--campfire-flame-y)) * var(--u));
   width: 0;
   height: 0;
   pointer-events: none;
@@ -156,17 +112,21 @@
 .campfireLargeFlame,
 .campfireSmallFlame {
   /* Grow the original flame 12%, retaining crisp glyphs and the logs' anchor. */
-  --u: calc(112cqw / 1512);
+  --u: calc(102cqw / 1512);
   position: absolute;
   left: 0;
-  translate: -50% 0;
+  translate: -35% 13%;
 }
 
 .campfireLargeFlame {
-  width: calc(188.11 * var(--u));
-  height: calc(178.959 * var(--u));
+  width: calc(260 * var(--u));
+  height: calc(255 * var(--u));
+  overflow: visible;
+  /* Slightly smaller flame on the logs; larger source glyphs, scaled down here. */
+  scale: 0.89;
+  transform-origin: 50% 100%;
   /* Subtract the source's empty lower rows to align its occupied baseline. */
-  bottom: calc(-30.514 * var(--u));
+  bottom: calc(-22 * var(--u));
 }
 
 .campfireSmallFlame {
