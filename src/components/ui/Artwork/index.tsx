@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- Figma artwork keeps its original SVG bounds. */
 import styles from "./Artwork.module.css";
 
-export type NativeArtwork = {
+export type BlueCloud = {
   src: string;
   left: number;
   top: number;
@@ -16,12 +16,12 @@ export function ArtworkImage({ src, absolute = false }: { src: string; absolute?
   return <img alt="" className={absolute ? styles.absoluteImage : styles.image} src={src} />;
 }
 
-export function NativeImage({ artwork }: { artwork: NativeArtwork }) {
-  const { src, paintBounds } = artwork;
+export function BlueCloudImage({ cloud }: { cloud: BlueCloud }) {
+  const { src, paintBounds } = cloud;
   return (
     <img
       alt=""
-      className={styles.nativeImage}
+      className={styles.blueCloudImage}
       src={src}
       style={{
         left: `calc(${paintBounds.left} * var(--u))`,
@@ -33,11 +33,11 @@ export function NativeImage({ artwork }: { artwork: NativeArtwork }) {
   );
 }
 
-export function NativeGroup({ nodeId, artwork }: { nodeId: string; artwork: NativeArtwork }) {
-  const { left, top, width, height, transform } = artwork;
+export function BlueCloudGroup({ nodeId, cloud }: { nodeId: string; cloud: BlueCloud }) {
+  const { left, top, width, height, transform } = cloud;
   return (
     <div
-      className={styles.nativeGroup}
+      className={styles.blueCloudGroup}
       data-node-id={nodeId}
       data-name="Mask group"
       style={{
@@ -48,7 +48,7 @@ export function NativeGroup({ nodeId, artwork }: { nodeId: string; artwork: Nati
         transform,
       }}
     >
-      <NativeImage artwork={artwork} />
+      <BlueCloudImage cloud={cloud} />
     </div>
   );
 }

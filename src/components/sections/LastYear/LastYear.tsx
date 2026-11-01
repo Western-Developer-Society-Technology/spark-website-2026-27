@@ -1,4 +1,4 @@
-import { ArtworkImage, NativeGroup, NativeImage } from "@/components/ui/Artwork";
+import { ArtworkImage, BlueCloudGroup, BlueCloudImage } from "@/components/ui/Artwork";
 import AsciiArt from "@/components/ui/AsciiArt";
 import artwork from "./artwork";
 import nativeArtwork from "./native-artwork";
@@ -25,27 +25,27 @@ export default function LastYear() {
       <div className={styles.cloudSection} data-node-id="116:183" data-name="cloud section">
         <div className={styles.cloudBackground} data-node-id="133:18" style={{ backgroundImage: "linear-gradient(-5.684341886080802e-14deg, rgb(10, 10, 10) 0%, rgb(33, 15, 6) 15.865%, rgb(33, 15, 6) 83.654%, rgb(18, 19, 21) 100%)" }} />
         <div className={styles.tallLeftCloud} data-node-id="133:2" data-name="Cloud 8">
-          <NativeImage artwork={nativeArtwork["133:2"]} />
+          <BlueCloudImage cloud={nativeArtwork["133:2"]} />
         </div>
         <div className={styles.upperRightCloud} data-node-id="133:8">
           <div className={styles.flipped}>
             <div className={styles.upperRightCloudShape} data-name="Cloud 9">
-              <NativeImage artwork={nativeArtwork["133:8"]} />
+              <BlueCloudImage cloud={nativeArtwork["133:8"]} />
             </div>
           </div>
         </div>
         <div className={styles.lowerRightCloud} data-node-id="133:24">
           <div className={styles.flipped}>
             <div className={styles.lowerRightCloudShape} data-name="Cloud 9">
-              <NativeImage artwork={nativeArtwork["133:24"]} />
+              <BlueCloudImage cloud={nativeArtwork["133:24"]} />
             </div>
           </div>
         </div>
         <div className={styles.lowerLeftCloud} data-node-id="134:58" data-name="Cloud 11">
-          <NativeImage artwork={nativeArtwork["134:58"]} />
+          <BlueCloudImage cloud={nativeArtwork["134:58"]} />
         </div>
         <div className={styles.middleLeftCloud} data-node-id="133:31" data-name="Cloud 10">
-          <NativeImage artwork={nativeArtwork["133:31"]} />
+          <BlueCloudImage cloud={nativeArtwork["133:31"]} />
         </div>
         <div className={`${styles.shootingStar} ${styles.peachShootingStar}`} data-node-id="116:184" data-name="Shooting star 1">
           <div className={styles.peachTrail} data-node-id="116:185">
@@ -65,7 +65,7 @@ export default function LastYear() {
           </div>
         </div>
         <div className={styles.peachCloudBase} data-node-id="116:196" data-name="Cloud 3">
-          <NativeImage artwork={nativeArtwork["116:196"]} />
+          <BlueCloudImage cloud={nativeArtwork["116:196"]} />
         </div>
         <div className={styles.smallCloudAccent} data-node-id="133:36">
           <div className={styles.flipped}>
@@ -114,10 +114,10 @@ export default function LastYear() {
               <ArtworkImage src={artwork.imgCloud} />
             </div>
           </div>
-          <NativeGroup nodeId="116:218" artwork={nativeArtwork["116:218"]} />
+          <BlueCloudGroup nodeId="116:218" cloud={nativeArtwork["116:218"]} />
         </div>
         {/* Export the complete cloud so its native blur and noise share the same mask. */}
-        <NativeGroup nodeId="116:223" artwork={nativeArtwork["116:223"]} />
+        <BlueCloudGroup nodeId="116:223" cloud={nativeArtwork["116:223"]} />
         <div className={`${styles.shootingStar} ${styles.pinkShootingStar}`} data-node-id="116:231" data-name="Shooting star 4">
           <div className={styles.pinkTrail} data-node-id="116:232">
             <div className={styles.pinkTrailRotation}>
@@ -144,7 +144,7 @@ export default function LastYear() {
               </div>
             </div>
           </div>
-          <NativeGroup nodeId="116:241" artwork={nativeArtwork["116:241"]} />
+          <BlueCloudGroup nodeId="116:241" cloud={nativeArtwork["116:241"]} />
         </div>
         <div className={styles.lastYearGroup} data-node-id="116:246" data-name="last year">
           <div className={styles.lastYearGroup} data-node-id="116:247" data-name="cloud">

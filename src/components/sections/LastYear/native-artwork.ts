@@ -1,4 +1,4 @@
-import type { NativeArtwork } from "@/components/ui/Artwork";
+import type { BlueCloud } from "@/components/ui/Artwork";
 
 // Exact local render bounds and transforms from the Figma native-effect exports.
 // Lossless WebP retains every decoded RGBA channel, including fully transparent pixels.
@@ -129,6 +129,6 @@ const nativeArtwork = {
       "height": 476.2838439941406
     }
   }
-} as const satisfies Record<string, NativeArtwork>;
+} as const satisfies Record<string, BlueCloud>;
 
 export default nativeArtwork;

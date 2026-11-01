@@ -14,13 +14,13 @@
   height: 100%;
 }
 
-.nativeImage {
+.blueCloudImage {
   position: absolute;
   display: block;
   max-width: none;
 }
 
-.nativeGroup {
+.blueCloudGroup {
   position: absolute;
   transform-origin: 0 0;
 }
