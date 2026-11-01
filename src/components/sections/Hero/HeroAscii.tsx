@@ -38,8 +38,12 @@ const SKIP_RATE = 0.05;
 const ECLIPSE_SOURCE_IDS = ["111:95", "111:97", "111:98", "111:99"] as const;
 /** Star artwork is sampled for glow colour; glyphs are cleared only where its alpha is high. */
 const ECLIPSE_STAR_ID = "111:100";
+/** Black disc under the flare; cursor ASCII is suppressed here. */
+const ECLIPSE_CORE_ID = "111:99";
 /** Drop glyphs on the opaque star core, but keep them in the soft outer flare. */
 const STAR_MASK_ALPHA = 0.42;
+/** Cursor trail and dark-reveal skip the opaque eclipse core. */
+const CORE_MASK_ALPHA = 0.12;
 
 /** Mouse trail: subtle reveal on the same ASCII grid (weaker than the hero streaks). */
 const CURSOR_TRAIL_LIFE = 1.15;
@@ -537,13 +541,16 @@ export default function HeroAscii() {
     // Helper canvases stay in software like `sample`, so compositing them never reads back from the GPU.
     const base = document.createElement("canvas");
     const mask = document.createElement("canvas");
+    const coreMask = document.createElement("canvas");
     const scratch = document.createElement("canvas");
     const eclipseContext = base.getContext("2d", { willReadFrequently: true });
     const starContext = mask.getContext("2d", { willReadFrequently: true });
+    const coreMaskContext = coreMask.getContext("2d", { willReadFrequently: true });
     const streakingContext = scratch.getContext("2d", { willReadFrequently: true });
-    if (!eclipseContext || !starContext || !streakingContext) return;
+    if (!eclipseContext || !starContext || !coreMaskContext || !streakingContext) return;
     const baseContext = eclipseContext;
     const maskContext = starContext;
+    const coreContext = coreMaskContext;
     const scratchContext = streakingContext;
 
     const overlay = mountedOverlay;
@@ -563,6 +570,7 @@ export default function HeroAscii() {
     let lastDraw = 0;
     let lastGridKey = "";
     let starMaskField: Uint8ClampedArray | null = null;
+    let coreMaskField: Uint8ClampedArray | null = null;
     const trail: TrailPoint[] = [];
     let lastSampleX = Number.NaN;
     let lastSampleY = Number.NaN;
@@ -613,6 +621,19 @@ export default function HeroAscii() {
       target.restore();
     }
 
+    function maskAlphaAt(x: number, y: number, field: Uint8ClampedArray | null) {
+      if (!field || overlayWidth <= 0 || sample.width <= 0) return 0;
+      const scale = sample.width / overlayWidth;
+      const sampleX = Math.min(sample.width - 1, Math.max(0, Math.round(x * scale)));
+      const sampleY = Math.min(sample.height - 1, Math.max(0, Math.round(y * scale)));
+      const index = (sampleY * sample.width + sampleX) * 4;
+      return field[index + 3] / 255;
+    }
+
+    function isOnEclipseCore(x: number, y: number) {
+      return maskAlphaAt(x, y, coreMaskField) > CORE_MASK_ALPHA;
+    }
+
     /** Mirrors HeroStreaks' live pose: each layer stroked sharp, then blurred once and blended with `screen`. */
     function drawStreaks(width: number, height: number) {
       const unit = width / 1512;
@@ -644,7 +665,7 @@ export default function HeroAscii() {
       lastStreakVersion = liveStreaks.version;
 
       if (resized) {
-        for (const target of [sample, base, mask, scratch]) {
+        for (const target of [sample, base, mask, coreMask, scratch]) {
           target.width = width;
           target.height = height;
         }
@@ -661,6 +682,10 @@ export default function HeroAscii() {
         maskContext.clearRect(0, 0, width, height);
         drawLayer(maskContext, ECLIPSE_STAR_ID, scale);
         starMaskField = maskContext.getImageData(0, 0, width, height).data;
+        coreContext.setTransform(1, 0, 0, 1, 0, 0);
+        coreContext.clearRect(0, 0, width, height);
+        drawLayer(coreContext, ECLIPSE_CORE_ID, scale, true);
+        coreMaskField = coreContext.getImageData(0, 0, width, height).data;
       }
 
       sampleContext.setTransform(1, 0, 0, 1, 0, 0);
@@ -763,7 +788,9 @@ export default function HeroAscii() {
       const cursorOn = !reduced;
 
       for (const cell of cells) {
-        const trailFx = cursorOn ? trailInfluence(cell.x, cell.y, trail, now, trailBox) : null;
+        const onCore = isOnEclipseCore(cell.x, cell.y);
+        const trailFx =
+          cursorOn && !onCore ? trailInfluence(cell.x, cell.y, trail, now, trailBox) : null;
         const hasGlow = cell.strength > 0;
         if (!hasGlow && !trailFx) continue;
 
@@ -810,6 +837,7 @@ export default function HeroAscii() {
       const x = clientX - rect.left;
       const y = clientY - rect.top;
       if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
+      if (isOnEclipseCore(x, y)) return;
       if (Number.isFinite(lastSampleX) && Math.hypot(x - lastSampleX, y - lastSampleY) < CURSOR_SAMPLE_SPACING) return;
       lastSampleX = x;
       lastSampleY = y;
@@ -863,6 +891,11 @@ export default function HeroAscii() {
         })
         .catch(() => undefined);
     });
+    document.querySelector<HTMLImageElement>(`[data-node-id="${ECLIPSE_CORE_ID}"] img`)?.decode()
+      .then(() => {
+        if (!disposed) sampleField(performance.now(), true);
+      })
+      .catch(() => undefined);
     start();
 
     return () => {

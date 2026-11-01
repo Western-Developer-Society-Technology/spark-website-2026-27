@@ -67,6 +67,17 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.wordmarkSp::selection,
+.wordmarkA::selection,
+.wordmarkRk::selection {
+  background-color: #e84816;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
 }
 
 /* Glyph origins come from the font's kerning (P→A −124, A→R −17 units).
@@ -108,6 +119,7 @@
 /* Keeps its distance above the wordmark's baseline. */
 .tagline {
   position: absolute;
+  z-index: 2;
   left: calc(756.5 * var(--u) - 85.5 * var(--text-u));
   top: calc(418 * var(--u) - 191 * var(--text-u));
   font-size: calc(20.863676 * var(--text-u));
@@ -116,6 +128,14 @@
   line-height: calc(28 * var(--text-u));
   color: #fff;
   white-space: nowrap;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.tagline::selection {
+  background-color: #e84816;
+  color: #fff;
 }
 
 .apply {
@@ -133,6 +153,14 @@
   letter-spacing: calc(-0.17386 * var(--text-u));
   cursor: pointer;
   pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.apply::selection,
+.apply span::selection {
+  background-color: #e84816;
+  color: #fff;
 }
 
 .details {
@@ -146,6 +174,7 @@
   );
   width: calc(295 * var(--text-u));
   height: calc(150 * var(--text-u));
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -172,6 +201,16 @@
   letter-spacing: calc(-0.17386 * var(--text-u));
   line-height: normal;
   white-space: nowrap;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.date::selection,
+.format::selection,
+.location::selection {
+  background-color: #e84816;
+  color: #fff;
 }
 
 .date { left: calc(68 * var(--text-u)); top: calc(73 * var(--text-u)); width: calc(159 * var(--text-u)); }
