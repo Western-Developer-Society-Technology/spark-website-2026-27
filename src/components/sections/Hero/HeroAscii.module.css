@@ -29,6 +29,29 @@
   width: 100%;
   height: calc(1273 * var(--u));
   pointer-events: none;
+  opacity: 0;
+}
+
+@media (scripting: enabled) {
+  .overlay[data-visible] {
+    animation: heroAsciiFadeIn 0.65s ease forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    opacity: 1;
+  }
+}
+
+@keyframes heroAsciiFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .canvas {

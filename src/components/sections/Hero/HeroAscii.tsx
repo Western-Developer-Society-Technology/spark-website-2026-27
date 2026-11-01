@@ -566,6 +566,13 @@ export default function HeroAscii() {
     const trail: TrailPoint[] = [];
     let lastSampleX = Number.NaN;
     let lastSampleY = Number.NaN;
+    let asciiVisible = false;
+
+    const revealAscii = () => {
+      if (asciiVisible || disposed || motionPreference.matches) return;
+      asciiVisible = true;
+      overlay.setAttribute("data-visible", "");
+    };
 
     /** Paints an ellipse layer at its untransformed layout box, then applies its live translate/rotate/scale. */
     function drawLayer(target: CanvasRenderingContext2D, nodeId: string, scale: number, silhouette = false) {
@@ -686,6 +693,7 @@ export default function HeroAscii() {
         cell.packed = packed;
         cell.color = glyphColor(r, g, b, cell.strength);
       }
+      if (!asciiVisible && cells.some((cell) => cell.strength > 0)) revealAscii();
     }
 
     function layout() {
@@ -840,6 +848,7 @@ export default function HeroAscii() {
     document.addEventListener("visibilitychange", updateActivity);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     layout();
+    if (motionPreference.matches) overlay.setAttribute("data-visible", "");
     document.fonts.ready.then(() => {
       if (!disposed) layout();
     });
@@ -847,7 +856,10 @@ export default function HeroAscii() {
     ECLIPSE_SOURCE_IDS.forEach((nodeId) => {
       document.querySelector<HTMLImageElement>(`[data-node-id="${nodeId}"] img`)?.decode()
         .then(() => {
-          if (!disposed) sampleField(performance.now(), true);
+          if (!disposed) {
+            sampleField(performance.now(), true);
+            if (cells.some((cell) => cell.strength > 0)) revealAscii();
+          }
         })
         .catch(() => undefined);
     });

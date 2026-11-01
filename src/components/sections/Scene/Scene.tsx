@@ -59,7 +59,7 @@ export default function Scene({ children }: SceneProps) {
     return createStarEntrances(root);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -172,13 +172,13 @@ export default function Scene({ children }: SceneProps) {
     reducedMotion.addEventListener("change", handleReducedMotion);
     document.addEventListener("visibilitychange", syncPlayback);
 
-    // Start with fonts and the actual hero artwork ready, rather than letting a
-    // late SVG decode miss the authored reveal. Below-the-fold images don't delay it.
+    // Play the eclipse intro immediately; wordmark and artwork can finish decoding in the background.
+    ready = true;
+    syncPlayback();
     const heroImages = [...root.querySelectorAll<HTMLImageElement>('[data-node-id="111:94"] img, [data-node-id="111:96"] img')];
     const wordmarkFont = document.fonts.load('1em "Eternalo"').catch(() => undefined);
-    Promise.all([document.fonts.ready, wordmarkFont, ...heroImages.map((img) => img.decode().catch(() => undefined))]).then(() => {
+    void Promise.all([wordmarkFont, ...heroImages.map((img) => img.decode().catch(() => undefined))]).then(() => {
       if (disposed) return;
-      ready = true;
       syncPlayback();
     });
 
