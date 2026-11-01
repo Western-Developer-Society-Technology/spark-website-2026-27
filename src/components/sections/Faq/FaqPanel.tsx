@@ -18,7 +18,7 @@ export default function FaqPanel() {
       <div className={styles.panel} data-node-id="116:112">
         {FAQ_COLUMNS.map((questions, column) => (
           <div className={styles.column} key={column}>
-            {questions.map(({ id, question, width }) => {
+            {questions.map(({ id, question }) => {
               const isOpen = openId === id;
               const answerId = `answer-${id.replace(":", "-")}`;
               const questionId = `question-${id.replace(":", "-")}`;
@@ -33,9 +33,21 @@ export default function FaqPanel() {
                       aria-controls={answerId}
                       onClick={() => setOpenId(isOpen ? null : id)}
                       data-node-id={id}
-                      style={{ width: `calc(${width} * var(--panel-u))` }}
                     >
-                      {question}
+                      <span>{question}</span>
+                      <svg
+                        className={styles.toggleIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path d="M5 12h14" />
+                        <path className={styles.iconStem} d="M12 5v14" />
+                      </svg>
                     </button>
                   </h3>
                   <div
@@ -43,9 +55,13 @@ export default function FaqPanel() {
                     id={answerId}
                     role="region"
                     aria-labelledby={questionId}
-                    hidden={!isOpen}
+                    aria-hidden={!isOpen}
+                    inert={!isOpen}
+                    data-open={isOpen}
                   >
-                    {FAQ_PLACEHOLDER}
+                    <div className={styles.answerContent}>
+                      <p className={styles.answerText}>{FAQ_PLACEHOLDER}</p>
+                    </div>
                   </div>
                 </div>
               );
