@@ -14,7 +14,7 @@ export interface AsciiArtMetadata {
   mode: AsciiArtMode;
   columns: number;
   rows: number;
-  /** Fire only: sample every N cells and draw at N× size (same flame footprint). */
+  /** Fire / sparkler: sample every N cells and draw at N× size (same footprint). */
   fireStride?: number;
 }
 
@@ -127,27 +127,29 @@ export const ASCII_ART: Record<string, AsciiArtMetadata> = {
   },
   "116:161": {
     text: source116_161,
-    fontSize: 5.759,
-    lineHeight: 5.759,
-    left: 8.64,
-    top: 8.64,
+    fontSize: 6.8,
+    lineHeight: 6.8,
+    left: 10.2,
+    top: 10.2,
     color: "#ff6200",
     fontWeight: 400,
     mode: "sparkler",
     columns: 72,
     rows: 41,
+    fireStride: 2,
   },
   "116:165": {
     text: source116_161,
-    fontSize: 7.019,
-    lineHeight: 7.019,
-    left: 10.53,
-    top: 10.53,
+    fontSize: 6.8,
+    lineHeight: 6.8,
+    left: 10.2,
+    top: 10.2,
     color: "#ae2bff",
     fontWeight: 400,
     mode: "sparkler",
     columns: 72,
     rows: 41,
+    fireStride: 2,
   },
   "121:55": {
     /* Compact silhouette on the logs; hero-style glyphs come from fire-field sampling. */

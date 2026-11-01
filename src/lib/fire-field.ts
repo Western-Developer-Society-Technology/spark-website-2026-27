@@ -18,7 +18,7 @@ function glyphsFor(strength: number) {
   return MIXED_GLYPHS;
 }
 
-function pickFireGlyph(intensity: number, column: number, row: number, time: number) {
+export function pickFireGlyph(intensity: number, column: number, row: number, time: number) {
   const glyphs = glyphsFor(intensity);
   const flip = Math.floor(time * FLIPS_PER_SECOND + seed(column * 17 + row * 31) * 11);
   return glyphs[((flip % glyphs.length) + glyphs.length) % glyphs.length];

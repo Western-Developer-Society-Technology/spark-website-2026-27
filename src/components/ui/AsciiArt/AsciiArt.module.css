@@ -36,7 +36,8 @@
 }
 
 /* Hide the static grid while the canvas animates so they never stack as two fires. */
-.art[data-mode="fire"][data-running="true"] .source {
+.art[data-mode="fire"][data-running="true"] .source,
+.art[data-mode="sparkler"][data-running="true"] .source {
   visibility: hidden;
 }
 

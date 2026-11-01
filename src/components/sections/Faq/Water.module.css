@@ -77,8 +77,8 @@
   height: calc(321.435 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(110.48 * var(--u));
-  top: 0;
+  left: calc(100 * var(--u));
+  top: calc(-30 * var(--u));
   width: calc(329.929 * var(--u));
 }
 
@@ -134,7 +134,7 @@
   height: calc(356.062 * var(--u));
   align-items: center;
   justify-content: center;
-  left: 0;
+  left: calc(10 * var(--u));
   top: calc(1 * var(--u));
   width: calc(369.175 * var(--u));
 }
