@@ -8,22 +8,12 @@ import styles from "./LastYear.module.css";
 export default function LastYear() {
   return (
     <>
-      {SHOOTING_STARS.map((star) => (
-        <div
-          key={star.id}
-          className={styles.starTrigger}
-          data-star-trigger={star.id}
-          aria-hidden="true"
-          style={{
-            left: `calc(${star.left} * var(--u))`,
-            top: `calc(${star.top} * var(--u))`,
-            width: `calc(${star.width} * var(--u))`,
-            height: `calc(${star.height} * var(--u))`,
-          }}
-        />
-      ))}
+      <div
+        className={styles.cloudBackground}
+        data-node-id="133:18"
+        style={{ backgroundImage: "linear-gradient(-5.684341886080802e-14deg, rgb(10, 10, 10) 0%, rgb(33, 15, 6) 15.865%, rgb(33, 15, 6) 83.654%, rgb(18, 19, 21) 100%)" }}
+      />
       <div className={styles.cloudSection} data-node-id="116:183" data-name="cloud section">
-        <div className={styles.cloudBackground} data-node-id="133:18" style={{ backgroundImage: "linear-gradient(-5.684341886080802e-14deg, rgb(10, 10, 10) 0%, rgb(33, 15, 6) 15.865%, rgb(33, 15, 6) 83.654%, rgb(18, 19, 21) 100%)" }} />
         <div className={styles.tallLeftCloud} data-node-id="133:2" data-name="Cloud 8">
           <BlueCloudImage cloud={nativeArtwork["133:2"]} />
         </div>
@@ -47,6 +37,21 @@ export default function LastYear() {
         <div className={styles.middleLeftCloud} data-node-id="133:31" data-name="Cloud 10">
           <BlueCloudImage cloud={nativeArtwork["133:31"]} />
         </div>
+        <div className={styles.lastYearBand}>
+          {SHOOTING_STARS.map((star) => (
+            <div
+              key={star.id}
+              className={styles.starTrigger}
+              data-star-trigger={star.id}
+              aria-hidden="true"
+              style={{
+                left: `calc(${star.left} * var(--u))`,
+                top: `calc(${star.top} * var(--u))`,
+                width: `calc(${star.width} * var(--u))`,
+                height: `calc(${star.height} * var(--u))`,
+              }}
+            />
+          ))}
         <div className={`${styles.shootingStar} ${styles.peachShootingStar}`} data-node-id="116:184" data-name="Shooting star 1">
           <div className={styles.peachTrail} data-node-id="116:185">
             <div className={styles.peachTrailRotation}>
@@ -60,12 +65,7 @@ export default function LastYear() {
           </div>
         </div>
         <div className={styles.peachCloudBase} data-node-id="116:191" data-name="Cloud 1">
-          <div className={styles.peachCloudBasePaintBounds}>
-            <ArtworkImage src={artwork.imgCloud1} />
-          </div>
-        </div>
-        <div className={styles.peachCloudBase} data-node-id="116:196" data-name="Cloud 3">
-          <BlueCloudImage cloud={nativeArtwork["116:196"]} />
+          <ArtworkImage src={artwork.imgCloud1} />
         </div>
         <div className={styles.smallCloudAccent} data-node-id="133:36">
           <div className={styles.flipped}>
@@ -108,6 +108,9 @@ export default function LastYear() {
             </div>
           </div>
         </div>
+        <div className={styles.topRightCloud} data-node-id="116:223" data-name="Cloud 2">
+          <ArtworkImage src={artwork.imgCloud2} />
+        </div>
         <div className={styles.blueCloudGroup} data-node-id="116:215" data-name="Cloud 2">
           <div className={styles.blueCloudBase} data-node-id="116:216" data-name="Cloud">
             <div className={styles.blueCloudBasePaintBounds}>
@@ -116,8 +119,6 @@ export default function LastYear() {
           </div>
           <BlueCloudGroup nodeId="116:218" cloud={nativeArtwork["116:218"]} />
         </div>
-        {/* Export the complete cloud so its native blur and noise share the same mask. */}
-        <BlueCloudGroup nodeId="116:223" cloud={nativeArtwork["116:223"]} />
         <div className={`${styles.shootingStar} ${styles.pinkShootingStar}`} data-node-id="116:231" data-name="Shooting star 4">
           <div className={styles.pinkTrail} data-node-id="116:232">
             <div className={styles.pinkTrailRotation}>
@@ -181,6 +182,7 @@ export default function LastYear() {
             <li>$1k+ in prizes</li>
           </ul>
         </section>
+        </div>
       </div>
     </>
   );

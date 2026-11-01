@@ -1,7 +1,8 @@
 // Static SVG filters are baked at 2× into lossless WebP to avoid raster work during scroll.
 const artwork = {
   "imgGroup1358": "/images/figma/rendered/group-1358.webp",
-  "imgCloud1": "/images/figma/rendered/cloud-1.webp",
+  "imgCloud1": "/images/figma/rendered/cloud-1.png",
+  "imgCloud2": "/images/figma/rendered/cloud-2.png",
   "imgVector4": "/images/figma/rendered/vector-4.webp",
   "imgGroup1359": "/images/figma/rendered/group-1359.webp",
   "imgGroup1360": "/images/figma/rendered/group-1360.webp",

@@ -1,4 +1,16 @@
 /* Measurements are copied from Figma frame 111:2 at 1512px width. */
+.lastYearBand {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Foreground only — gradient + backdrop clouds stay on full var(--u) outside this band. */
+  --last-year-art-scale: 0.91;
+  --cloud-u: min(calc(var(--u) * var(--last-year-art-scale)), calc(1512px / 1512));
+  --cloud-scale: calc(var(--cloud-u) / var(--u));
+  transform: scale(var(--cloud-scale));
+  transform-origin: calc(756 * var(--u)) calc(3180 * var(--u));
+}
+
 .starTrigger {
   position: absolute;
   pointer-events: none;
@@ -129,15 +141,20 @@
 
 .peachCloudBase {
   position: absolute;
-  height: calc(352 * var(--u));
-  left: calc(-76 * var(--u));
-  top: calc(2847 * var(--u));
-  width: calc(747 * var(--u));
+  height: calc(403 * var(--u));
+  left: calc(-168 * var(--u));
+  top: calc(2827 * var(--u));
+  /* cloud-1.png (2029×871) — sized up slightly vs the 747×352 comp box. */
+  width: calc(939 * var(--u));
 }
 
-.peachCloudBasePaintBounds {
+.topRightCloud {
   position: absolute;
-  inset: -11.84% -5.2% -12.06% -7.22%;
+  height: calc(458 * var(--u));
+  left: calc(740 * var(--u));
+  top: calc(3010 * var(--u));
+  /* cloud-2.png (961×482) — sized up slightly; white + peach baked in one render. */
+  width: calc(913 * var(--u));
 }
 
 .smallCloudAccent {

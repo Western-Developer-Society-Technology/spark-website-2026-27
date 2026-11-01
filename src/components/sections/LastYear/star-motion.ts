@@ -3,6 +3,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SHOOTING_STARS } from "./shooting-stars";
 
 const RELEASE_PROPERTIES = "transform,transformOrigin,willChange,visibility";
+/** Keep in sync with --last-year-art-scale in LastYear.module.css */
+const LAST_YEAR_ART_SCALE = 0.91;
+const FIGMA_WIDTH = 1512;
+
+function lastYearUnit(viewportWidth: number) {
+  const unit = viewportWidth / FIGMA_WIDTH;
+  return Math.min(unit * LAST_YEAR_ART_SCALE, 1);
+}
 
 export function createStarEntrances(root: HTMLElement) {
   gsap.registerPlugin(ScrollTrigger);
@@ -29,7 +37,7 @@ export function createStarEntrances(root: HTMLElement) {
       }
 
       group.dataset.starState = "pending";
-      const unit = () => root.clientWidth / 1512;
+      const unit = () => lastYearUnit(root.clientWidth);
       const departureX = () => {
         const bounds = marker.getBoundingClientRect();
         const gutter = Math.max(24, 40 * unit());
