@@ -1,4 +1,5 @@
 import { ArtworkImage } from "@/components/ui/Artwork";
+import AboutStarsAscii from "./AboutStarsAscii";
 import artwork from "./artwork";
 import styles from "./Mountains.module.css";
 
@@ -16,6 +17,7 @@ export default function Mountains() {
             </div>
           </div>
         </div>
+        <AboutStarsAscii nodeId="116:102" className={styles.smallMountainStarAscii} />
       </div>
       <div className={styles.middleMountain} data-node-id="112:49">
         <ArtworkImage absolute src={artwork.mountainMiddle} />
@@ -28,6 +30,7 @@ export default function Mountains() {
             </div>
           </div>
         </div>
+        <AboutStarsAscii nodeId="116:87" className={styles.largeMountainStarAscii} />
       </div>
       <div className={styles.leftMountainStar} data-node-id="116:96">
         <div className={styles.largeMountainStarRotation}>
@@ -37,6 +40,7 @@ export default function Mountains() {
             </div>
           </div>
         </div>
+        <AboutStarsAscii nodeId="116:96" className={styles.leftMountainStarAscii} />
       </div>
       <div className={styles.nearMountain} data-node-id="112:50">
         <ArtworkImage absolute src={artwork.mountainNear} />

@@ -24,6 +24,28 @@
   width: calc(414.561 * var(--u));
 }
 
+.smallMountainStarAscii {
+  inset: -78%;
+  -webkit-mask-image: radial-gradient(
+    ellipse 40% 40% at 50% 50%,
+    #000 0%,
+    #000 44%,
+    transparent 60%
+  );
+  mask-image: radial-gradient(
+    ellipse 40% 40% at 50% 50%,
+    #000 0%,
+    #000 44%,
+    transparent 60%
+  );
+}
+
+.smallMountainStar,
+.largeMountainStar,
+.leftMountainStar {
+  overflow: visible;
+}
+
 .smallMountainStarRotation {
   flex: none;
   rotate: 109.3deg;
@@ -59,6 +81,22 @@
   width: calc(606.017 * var(--u));
 }
 
+.largeMountainStarAscii {
+  inset: -42%;
+  -webkit-mask-image: radial-gradient(
+    ellipse 42% 42% at 50% 50%,
+    #000 0%,
+    #000 46%,
+    transparent 62%
+  );
+  mask-image: radial-gradient(
+    ellipse 42% 42% at 50% 50%,
+    #000 0%,
+    #000 46%,
+    transparent 62%
+  );
+}
+
 .largeMountainStarRotation {
   flex: none;
   rotate: -30.96deg;
@@ -81,9 +119,25 @@
   height: calc(327.532 * var(--u));
   align-items: center;
   justify-content: center;
-  left: calc(249 * var(--u));
-  top: calc(1257 * var(--u));
+  left: calc(269 * var(--u));
+  top: calc(1317 * var(--u));
   width: calc(327.468 * var(--u));
+}
+
+.leftMountainStarAscii {
+  inset: -100%;
+  -webkit-mask-image: radial-gradient(
+    ellipse 38% 38% at 50% 50%,
+    #000 0%,
+    #000 42%,
+    transparent 58%
+  );
+  mask-image: radial-gradient(
+    ellipse 38% 38% at 50% 50%,
+    #000 0%,
+    #000 42%,
+    transparent 58%
+  );
 }
 
 .leftMountainStarShape {
