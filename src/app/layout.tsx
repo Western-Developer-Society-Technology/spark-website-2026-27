@@ -5,7 +5,6 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Spark Hackathon × Case Competition",
   description: "Spark Hackathon × Case Competition at Western University.",
-  icons: { icon: "/images/figma/group-1361.svg" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

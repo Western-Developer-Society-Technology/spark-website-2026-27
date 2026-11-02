@@ -2,6 +2,7 @@ import { gsap } from "gsap";
 import { ORIGINAL_STAR_OUTLINE, starOutline } from "./star-shape";
 import { SPLASH_DROPLETS, splashKeyframes } from "./water-splashes";
 import { SPLASH_CELLS, splashGlyph } from "./water-splash-art";
+import { BOAT_DURATION, boatPathKeyframes } from "./boat-motion";
 
 export type WaterMotion = {
   selector: string;
@@ -135,17 +136,8 @@ function eyeKeyframes(): Keyframe[] {
 export const WATER_MOTION: readonly WaterMotion[] = [
   {
     selector: '[data-animation="boat-drift"]',
-    // The hull travels into the left half of the scene beside the floating
-    // character. Drift and hull-centred rocking use separate wrappers.
-    keyframes: (unit) => [
-      { translate: "0px 0px", offset: 0, easing: SOFT },
-      { translate: "0px 0px", offset: 1000 / 32000, easing: SOFT },
-      { translate: `${-580 * unit}px 0px`, offset: 14500 / 32000, easing: SOFT },
-      { translate: `${-580 * unit}px 0px`, offset: 16000 / 32000, easing: SOFT },
-      { translate: "0px 0px", offset: 30500 / 32000, easing: SOFT },
-      { translate: "0px 0px", offset: 1 },
-    ],
-    options: { duration: 32000, iterations: Infinity },
+    keyframes: boatPathKeyframes,
+    options: { duration: BOAT_DURATION, iterations: Infinity },
   },
   {
     selector: '[data-animation="boat"]',

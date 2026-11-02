@@ -5,6 +5,7 @@
   top: calc(4784 * var(--u));
   width: calc(507.043 * var(--u));
   height: calc(465.291 * var(--u));
+  transform-origin: calc(267.00013 * var(--u)) calc(344.7501 * var(--u));
 }
 
 .boatGroup {
