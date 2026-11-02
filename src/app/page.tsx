@@ -8,13 +8,15 @@ import Footer from "@/components/sections/Footer/Footer";
 
 export default function Home() {
   return (
-    <Scene>
-      <Hero />
-      <About />
-      <LastYear />
-      <Faq />
+    <>
+      <Scene>
+        <Hero />
+        <About />
+        <LastYear />
+        <Faq />
+      </Scene>
       <Sponsors />
       <Footer />
-    </Scene>
+    </>
   );
 }

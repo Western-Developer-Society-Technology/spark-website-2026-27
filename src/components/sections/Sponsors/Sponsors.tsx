@@ -1,47 +1,33 @@
-/* eslint-disable @next/next/no-img-element -- Figma artwork keeps its original bounds. */
+/* eslint-disable @next/next/no-img-element -- Local SVG sponsor wordmarks need no raster optimization. */
 import styles from "./Sponsors.module.css";
 
-const LOGO = "/images/figma/image-58.png";
-const MESSAGE = "/images/figma/image-62.png";
-
-const LOGO_ROWS = [
-  { nodeId: "134:66", name: "image 58", className: styles.sponsorLogoRowOne },
-  { nodeId: "135:71", name: "image 59", className: styles.sponsorLogoRowTwo },
-  { nodeId: "135:72", name: "image 60", className: styles.sponsorLogoRowThree },
-  { nodeId: "135:73", name: "image 61", className: styles.sponsorLogoRowFour },
-];
-
-const MESSAGE_ROWS = [
-  { nodeId: "135:75", name: "image 62", className: styles.sponsorMessageRowOne },
-  { nodeId: "135:77", name: "image 63", className: styles.sponsorMessageRowTwo },
-  { nodeId: "135:78", name: "image 64", className: styles.sponsorMessageRowThree },
-  { nodeId: "135:79", name: "image 65", className: styles.sponsorMessageRowFour },
+// Last year's sponsors, shown until the 2027 lineup is confirmed.
+const SPONSORS = [
+  { name: "Slido", logo: "/images/sponsors/slido.svg", width: 144, height: 48 },
+  { name: "Voices", logo: "/images/sponsors/voices.svg", width: 160, height: 36 },
+  { name: "EY", logo: "/images/sponsors/ey.svg", width: 64, height: 65 },
+  { name: "RBC", logo: "/images/sponsors/rbc.svg", width: 52, height: 68 },
 ];
 
 export default function Sponsors() {
   return (
-    <>
-      <div className={styles.sponsorBackground} data-node-id="134:64" />
-      <section aria-labelledby="sponsors-heading" className={styles.sponsors}>
-        <h2 id="sponsors-heading" data-node-id="116:259">Sponsors</h2>
-        <ul className={styles.srOnly}>
-          <li>Lovable</li>
-          <li>Figma</li>
+    <section id="sponsors" aria-labelledby="sponsors-heading" className={styles.sponsors}>
+      <div className={styles.inner}>
+        <div className={styles.intro}>
+          <h2 id="sponsors-heading">Our sponsors</h2>
+          <p>A little support goes a long way. Thank you to the partners who helped last year&apos;s ideas take flight.</p>
+        </div>
+        <ul className={styles.logos} aria-label="Last year's sponsors" aria-describedby="sponsor-note">
+          {SPONSORS.map(({ name, logo, width, height }) => (
+            <li className={styles.logo} key={name}>
+              <img className={name === "RBC" ? styles.rbcLogo : undefined} src={logo} alt={name} width={width} height={height} />
+            </li>
+          ))}
         </ul>
-      </section>
-      {LOGO_ROWS.map(({ nodeId, name, className }) => (
-        <div className={className} data-node-id={nodeId} data-name={name} key={nodeId}>
-          <img alt="" className={styles.sponsorImage} src={LOGO} />
-        </div>
-      ))}
-      {MESSAGE_ROWS.map(({ nodeId, name, className }) => (
-        <div className={className} data-node-id={nodeId} data-name={name} key={nodeId}>
-          <div aria-hidden className={styles.sponsorMessagePaintBounds}>
-            <img alt="" className={styles.sponsorMessageImage} src={MESSAGE} />
-            <img alt="" className={styles.sponsorMessageImage} src={MESSAGE} />
-          </div>
-        </div>
-      ))}
-    </>
+        <p className={styles.note} id="sponsor-note">
+          These companies sponsored Spark last year. Our 2027 sponsors are still to be confirmed.
+        </p>
+      </div>
+    </section>
   );
 }

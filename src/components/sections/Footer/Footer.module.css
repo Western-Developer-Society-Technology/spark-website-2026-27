@@ -1,16 +1,176 @@
-.footer { display: contents; }
+.footer {
+  position: relative;
+  background: #0a0a0a;
+  color: #fff3ea;
+  padding: clamp(3rem, 5vw, 5rem) 1.5rem 1.5rem;
+}
 
-.footer h2 {
+.inner {
+  max-width: 1122px;
+  margin-inline: auto;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr auto;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  padding-bottom: clamp(3rem, 5vw, 5rem);
+}
+
+.wordmark {
+  position: relative;
+  display: inline-block;
+  width: 2.4em;
+  height: 1.14em;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 6.5vw, 6rem);
+  font-weight: 400;
+  line-height: 1.14;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+/* The hero's glyph origins and star bounds, expressed relative to its type size.
+   The star overlaps P and R instead of occupying a small gap between them. */
+.wordmarkSp,
+.wordmarkA,
+.wordmarkRk {
   position: absolute;
-  left: calc(211 * var(--u));
-  width: calc(258 * var(--u));
-  top: calc(7167 * var(--u));
-  font-size: calc(46.400532 * var(--u));
-  font-weight: 800;
-  line-height: calc(60 * var(--u));
-  letter-spacing: calc(-0.464005 * var(--u));
-  background: linear-gradient(89.98889627541516deg, #fff 19.611%, #ff560f 106.78%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  top: 0;
+}
+
+.wordmarkSp { left: 0; }
+.wordmarkA { left: 0.879em; opacity: 0; }
+.wordmarkRk { left: 1.442em; }
+
+.star {
+  position: absolute;
+  z-index: 1;
+  left: 0.606em;
+  top: 0.019em;
+  width: 1.088em;
+  height: 1.1em;
+}
+
+.star img {
+  transition: scale 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  .wordmark:hover .star img {
+    scale: 1.08;
+  }
+}
+
+.wordmark:focus-visible .star img {
+  scale: 1.08;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star img {
+    transition: none;
+  }
+}
+
+.tagline {
+  margin-top: 0.625rem;
+  color: #dfb9a2;
+  font-size: 1rem;
+}
+
+.event {
+  color: #dfb9a2;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.event .invitation {
+  margin-bottom: 1rem;
+  color: #fff3ea;
+  font-size: clamp(1.375rem, 2vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.format {
+  margin-top: 0.75rem;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.footer a {
+  color: inherit;
+  text-decoration: none;
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 1rem;
+}
+
+.links a:hover,
+.backToTop:hover {
+  color: #ffab7f;
+  text-decoration: underline;
+}
+
+.footer a:focus-visible {
+  outline: 2px solid #ffab7f;
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  border-top: 1px solid #48372d;
+  padding-top: 1rem;
+  color: #dfb9a2;
+  font-size: 0.875rem;
+}
+
+.backToTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+}
+
+.backToTop svg {
+  width: 20px;
+  height: 20px;
+}
+
+.footer ::selection {
+  background: #ffab7f;
+  color: #0a0a0a;
+}
+
+@media (max-width: 760px) {
+  .main {
+    grid-template-columns: 1fr auto;
+    row-gap: 2.5rem;
+  }
+
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 380px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,0 +1,6 @@
+Last year's sponsors, as supplied by the site owner. The 2027 lineup is not yet confirmed.
+
+Slido: https://www.slido.com/static/slido-logo.a3d453e1.svg
+Voices: header SVG from https://voices.com (preserved the header fill and normalized viewBox casing).
+EY: https://upload.wikimedia.org/wikipedia/commons/3/34/EY_logo_2019.svg
+RBC: https://www.rbc.com/dvl/v1.0/assets/images/logos/rbc-logo-shield.svg

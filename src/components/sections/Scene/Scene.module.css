@@ -9,8 +9,20 @@
    stacking context, so their render order is also their paint order. */
 .stage {
   --u: calc(100cqw / 1512);
+  /* Share the FAQ's capped sizing and lift so the section ends with its waves,
+     including on wide screens where the scenery moves farther up the page. */
+  --panel-max-width: 1122px;
+  --panel-u: min(var(--u), calc(var(--panel-max-width) / 1122));
+  --faq-lift-base: 0;
+  --faq-lift-wide: 770;
+  --faq-scenery-lift: 100;
   position: relative;
-  height: calc(7709 * var(--u));
+  /* The final wave's full paint bounds end at 5670.52 before scenery lift.
+     Keep that entire fade and remove only the plain background below it. */
+  height: calc(
+    (5671 - var(--faq-scenery-lift) - var(--faq-lift-base)) * var(--u)
+    - var(--faq-lift-wide) * (var(--u) - var(--panel-u))
+  );
   isolation: isolate;
   color: #fff;
   pointer-events: none;

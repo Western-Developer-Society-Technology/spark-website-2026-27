@@ -205,7 +205,7 @@ export default function Scene({ children }: SceneProps) {
   }, []);
 
   return (
-    <main className={styles.site} ref={rootRef} data-load-state="pending" data-stars-state="pending">
+    <main id="top" className={styles.site} ref={rootRef} data-load-state="pending" data-stars-state="pending">
       <div className={styles.stage}>{children}</div>
     </main>
   );
