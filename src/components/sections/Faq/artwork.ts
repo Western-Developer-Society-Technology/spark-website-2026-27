@@ -127,14 +127,13 @@ export const faqClouds = {
 } as const satisfies Record<string, FaqCloudLayer>;
 
 const artwork = {
-  imgEllipse5: "/images/figma/rendered/ellipse-5.webp",
+  imgEllipse5: "/images/figma/rendered/ellipse-1.webp",
   imgEllipse6: "/images/figma/rendered/ellipse-6.webp",
   imgVector11: "/images/figma/vector-11.svg",
   imgLine2: "/images/figma/line-2.svg",
   imgLine3: "/images/figma/line-3.svg",
   imgGroup1363: "/images/figma/rendered/group-1363.webp",
   imgVector12: "/images/figma/vector-12.svg",
-  imgGroup1364: "/images/figma/rendered/group-1364.webp",
 } as const;
 
 export default artwork;

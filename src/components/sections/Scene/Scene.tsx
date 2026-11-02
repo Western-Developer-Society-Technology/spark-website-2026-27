@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
-import { WATER_MOTION } from "../Faq/water-motion";
+import { createStarOutlineMotion, createWaterSplashArt, WATER_MOTION } from "../Faq/water-motion";
 import { HERO_DURATION, HERO_MOTION, type HeroMotion } from "../Hero/hero-motion";
 import { createStarEntrances } from "../LastYear/star-motion";
 import { createScrollScenery } from "./scroll-scenery";
@@ -64,6 +64,8 @@ export default function Scene({ children }: SceneProps) {
     if (!root) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const motions: ManagedMotion[] = [];
+    let starOutline: ReturnType<typeof createStarOutlineMotion> | undefined;
+    let splashArt: ReturnType<typeof createWaterSplashArt> | undefined;
     const visibleRegions: Record<MotionRegion, boolean> = { hero: false, water: false };
     let unit = root.clientWidth / 1512;
     let ready = false;
@@ -94,10 +96,12 @@ export default function Scene({ children }: SceneProps) {
           if (typeof timelineTime === "number") animation.startTime = timelineTime - currentTime;
         } else animation.pause();
       });
+      starOutline?.sync();
+      splashArt?.sync();
     };
 
     const addMotion = (
-      element: HTMLElement,
+      element: HTMLElement | SVGElement,
       keyframes: ManagedMotion["keyframes"],
       region: MotionRegion,
       options: KeyframeAnimationOptions,
@@ -134,8 +138,14 @@ export default function Scene({ children }: SceneProps) {
     root.dataset.loadState = heroFinished ? "complete" : "running";
 
     WATER_MOTION.forEach(({ selector, keyframes, options }) => {
-      const element = root.querySelector<HTMLElement>(selector);
-      if (element) addMotion(element, keyframes, "water", options);
+      const element = root.querySelector<HTMLElement | SVGElement>(selector);
+      if (!element) return;
+      const animation = addMotion(element, keyframes, "water", options);
+      if (element.dataset.animation === "yellow-star-balance") {
+        const path = root.querySelector<SVGPathElement>('[data-animation="yellow-star-outline"]');
+        if (path) starOutline = createStarOutlineMotion(path, animation);
+        splashArt = createWaterSplashArt(root, animation);
+      }
     });
 
     const intersectionObserver = new IntersectionObserver((entries) => {
@@ -184,6 +194,8 @@ export default function Scene({ children }: SceneProps) {
 
     return () => {
       disposed = true;
+      starOutline?.dispose();
+      splashArt?.dispose();
       motions.forEach(({ animation }) => animation.cancel());
       resizeObserver.disconnect();
       intersectionObserver.disconnect();

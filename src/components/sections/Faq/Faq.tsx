@@ -1,7 +1,7 @@
 import { ArtworkImage, BlueCloudGroup } from "@/components/ui/Artwork";
 import artwork, { faqClouds } from "./artwork";
 import FaqPanel from "./FaqPanel";
-import { Boat, FloatingStar } from "./Water";
+import { Boat, FloatingStar, StarSplashes } from "./Water";
 import styles from "./Faq.module.css";
 
 export default function Faq() {
@@ -79,6 +79,7 @@ export default function Faq() {
             </div>
             <BlueCloudGroup nodeId={faqClouds.front.blueNodeId} cloud={faqClouds.front.blue} />
           </div>
+          <StarSplashes />
         </div>
       </div>
     </div>

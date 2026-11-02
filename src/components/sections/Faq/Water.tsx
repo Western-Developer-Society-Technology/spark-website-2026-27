@@ -1,6 +1,10 @@
+import { useId } from "react";
 import { ArtworkImage } from "@/components/ui/Artwork";
 import AsciiArt from "@/components/ui/AsciiArt";
 import artwork from "./artwork";
+import StarCharacter from "./StarCharacter";
+import { SPLASH_DROPLETS } from "./water-splashes";
+import { SPLASH_ART, SPLASH_CELLS, SPLASH_COLORS, splashGlyph } from "./water-splash-art";
 import styles from "./Water.module.css";
 
 // Selectors in water-motion.ts animate the data-animation wrappers.
@@ -81,10 +85,80 @@ export function FloatingStar() {
         <div className={styles.floatingYellowStarBody} data-animation="yellow-star-balance">
           <div className={styles.floatingYellowStarRotation}>
             <div className={styles.boatCharacterShape}>
-              <ArtworkImage absolute src={artwork.imgGroup1364} />
+              <StarCharacter />
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+export function StarSplashes() {
+  const splashId = useId();
+  return (
+    <div className={styles.splashViewport}>
+      <div className={styles.starSplashes} aria-hidden="true">
+        {SPLASH_DROPLETS.map((droplet) => (
+          <span
+            key={droplet.id}
+            className={styles.splashDroplet}
+            data-animation={`water-splash-${droplet.id}`}
+            style={{
+              left: `calc(${droplet.x} * var(--u))`,
+              top: `calc(${droplet.y} * var(--u))`,
+              width: `calc(${droplet.height * SPLASH_ART.aspect} * var(--u))`,
+              height: `calc(${droplet.height} * var(--u))`,
+            }}
+          >
+            <svg
+              className={styles.splashArt}
+              viewBox={`0 0 ${SPLASH_ART.width} ${SPLASH_ART.height}`}
+              preserveAspectRatio="none"
+              focusable="false"
+              style={{ transform: droplet.mirror ? "scaleX(-1)" : undefined }}
+            >
+              <defs>
+                <radialGradient
+                  id={`${splashId}-${droplet.id}-water`}
+                  gradientUnits="userSpaceOnUse"
+                  cx="0"
+                  cy="0"
+                  r="1"
+                  gradientTransform={`translate(${SPLASH_ART.width / 2} ${SPLASH_ART.height / 2}) scale(${SPLASH_ART.width / 2} ${SPLASH_ART.height / 2})`}
+                  colorInterpolation="sRGB"
+                >
+                  <stop offset="0" stopColor={SPLASH_COLORS.center} />
+                  <stop offset="0.45" stopColor={SPLASH_COLORS.center} />
+                  <stop offset="1" stopColor={SPLASH_COLORS.edge} />
+                </radialGradient>
+              </defs>
+              <g fill={`url(#${splashId}-${droplet.id}-water)`}>
+                {Array.from({ length: SPLASH_ART.rows }, (_, index) => (
+                  <text
+                    key={index}
+                    className={styles.splashRow}
+                    data-splash-row=""
+                    x="0"
+                    y={index * SPLASH_ART.lineHeight + SPLASH_ART.baseline}
+                    fontSize={SPLASH_ART.fontSize}
+                    xmlSpace="preserve"
+                  >
+                    {SPLASH_CELLS.filter((cell) => cell.row === index).map((cell) => (
+                      <tspan
+                        key={cell.column}
+                        data-splash-cell=""
+                        x={cell.column * SPLASH_ART.width / SPLASH_ART.columns}
+                      >
+                        {splashGlyph(cell, droplet.variant, 0)}
+                      </tspan>
+                    ))}
+                  </text>
+                ))}
+              </g>
+            </svg>
+          </span>
+        ))}
       </div>
     </div>
   );

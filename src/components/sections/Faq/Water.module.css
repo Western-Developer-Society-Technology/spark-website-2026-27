@@ -198,13 +198,19 @@
   inset: -6.43% -5.45% -5.15% 0;
 }
 
-.floatingYellowStarWaterViewport {
+.floatingYellowStarWaterViewport,
+.splashViewport {
   position: absolute;
   left: 0;
   top: calc(4800 * var(--u));
   width: calc(600 * var(--u));
   height: calc(665 * var(--u));
   overflow: hidden;
+}
+
+.splashViewport {
+  /* Airborne glyphs paint over the foreground; the surface hides their return. */
+  height: calc(420 * var(--u));
 }
 
 .floatingYellowStar {
@@ -230,5 +236,57 @@
 .floatingYellowStarRotation {
   flex: none;
   rotate: -24.9deg;
+}
+
+.starCharacter {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.starEyeLeft,
+.starEyeRight {
+  transform-box: view-box;
+}
+
+.starEyeLeft {
+  transform-origin: 125.5px 129.7px;
+}
+
+.starEyeRight {
+  transform-origin: 169.5px 139.85px;
+}
+
+.starSplashes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.splashDroplet {
+  position: absolute;
+  display: block;
+  font-family: var(--font-mono);
+  /* A little extra ink keeps these small glyphs as clear as the larger campfire. */
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: pre;
+  opacity: 0;
+  user-select: none;
+}
+
+.splashRow {
+  white-space: pre;
+}
+
+.splashArt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform-origin: 50% 50%;
 }
 
