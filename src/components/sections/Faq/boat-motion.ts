@@ -3,6 +3,7 @@ export const BOAT_DURATION = 32000;
 const RESTING_CENTER_X = 1221.00013;
 const TRAVEL = 580;
 const HALF_HULL = 150;
+const HALF_KEEL = 120;
 
 // Foreground cloud-31.webp's white waterline at a 1512px scene width.
 // Samples run from x=440 to x=1440 in 40px steps; y is relative to its crest.
@@ -56,8 +57,18 @@ export function boatPathKeyframes(unit: number): Keyframe[] {
           : time < 30500 ? 1 - travelEase((time - 16000) / 14500) : 0;
     const x = -TRAVEL * progress;
     const center = RESTING_CENTER_X + x;
+    // A broad, flat keel needs extra immersion over a convex crest. Account
+    // for both ends so following the center cannot lift the bottom edge clear.
+    const keelHeight = (waveHeight(center - HALF_KEEL) + waveHeight(center + HALF_KEEL)) / 2;
+    const centerHeight = waveHeight(center);
+    const clearance = keelHeight - centerHeight;
+    // Blend the extra draft in smoothly rather than changing vertical speed
+    // abruptly where a crest starts supporting the ends of the keel.
+    const crestImmersion = clearance <= -2 ? 0
+      : clearance >= 2 ? clearance : (clearance + 2) ** 2 / 8;
+    const ridingHeight = centerHeight + crestImmersion;
     return {
-      translate: `${x * unit}px ${(waveHeight(center) - restingHeight) * unit}px`,
+      translate: `${x * unit}px ${(ridingHeight - restingHeight) * unit}px`,
       // Let the existing gentle rocking ride on top of the wave's slope.
       rotate: `${(wavePitch(center) - restingPitch) * .65}deg`,
       offset: time / BOAT_DURATION,

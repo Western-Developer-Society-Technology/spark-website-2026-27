@@ -2,7 +2,8 @@
 .boatDrift {
   position: absolute;
   left: calc(954 * var(--u));
-  top: calc(4784 * var(--u));
+  /* Keep the keel submerged beneath the foreground, including upward rocking. */
+  top: calc(4814 * var(--u));
   width: calc(507.043 * var(--u));
   height: calc(465.291 * var(--u));
   transform-origin: calc(267.00013 * var(--u)) calc(344.7501 * var(--u));
