@@ -3,6 +3,14 @@
   display: contents;
 }
 
+/* Leave exposure headroom for the ASCII's emitted highlights. The sampler
+   still reads the full-color source; only the continuous light is attenuated. */
+.eclipseHalo,
+.eclipseOuterRing,
+.eclipseInnerGlow {
+  opacity: 0.74;
+}
+
 .eclipseHalo {
   position: absolute;
   height: calc(1144 * var(--u));
@@ -61,6 +69,11 @@
   left: calc(62 * var(--u));
   top: calc(333 * var(--u));
   width: calc(553.852 * var(--u));
+}
+
+.eclipseStar img {
+  /* Keep the continuous flare below its white ASCII highlights, like the rim. */
+  filter: brightness(0.7);
 }
 
 /* Match the first authored frame before hydration creates the Web Animations.

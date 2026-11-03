@@ -32,6 +32,7 @@ export type GlowCell = {
   phase: number;
   hold: number;
   strength: number;
+  emission: number;
   packed: number;
   color: string;
   glyphs: string;
@@ -60,6 +61,12 @@ export function glyphColor(r: number, g: number, b: number, strength: number) {
   const hot = Math.min(1, Math.max(0, (brightness - COLOR_WHITE_FROM) / (1 - COLOR_WHITE_FROM)));
   const mix = Math.min(1, COLOR_LIFT * strength + hot * COLOR_WHITE_MIX);
   return `rgb(${Math.round(r + (255 - r) * mix)} ${Math.round(g + (255 - g) * mix)} ${Math.round(b + (255 - b) * mix)})`;
+}
+
+/** Keep saturated color translucent; reserve the strongest glow for bright light. */
+export function lightEmission(r: number, g: number, b: number) {
+  const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  return 0.18 + 0.82 * luminance ** 0.72;
 }
 
 export function glyphFor(cell: GlowCell, time: number, cycling: boolean, cycleIndex: number) {

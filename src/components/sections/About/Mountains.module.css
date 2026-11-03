@@ -26,13 +26,7 @@
 
 .smallMountainStarAscii {
   inset: -78%;
-  -webkit-mask-image: radial-gradient(
-    ellipse 40% 40% at 50% 50%,
-    #000 0%,
-    #000 44%,
-    transparent 60%
-  );
-  mask-image: radial-gradient(
+  --ascii-mask: radial-gradient(
     ellipse 40% 40% at 50% 50%,
     #000 0%,
     #000 44%,
@@ -83,13 +77,7 @@
 
 .largeMountainStarAscii {
   inset: -42%;
-  -webkit-mask-image: radial-gradient(
-    ellipse 42% 42% at 50% 50%,
-    #000 0%,
-    #000 46%,
-    transparent 62%
-  );
-  mask-image: radial-gradient(
+  --ascii-mask: radial-gradient(
     ellipse 42% 42% at 50% 50%,
     #000 0%,
     #000 46%,
@@ -126,13 +114,7 @@
 
 .leftMountainStarAscii {
   inset: -100%;
-  -webkit-mask-image: radial-gradient(
-    ellipse 38% 38% at 50% 50%,
-    #000 0%,
-    #000 42%,
-    transparent 58%
-  );
-  mask-image: radial-gradient(
+  --ascii-mask: radial-gradient(
     ellipse 38% 38% at 50% 50%,
     #000 0%,
     #000 42%,
@@ -149,6 +131,13 @@
 .leftMountainStarPaintBounds {
   position: absolute;
   inset: -53.4% -69.73% -63.89% -53.78%;
+}
+
+.smallMountainStarPaintBounds,
+.largeMountainStarPaintBounds,
+.leftMountainStarPaintBounds {
+  /* Match the hero's exposure headroom without dimming the sampled source. */
+  opacity: 0.74;
 }
 
 .nearMountain {

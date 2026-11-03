@@ -17,6 +17,7 @@ import {
   glyphColor,
   glyphFor,
   glyphsFor,
+  lightEmission,
   seed,
   LIGHT_GLYPHS,
 } from "@/lib/ascii-glow";
@@ -39,15 +40,20 @@ type AboutStarsAsciiProps = {
 export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bloomRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const overlay = overlayRef.current;
     const canvas = canvasRef.current;
-    if (!overlay || !canvas) return;
+    const mountedBloom = bloomRef.current;
+    if (!overlay || !canvas || !mountedBloom) return;
     const overlayEl = overlay;
     const canvasEl = canvas;
     const context = canvasEl.getContext("2d", { alpha: true });
-    if (!context) return;
+    const bloomDrawingContext = mountedBloom.getContext("2d", { alpha: true });
+    if (!context || !bloomDrawingContext) return;
+    const bloom = mountedBloom;
+    const bloomContext = bloomDrawingContext;
 
     const sample = document.createElement("canvas");
     const samplingContext = sample.getContext("2d", { willReadFrequently: true });
@@ -111,6 +117,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
         const packed = (r << 16) | (g << 8) | b;
         if (packed === cell.packed) continue;
         cell.packed = packed;
+        cell.emission = lightEmission(r, g, b);
         cell.color = glyphColor(r, g, b, cell.strength);
       }
       if (!asciiVisible && cells.some((cell) => cell.strength > 0)) revealAscii();
@@ -120,13 +127,16 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
       overlayWidth = overlayEl.offsetWidth;
       overlayHeight = overlayEl.offsetHeight;
       const fontSize = Math.min(FONT_MAX, Math.max(FONT_MIN, overlayWidth * (FONT_UNITS / 1512)));
-      const font = `500 ${fontSize}px "Roboto Mono", monospace`;
+      const font = `400 ${fontSize}px "Roboto Mono", monospace`;
       drawContext.font = font;
       const cellWidth = drawContext.measureText("M").width * 1.05;
       const cellHeight = fontSize * 1.12;
       const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
       canvasEl.width = Math.max(1, Math.ceil(overlayWidth * pixelRatio));
       canvasEl.height = Math.max(1, Math.ceil(overlayHeight * pixelRatio));
+      // Bloom needs CSS-pixel resolution only; the sharp pass retains full DPR.
+      bloom.width = Math.max(1, Math.ceil(overlayWidth));
+      bloom.height = Math.max(1, Math.ceil(overlayHeight));
       drawContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       drawContext.font = font;
       drawContext.textAlign = "center";
@@ -148,6 +158,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
               phase: seed(identity + 3.7),
               hold: Math.floor(seed(identity + 8.2) * 1000),
               strength: 0,
+              emission: 0,
               packed: -1,
               color: "",
               glyphs: LIGHT_GLYPHS,
@@ -171,7 +182,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
 
       for (const cell of cells) {
         if (cell.strength <= 0) continue;
-        let opacity = cell.strength ** STAR_EDGE_OPACITY_CURVE;
+        let opacity = cell.strength ** STAR_EDGE_OPACITY_CURVE * cell.emission;
         let cycling = false;
         let cycleIndex = 0;
         if (!reduced) {
@@ -194,6 +205,8 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
         drawContext.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       drawContext.globalAlpha = 1;
+      bloomContext.clearRect(0, 0, bloom.width, bloom.height);
+      bloomContext.drawImage(canvasEl, 0, 0, bloom.width, bloom.height);
     }
 
     function start() {
@@ -243,6 +256,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
 
   return (
     <div ref={overlayRef} className={`${styles.overlay} ${className}`.trim()} aria-hidden="true">
+      <canvas ref={bloomRef} className={styles.bloom} />
       <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   );

@@ -29,18 +29,23 @@
   width: 100%;
   height: calc(1273 * var(--u));
   pointer-events: none;
-  opacity: 0;
+  /* Keep this wrapper unflattened: each pass must blend with the real eclipse
+     backdrop, rather than blending two canvases on an isolated text plane. */
 }
 
-@media (scripting: enabled) {
-  .overlay[data-visible] {
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .overlay[data-visible] .canvas,
+  .overlay[data-visible] .flare,
+  .overlay[data-visible] .bloom {
     animation: heroAsciiFadeIn 0.65s ease forwards;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .overlay {
-    opacity: 1;
+  .overlay .canvas,
+  .overlay .flare,
+  .overlay .bloom {
+    opacity: var(--ascii-opacity);
   }
 }
 
@@ -50,12 +55,37 @@
   }
 
   to {
-    opacity: 1;
+    opacity: var(--ascii-opacity);
   }
 }
 
-.canvas {
+.canvas,
+.flare,
+.bloom {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
+  opacity: 0;
+}
+
+.flare {
+  --ascii-opacity: 0.8;
+  mix-blend-mode: screen;
+  filter: blur(0.22px);
+}
+
+.canvas {
+  --ascii-opacity: 0.8;
+  mix-blend-mode: overlay;
+  /* A very small optical softness avoids hard, stamped-looking glyph edges. */
+  filter: blur(0.22px);
+}
+
+.bloom {
+  --ascii-opacity: 0.85;
+  mix-blend-mode: plus-lighter;
+  /* Blur the color-matched copy on the compositor, keeping glyph cores sharp. */
+  filter: blur(clamp(1.6px, 0.16vw, 3px));
 }
