@@ -37,12 +37,8 @@ const COLOR_WHITE_MIX = 0.62;
 const SKIP_RATE = 0.05;
 /** Every eclipse ellipse, in paint order. */
 const ECLIPSE_SOURCE_IDS = ["111:95", "111:97", "111:98", "111:99"] as const;
-/** White flare artwork, sampled on the same grid as the eclipse. */
-const ECLIPSE_STAR_ID = "111:100";
 /** Black disc under the flare; cursor ASCII is suppressed here. */
 const ECLIPSE_CORE_ID = "111:99";
-/** Transition from the surrounding glow into a white glyph pass over the flare. */
-const FLARE_WHITE_ALPHA = 0.42;
 /** Cursor trail and dark-reveal skip the opaque eclipse core. */
 const CORE_MASK_ALPHA = 0.12;
 
@@ -228,8 +224,6 @@ type Cell = {
   strength: number;
   /** Sampled light intensity, separate from the occupied-cell silhouette. */
   emission: number;
-  /** Share of this glyph drawn in white over the flare instead of with Overlay. */
-  flare: number;
   /** Last sampled RGB, so the colour string is only rebuilt when it changes. */
   packed: number;
   color: string;
@@ -534,37 +528,29 @@ export default function HeroAscii() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bloomRef = useRef<HTMLCanvasElement>(null);
-  const flareRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const mountedOverlay = overlayRef.current;
     const mountedCanvas = canvasRef.current;
     const mountedBloom = bloomRef.current;
-    const mountedFlare = flareRef.current;
-    if (!mountedOverlay || !mountedCanvas || !mountedBloom || !mountedFlare) return;
+    if (!mountedOverlay || !mountedCanvas || !mountedBloom) return;
     const drawingContext = mountedCanvas.getContext("2d", { alpha: true });
     const bloomDrawingContext = mountedBloom.getContext("2d", { alpha: true });
-    const flareDrawingContext = mountedFlare.getContext("2d", { alpha: true });
-    if (!drawingContext || !bloomDrawingContext || !flareDrawingContext) return;
+    if (!drawingContext || !bloomDrawingContext) return;
     const bloom = mountedBloom;
     const bloomContext = bloomDrawingContext;
-    const flareCanvas = mountedFlare;
-    const flareContext = flareDrawingContext;
     const sample = document.createElement("canvas");
     const samplingContext = sample.getContext("2d", { willReadFrequently: true });
     if (!samplingContext) return;
     // Helper canvases stay in software like `sample`, so compositing them never reads back from the GPU.
     const base = document.createElement("canvas");
-    const flareSample = document.createElement("canvas");
     const coreMask = document.createElement("canvas");
     const scratch = document.createElement("canvas");
     const eclipseContext = base.getContext("2d", { willReadFrequently: true });
-    const starContext = flareSample.getContext("2d", { willReadFrequently: true });
     const coreMaskContext = coreMask.getContext("2d", { willReadFrequently: true });
     const streakingContext = scratch.getContext("2d", { willReadFrequently: true });
-    if (!eclipseContext || !starContext || !coreMaskContext || !streakingContext) return;
+    if (!eclipseContext || !coreMaskContext || !streakingContext) return;
     const baseContext = eclipseContext;
-    const flareSampleContext = starContext;
     const coreContext = coreMaskContext;
     const scratchContext = streakingContext;
 
@@ -580,15 +566,10 @@ export default function HeroAscii() {
     let cells: Cell[] = [];
     let overlayWidth = 0;
     let overlayHeight = 0;
-    let flareLeft = 0;
-    let flareTop = 0;
-    let flareWidth = 0;
-    let flareHeight = 0;
     let lastSample = 0;
     let lastStreakVersion = -1;
     let lastDraw = 0;
     let lastGridKey = "";
-    let flareField: Uint8ClampedArray | null = null;
     let coreMaskField: Uint8ClampedArray | null = null;
     const trail: TrailPoint[] = [];
     let lastSampleX = Number.NaN;
@@ -624,8 +605,6 @@ export default function HeroAscii() {
       target.rotate((rotate * Math.PI) / 180);
       target.scale(scaleX, scaleY);
       target.translate(-node.offsetWidth / 2, -node.offsetHeight / 2);
-      // The flare's sampled coverage follows its entrance opacity as well as its pose.
-      if (nodeId === ECLIPSE_STAR_ID) target.globalAlpha = Number(style.opacity);
       if (silhouette) {
         target.filter = "brightness(0)";
         target.globalAlpha = parseFloat(style.opacity) || 0;
@@ -672,8 +651,8 @@ export default function HeroAscii() {
     }
 
     /**
-     * Caches the eclipse and flare coverage while the intro moves, then samples
-     * the live streaks on that same field for each cell's colour and strength.
+     * Samples only the eclipse and streaks. The glare paints above this field,
+     * so its growth never changes the glyph grid, colours, or occupied cells.
      */
     function sampleField(now: number, force: boolean) {
       const loadState = overlay.closest("[data-load-state]")?.getAttribute("data-load-state");
@@ -686,7 +665,7 @@ export default function HeroAscii() {
       lastStreakVersion = liveStreaks.version;
 
       if (resized) {
-        for (const target of [sample, base, flareSample, coreMask, scratch]) {
+        for (const target of [sample, base, coreMask, scratch]) {
           target.width = width;
           target.height = height;
         }
@@ -698,11 +677,6 @@ export default function HeroAscii() {
         baseContext.fillStyle = "#0a0a0a";
         baseContext.fillRect(0, 0, width, height);
         ECLIPSE_SOURCE_IDS.forEach((nodeId) => drawLayer(baseContext, nodeId, scale));
-        drawLayer(baseContext, ECLIPSE_STAR_ID, scale);
-        flareSampleContext.setTransform(1, 0, 0, 1, 0, 0);
-        flareSampleContext.clearRect(0, 0, width, height);
-        drawLayer(flareSampleContext, ECLIPSE_STAR_ID, scale);
-        flareField = flareSampleContext.getImageData(0, 0, width, height).data;
         coreContext.setTransform(1, 0, 0, 1, 0, 0);
         coreContext.clearRect(0, 0, width, height);
         drawLayer(coreContext, ECLIPSE_CORE_ID, scale, true);
@@ -717,7 +691,6 @@ export default function HeroAscii() {
       drawStreaks(width, height);
 
       const field = sampleContext.getImageData(0, 0, width, height).data;
-      const starField = flareField;
       for (const cell of cells) {
         const sampleX = Math.min(width - 1, Math.max(0, Math.round(cell.x * scale)));
         const sampleY = Math.min(height - 1, Math.max(0, Math.round(cell.y * scale)));
@@ -725,8 +698,6 @@ export default function HeroAscii() {
         const r = field[index];
         const g = field[index + 1];
         const b = field[index + 2];
-        const flareAlpha = starField ? starField[index + 3] / 255 : 0;
-        cell.flare = Math.min(1, flareAlpha / FLARE_WHITE_ALPHA);
         const brightness = Math.max(r, g, b) / 255;
         cell.strength = Math.min(1, Math.max(0, (brightness - BRIGHTNESS_HIDE) / (BRIGHTNESS_FULL - BRIGHTNESS_HIDE)));
         cell.glyphs = glyphsFor(cell.strength);
@@ -757,25 +728,6 @@ export default function HeroAscii() {
       // Copy the finished glyph pass once instead of shadowing every character.
       bloom.width = Math.max(1, Math.ceil(overlayWidth));
       bloom.height = Math.max(1, Math.ceil(overlayHeight));
-      const flareNode = document.querySelector<HTMLElement>(`[data-node-id="${ECLIPSE_STAR_ID}"]`);
-      // Bound the extra sharp pass to the flare, including its full intro travel.
-      // Coordinates remain on the shared grid, so its glyphs never shift or double.
-      const flarePaddingX = (flareNode?.offsetWidth ?? 0) * 0.3;
-      const flarePaddingY = (flareNode?.offsetHeight ?? 0) * 0.3;
-      flareWidth = (flareNode?.offsetWidth ?? 0) + flarePaddingX * 2;
-      flareHeight = (flareNode?.offsetHeight ?? 0) + flarePaddingY * 2;
-      flareLeft = (flareNode?.offsetLeft ?? 0) - flarePaddingX;
-      flareTop = (flareNode?.offsetTop ?? 0) - flarePaddingY;
-      flareCanvas.width = Math.max(1, Math.ceil(flareWidth * pixelRatio));
-      flareCanvas.height = Math.max(1, Math.ceil(flareHeight * pixelRatio));
-      flareCanvas.style.left = `${flareLeft}px`;
-      flareCanvas.style.top = `${flareTop}px`;
-      flareCanvas.style.width = `${flareWidth}px`;
-      flareCanvas.style.height = `${flareHeight}px`;
-      flareContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-      flareContext.font = font;
-      flareContext.textAlign = "center";
-      flareContext.textBaseline = "middle";
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       context.font = font;
       context.textAlign = "center";
@@ -798,7 +750,6 @@ export default function HeroAscii() {
               hold: Math.floor(seed(identity + 8.2) * 1000),
               strength: 0,
               emission: 0,
-              flare: 0,
               packed: -1,
               color: "",
               glyphs: LIGHT_GLYPHS,
@@ -829,7 +780,6 @@ export default function HeroAscii() {
       const trailBox = trailBounds(trail, CURSOR_RADIUS);
 
       context.clearRect(0, 0, overlayWidth, overlayHeight);
-      flareContext.clearRect(0, 0, flareWidth, flareHeight);
       const reduced = motionPreference.matches;
       const time = now / 1000;
       const cursorOn = !reduced;
@@ -872,25 +822,13 @@ export default function HeroAscii() {
             : `rgb(${trailFx.r} ${trailFx.g} ${trailFx.b})`
           : cell.color;
 
-        const glyph = glyphFor(cell, time, cycling, cycleIndex);
-        context.globalAlpha = opacity * (1 - cell.flare);
+        context.globalAlpha = opacity;
         context.fillStyle = fill;
-        context.fillText(glyph, cell.x, cell.y);
-        if (cell.flare > 0) {
-          // Overlay cannot show a white glyph against the flare's white light,
-          // or keep it white over the dark disc. Screen preserves both cases.
-          flareContext.globalAlpha = opacity * cell.flare;
-          flareContext.fillStyle = "#fff";
-          flareContext.fillText(glyph, cell.x - flareLeft, cell.y - flareTop);
-        }
+        context.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       context.globalAlpha = 1;
       bloomContext.clearRect(0, 0, bloom.width, bloom.height);
       bloomContext.drawImage(canvas, 0, 0, bloom.width, bloom.height);
-      // The flare already has a broad halo; keep its glyph bloom from washing out the ink.
-      bloomContext.globalAlpha = 0.35;
-      bloomContext.drawImage(flareCanvas, flareLeft, flareTop, flareWidth, flareHeight);
-      bloomContext.globalAlpha = 1;
     }
 
     function addTrailPoint(clientX: number, clientY: number, now: number) {
@@ -941,8 +879,8 @@ export default function HeroAscii() {
     document.fonts.ready.then(() => {
       if (!disposed) layout();
     });
-    // The eclipse and flare images may finish decoding after the first sample.
-    [...ECLIPSE_SOURCE_IDS, ECLIPSE_STAR_ID].forEach((nodeId) => {
+    // The halo and ring images may finish decoding after the first sample.
+    ECLIPSE_SOURCE_IDS.forEach((nodeId) => {
       document.querySelector<HTMLImageElement>(`[data-node-id="${nodeId}"] img`)?.decode()
         .then(() => {
           if (!disposed) {
@@ -973,7 +911,6 @@ export default function HeroAscii() {
     <div className={styles.overlay} ref={overlayRef} aria-hidden="true">
       <canvas ref={bloomRef} className={styles.bloom} />
       <canvas ref={canvasRef} className={styles.canvas} />
-      <canvas ref={flareRef} className={styles.flare} />
     </div>
   );
 }

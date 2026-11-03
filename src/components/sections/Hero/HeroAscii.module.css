@@ -35,7 +35,6 @@
 
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
   .overlay[data-visible] .canvas,
-  .overlay[data-visible] .flare,
   .overlay[data-visible] .bloom {
     animation: heroAsciiFadeIn 0.65s ease forwards;
   }
@@ -43,7 +42,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .overlay .canvas,
-  .overlay .flare,
   .overlay .bloom {
     opacity: var(--ascii-opacity);
   }
@@ -60,7 +58,6 @@
 }
 
 .canvas,
-.flare,
 .bloom {
   position: absolute;
   inset: 0;
@@ -68,12 +65,6 @@
   width: 100%;
   height: 100%;
   opacity: 0;
-}
-
-.flare {
-  --ascii-opacity: 0.8;
-  mix-blend-mode: screen;
-  filter: blur(0.22px);
 }
 
 .canvas {
