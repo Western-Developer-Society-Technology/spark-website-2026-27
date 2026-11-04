@@ -74,3 +74,38 @@
   letter-spacing: -0.0138em;
   text-align: left;
 }
+
+@media (max-width: 1023px) {
+  .aboutStage {
+    --about-content-lift: 0;
+    position: relative;
+    inset: auto;
+    translate: none;
+    margin-top: calc(-200 * var(--u));
+    padding-top: calc(850 * var(--u));
+    padding-bottom: calc(120 * var(--u));
+  }
+
+  .motionRegion {
+    top: 0;
+    height: 100%;
+  }
+
+  .about {
+    position: relative;
+    inset: auto;
+    width: min(100% - 48px, 560px);
+    margin-inline: auto;
+  }
+
+  .heading {
+    font-size: clamp(28px, 4.5cqw, 40px);
+  }
+
+  .copy {
+    max-width: none;
+    margin-top: 20px;
+    font-size: clamp(17px, 2.3cqw, 20px);
+    line-height: 1.6;
+  }
+}

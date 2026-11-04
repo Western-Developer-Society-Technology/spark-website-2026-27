@@ -254,3 +254,73 @@
     translate: 0 calc(133.5 * var(--cta-u));
   }
 }
+
+.heroStage {
+  display: contents;
+}
+
+@media (max-width: 1023px) {
+  .heroStage {
+    --u: min(calc(100cqw / 780), 0.8px);
+    position: relative;
+    display: block;
+    left: calc(50% - 756 * var(--u));
+    width: calc(1512 * var(--u));
+    height: max(clamp(560px, 82svh, 820px), calc(1030 * var(--u)));
+  }
+
+  .ground {
+    top: calc(1700 * var(--u));
+  }
+
+  .wordmark,
+  .tagline,
+  .details {
+    --text-u: min(calc(100cqw / 600), 1px);
+  }
+
+  .tagline {
+    left: 50%;
+    top: calc(418 * var(--u) - 205 * var(--text-u));
+    /* The intro animates translate; keep horizontal centering independent. */
+    transform: translateX(-50%);
+    translate: none;
+    width: max-content;
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .details {
+    --cta-u: 1px;
+    left: 50%;
+    top: max(330px, calc(720 * var(--u)));
+    transform: translateX(-50%);
+    translate: none;
+    width: min(340px, calc(100cqw - 32px));
+    height: 158px;
+  }
+
+  .apply {
+    min-height: 48px;
+    font-size: 17px;
+  }
+
+  .date,
+  .format,
+  .location {
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  .date { top: 68px; }
+  .format { top: 96px; }
+  .location {
+    top: 124px;
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+    text-wrap: balance;
+  }
+}

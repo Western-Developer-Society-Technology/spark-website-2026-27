@@ -444,3 +444,43 @@
     visibility: hidden;
   }
 }
+
+.lastYearStage,
+.lastYearScene {
+  display: contents;
+}
+
+@media (max-width: 1023px) {
+  .lastYearStage {
+    --u: min(calc(100cqw / 1100), 0.7px);
+    position: relative;
+    display: block;
+    /* Let the cloud atmosphere rise behind the campfire's foreground ridge. */
+    margin-top: calc(-1 * min(480 * var(--u), 200px));
+    height: calc(1820 * var(--u));
+  }
+
+  .lastYearScene {
+    position: absolute;
+    display: block;
+    top: calc(-2230 * var(--u));
+    left: calc(50% - 756 * var(--u));
+    width: calc(1512 * var(--u));
+    /* Include the lower clouds' paint bounds as they continue behind the FAQ. */
+    height: calc(6000 * var(--u));
+    /* Fade the complete scene at its new local origin, including the native
+       cloud glow, so no rectangular backdrop edge cuts across the landscape. */
+    mask-image: linear-gradient(transparent calc(2230 * var(--u)), #000 calc(2560 * var(--u)));
+  }
+
+  .lastYearCloudBase,
+  .lastYearCloudMaskFrame,
+  .lastYear h2 {
+    scale: 1.4;
+  }
+
+  /* Use each layer's own origin so the label and its cloud enlarge together. */
+  .lastYearCloudBase { transform-origin: 50% 50%; }
+  .lastYearCloudMaskFrame { transform-origin: 50% calc(31.57 * var(--u)); }
+  .lastYear h2 { transform-origin: calc(84 * var(--u)) calc(13 * var(--u)); }
+}

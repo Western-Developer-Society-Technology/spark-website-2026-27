@@ -140,3 +140,37 @@
   height: calc(137.558 * var(--u));
   bottom: calc(-23.458 * var(--u));
 }
+
+@media (max-width: 1023px) {
+  .campfireGroup {
+    --u: min(calc(100cqw / 600), 1px);
+    position: relative;
+    inset: auto;
+    left: calc(50% - 1135 * var(--u));
+    width: calc(1512 * var(--u));
+    height: calc(560 * var(--u));
+    margin-top: 24px;
+    translate: none;
+  }
+
+  /* Keep the entire campfire on one local grid, including the ASCII flames. */
+  .campfireLeftCharacter { top: calc(121 * var(--u)); }
+  .campfireRightCharacter { top: calc(121.02 * var(--u)); }
+  .campfireFrontCharacter { top: calc(225.46 * var(--u)); }
+  .campfireWood { top: calc(243 * var(--u)); }
+  .campfireFlames { top: calc((279 - var(--campfire-flame-y)) * var(--u)); }
+  .campfireLargeFlame,
+  .campfireSmallFlame {
+    --u: min(calc(102cqw / 600), 1.02px);
+  }
+}
+
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce),
+       (max-width: 1023px) and (scripting: none) {
+  /* The static fire has every second row/column, just like the canvas's stride.
+     Match its glyph size so the non-animated flame still reaches the logs. */
+  .campfireLargeFlame pre {
+    font-size: calc(2 * var(--ascii-font-size));
+    line-height: calc(2 * var(--ascii-line-height));
+  }
+}

@@ -20,7 +20,7 @@ function Wordmark() {
 
 export default function Hero() {
   return (
-    <>
+    <div className={styles.heroStage}>
       <div className={styles.motionRegion} data-motion-region="hero" aria-hidden="true" />
       <Eclipse />
       <HeroStreaks />
@@ -42,6 +42,6 @@ export default function Hero() {
         </div>
       </section>
       <Wordmark />
-    </>
+    </div>
   );
 }

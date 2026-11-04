@@ -27,3 +27,11 @@
   color: #fff;
   pointer-events: none;
 }
+
+/* Narrow screens use content-height sections instead of shrinking one poster.
+   The desktop coordinate system above remains unchanged. */
+@media (max-width: 1023px) {
+  .stage {
+    height: auto;
+  }
+}
