@@ -34,13 +34,18 @@ const PLANETS = [
 export default function Sponsors() {
   return (
     <section id="sponsors" aria-labelledby="sponsors-heading" className={styles.sponsors}>
-      <Orbits tone="dark" />
+      <Orbits tone="dark" className={styles.orbits} />
       <div className={styles.copy}>
         <h2 id="sponsors-heading">
           Spark a weekend
           <br />
           of innovation
         </h2>
+        <p className={styles.subtitle}>
+          Connect with Western&apos;s brightest minds and
+          <br />
+          empower the builders of tomorrow.
+        </p>
         <a className={styles.sponsorUs} href={SPONSOR_EMAIL}>
           Sponsor us
         </a>

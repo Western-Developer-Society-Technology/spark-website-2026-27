@@ -57,7 +57,7 @@ export default function Footer() {
   return (
     <footer className={styles.footer} aria-label="Spark footer">
       <div className={styles.orbitClip} aria-hidden="true">
-        <Orbits tone="light" className={styles.orbits} />
+        <Orbits tone="light" className={styles.orbits} omitOutermost />
       </div>
       <div className={styles.brand}>
         <p className={styles.credit}>
