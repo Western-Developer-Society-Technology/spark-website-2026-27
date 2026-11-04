@@ -34,7 +34,6 @@ const PLANETS = [
 export default function Sponsors() {
   return (
     <section id="sponsors" aria-labelledby="sponsors-heading" className={styles.sponsors}>
-      <Orbits tone="dark" className={styles.orbits} />
       <div className={styles.copy}>
         <h2 id="sponsors-heading">
           Spark a weekend
@@ -50,14 +49,19 @@ export default function Sponsors() {
           Sponsor us
         </a>
       </div>
-      <ul className={styles.planets} aria-label="Last year's sponsors">
-        {PLANETS.map(({ name, logo, className, logoClassName }) => (
-          <li className={`${styles.planet} ${className}`} key={name}>
-            <img className={styles.planetBall} src="/images/sponsors/planet-ball.svg" alt="" />
-            <img className={`${styles.planetLogo} ${logoClassName}`} src={logo} alt={name} />
-          </li>
-        ))}
-      </ul>
+      <div className={styles.artStage}>
+        <div className={styles.art}>
+          <Orbits tone="dark" className={styles.orbits} />
+          <ul className={styles.planets} aria-label="Last year's sponsors">
+            {PLANETS.map(({ name, logo, className, logoClassName }) => (
+              <li className={`${styles.planet} ${className}`} key={name}>
+                <img className={styles.planetBall} src="/images/sponsors/planet-ball.svg" alt="" />
+                <img className={`${styles.planetLogo} ${logoClassName}`} src={logo} alt={name} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
   );
 }

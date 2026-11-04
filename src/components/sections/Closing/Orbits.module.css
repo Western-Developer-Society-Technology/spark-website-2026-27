@@ -6,3 +6,14 @@
   max-width: none;
   pointer-events: none;
 }
+
+@media (max-width: 720px) {
+  .voicesOrbit {
+    /* Enlarge the original ellipse uniformly, keeping it under Voices.
+       Both sections use this geometry so the ring stays continuous. */
+    transform-box: view-box;
+    transform-origin: 57.84% 48.08%;
+    transform: translate(96px, 38px) scale(1.5);
+    stroke-width: calc(2 / 1.5);
+  }
+}

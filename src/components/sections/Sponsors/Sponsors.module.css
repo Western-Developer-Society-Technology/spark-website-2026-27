@@ -78,6 +78,11 @@
   list-style: none;
 }
 
+.artStage,
+.art {
+  display: contents;
+}
+
 .planet {
   position: absolute;
   z-index: 2;
@@ -146,6 +151,12 @@
 }
 
 @media (max-width: 720px) {
+  .sponsors {
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
   .copy {
     padding-top: clamp(2rem, 8vw, 3rem);
   }
@@ -154,7 +165,24 @@
     max-width: 8.5em;
   }
 
+  .artStage {
+    position: relative;
+    display: block;
+    flex: 0 0 var(--sponsor-art-height);
+    width: 100%;
+    height: var(--sponsor-art-height);
+  }
+
+  .art {
+    position: absolute;
+    display: block;
+    left: var(--sponsor-orbit-left);
+    top: var(--sponsor-orbit-top);
+    width: var(--sponsor-orbit-width);
+    height: var(--sponsor-orbit-height);
+  }
+
   .planet {
-    width: clamp(4.85rem, 20vw, 7.1rem);
+    width: var(--sponsor-planet-size);
   }
 }

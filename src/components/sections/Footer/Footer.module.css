@@ -190,6 +190,15 @@
 }
 
 @media (max-width: 720px) {
+  .orbits {
+    /* Continue the same uncompressed frame through the footer boundary. */
+    left: var(--sponsor-orbit-left);
+    top: calc(var(--sponsor-orbit-top) - var(--sponsor-art-height));
+    bottom: auto;
+    width: var(--sponsor-orbit-width);
+    height: var(--sponsor-orbit-height);
+  }
+
   .brand {
     font-size: clamp(4.25rem, 22vw, 7.5rem);
   }
