@@ -2,7 +2,7 @@
 import Orbits from "../Closing/Orbits";
 import styles from "./Sponsors.module.css";
 
-const SPONSOR_EMAIL = "mailto:westerndeveloperssociety@gmail.com";
+const SPONSOR_EMAIL = "mailto:wdsspark@gmail.com";
 
 const PLANETS = [
   {
