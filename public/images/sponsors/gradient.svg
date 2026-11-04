@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1512 1454" preserveAspectRatio="none" fill="none">
+  <defs>
+    <radialGradient id="sparkClosingGlow" gradientUnits="userSpaceOnUse" cx="1180" cy="1380" r="920">
+      <stop offset="0" stop-color="#6FCCE5"/>
+      <stop offset="0.32" stop-color="#6FCDE7"/>
+      <stop offset="0.58" stop-color="#75D8F3" stop-opacity="0.85"/>
+      <stop offset="0.82" stop-color="#C6F2FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="sparkClosingSoft" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="36"/>
+    </filter>
+  </defs>
+  <ellipse cx="1180" cy="1380" rx="780" ry="760" fill="url(#sparkClosingGlow)" filter="url(#sparkClosingSoft)"/>
+</svg>
