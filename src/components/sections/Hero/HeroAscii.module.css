@@ -68,15 +68,15 @@
 }
 
 .canvas {
-  --ascii-opacity: 0.8;
+  --ascii-opacity: 0.85;
   mix-blend-mode: overlay;
   /* A very small optical softness avoids hard, stamped-looking glyph edges. */
   filter: blur(0.22px);
 }
 
 .bloom {
-  --ascii-opacity: 0.85;
+  --ascii-opacity: 0.5;
   mix-blend-mode: plus-lighter;
   /* Blur the color-matched copy on the compositor, keeping glyph cores sharp. */
-  filter: blur(clamp(1.6px, 0.16vw, 3px));
+  filter: blur(clamp(1.25px, 0.12vw, 2.4px));
 }
