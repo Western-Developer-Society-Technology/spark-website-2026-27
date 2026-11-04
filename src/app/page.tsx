@@ -3,8 +3,7 @@ import Hero from "@/components/sections/Hero/Hero";
 import About from "@/components/sections/About/About";
 import LastYear from "@/components/sections/LastYear/LastYear";
 import Faq from "@/components/sections/Faq/Faq";
-import Sponsors from "@/components/sections/Sponsors/Sponsors";
-import Footer from "@/components/sections/Footer/Footer";
+import Closing from "@/components/sections/Closing/Closing";
 
 export default function Home() {
   return (
@@ -15,8 +14,7 @@ export default function Home() {
         <LastYear />
         <Faq />
       </Scene>
-      <Sponsors />
-      <Footer />
+      <Closing />
     </>
   );
 }
