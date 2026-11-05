@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { lightEmission } from "@/lib/ascii-glow";
 import { HERO_DURATION } from "./hero-motion";
 import styles from "./HeroAscii.module.css";
 
@@ -222,8 +221,6 @@ type Cell = {
   phase: number;
   hold: number;
   strength: number;
-  /** Sampled light intensity, separate from the occupied-cell silhouette. */
-  emission: number;
   /** Last sampled RGB, so the colour string is only rebuilt when it changes. */
   packed: number;
   color: string;
@@ -527,18 +524,13 @@ export function HeroStreaks() {
 export default function HeroAscii() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const bloomRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const mountedOverlay = overlayRef.current;
     const mountedCanvas = canvasRef.current;
-    const mountedBloom = bloomRef.current;
-    if (!mountedOverlay || !mountedCanvas || !mountedBloom) return;
+    if (!mountedOverlay || !mountedCanvas) return;
     const drawingContext = mountedCanvas.getContext("2d", { alpha: true });
-    const bloomDrawingContext = mountedBloom.getContext("2d", { alpha: true });
-    if (!drawingContext || !bloomDrawingContext) return;
-    const bloom = mountedBloom;
-    const bloomContext = bloomDrawingContext;
+    if (!drawingContext) return;
     const sample = document.createElement("canvas");
     const samplingContext = sample.getContext("2d", { willReadFrequently: true });
     if (!samplingContext) return;
@@ -704,10 +696,6 @@ export default function HeroAscii() {
         const packed = (r << 16) | (g << 8) | b;
         if (packed === cell.packed) continue;
         cell.packed = packed;
-        // Saturated orange previously hit full opacity just as early as white
-        // light. Keep dim color translucent and reserve strong emission for
-        // the bright rim/flare. Recalculate only when the sampled RGB changes.
-        cell.emission = lightEmission(r, g, b);
         cell.color = glyphColor(r, g, b, cell.strength);
       }
       if (!asciiVisible && cells.some((cell) => cell.strength > 0)) revealAscii();
@@ -724,10 +712,6 @@ export default function HeroAscii() {
       const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.max(1, Math.ceil(overlayWidth * pixelRatio));
       canvas.height = Math.max(1, Math.ceil(overlayHeight * pixelRatio));
-      // The halo is intentionally soft, so CSS-pixel resolution is enough.
-      // Copy the finished glyph pass once instead of shadowing every character.
-      bloom.width = Math.max(1, Math.ceil(overlayWidth));
-      bloom.height = Math.max(1, Math.ceil(overlayHeight));
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       context.font = font;
       context.textAlign = "center";
@@ -749,7 +733,6 @@ export default function HeroAscii() {
               phase: seed(identity + 3.7),
               hold: Math.floor(seed(identity + 8.2) * 1000),
               strength: 0,
-              emission: 0,
               packed: -1,
               color: "",
               glyphs: LIGHT_GLYPHS,
@@ -791,7 +774,7 @@ export default function HeroAscii() {
         const hasGlow = cell.strength > 0;
         if (!hasGlow && !trailFx) continue;
 
-        let opacity = hasGlow ? cell.strength ** EDGE_OPACITY_CURVE * cell.emission : 0;
+        let opacity = hasGlow ? cell.strength ** EDGE_OPACITY_CURVE : 0;
         let cycling = false;
         let cycleIndex = 0;
         if (hasGlow && !reduced) {
@@ -827,8 +810,6 @@ export default function HeroAscii() {
         context.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       context.globalAlpha = 1;
-      bloomContext.clearRect(0, 0, bloom.width, bloom.height);
-      bloomContext.drawImage(canvas, 0, 0, bloom.width, bloom.height);
     }
 
     function addTrailPoint(clientX: number, clientY: number, now: number) {
@@ -909,7 +890,6 @@ export default function HeroAscii() {
 
   return (
     <div className={styles.overlay} ref={overlayRef} aria-hidden="true">
-      <canvas ref={bloomRef} className={styles.bloom} />
       <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   );
