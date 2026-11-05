@@ -1,5 +1,8 @@
 /* eslint-disable @next/next/no-img-element -- Figma artwork keeps its original SVG bounds. */
 import styles from "./Artwork.module.css";
+import type { ComponentProps } from "react";
+
+type ArtworkDeliveryProps = Pick<ComponentProps<"img">, "srcSet" | "sizes" | "loading" | "fetchPriority">;
 
 export type BlueCloud = {
   src: string;
@@ -16,22 +19,24 @@ export function ArtworkImage({
   src,
   absolute = false,
   className,
+  ...delivery
 }: {
   src: string;
   absolute?: boolean;
   className?: string;
-}) {
+} & ArtworkDeliveryProps) {
   const defaultClass = absolute ? styles.absoluteImage : styles.image;
-  return <img alt="" className={className ?? defaultClass} src={src} />;
+  return <img alt="" className={className ?? defaultClass} src={src} {...delivery} />;
 }
 
-export function BlueCloudImage({ cloud }: { cloud: BlueCloud }) {
+export function BlueCloudImage({ cloud, ...delivery }: { cloud: BlueCloud } & ArtworkDeliveryProps) {
   const { src, paintBounds } = cloud;
   return (
     <img
       alt=""
       className={styles.blueCloudImage}
       src={src}
+      {...delivery}
       style={{
         left: `calc(${paintBounds.left} * var(--u))`,
         top: `calc(${paintBounds.top} * var(--u))`,
@@ -42,7 +47,7 @@ export function BlueCloudImage({ cloud }: { cloud: BlueCloud }) {
   );
 }
 
-export function BlueCloudGroup({ nodeId, cloud }: { nodeId: string; cloud: BlueCloud }) {
+export function BlueCloudGroup({ nodeId, cloud, ...delivery }: { nodeId: string; cloud: BlueCloud } & ArtworkDeliveryProps) {
   const { left, top, width, height, transform } = cloud;
   return (
     <div
@@ -57,7 +62,7 @@ export function BlueCloudGroup({ nodeId, cloud }: { nodeId: string; cloud: BlueC
         transform,
       }}
     >
-      <BlueCloudImage cloud={cloud} />
+      <BlueCloudImage cloud={cloud} {...delivery} />
     </div>
   );
 }

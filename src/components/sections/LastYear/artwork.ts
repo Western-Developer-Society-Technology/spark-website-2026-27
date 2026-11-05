@@ -1,25 +1,25 @@
 // Static SVG filters are baked at 2× into lossless WebP to avoid raster work during scroll.
 const artwork = {
   //orange shooting star
-  "orangeStar": "/images/figma/rendered/orangeStar.png",
+  "orangeStar": "/images/optimized/figma/rendered/orangeStar.webp",
   // cloud 1
-  "cloud1": "/images/figma/rendered/cloud-1.png",
+  "cloud1": "/images/optimized/figma/rendered/cloud-1.webp",
   // cloud 2
-  "cloud2": "/images/figma/rendered/cloud-2.png",
+  "cloud2": "/images/optimized/figma/rendered/cloud-2.webp",
   // cloud 5
   "cloud5": "/images/figma/rendered/cloud-5.webp",
   //blue shooting star
-  "blueStar": "/images/figma/rendered/blueStar.png",
+  "blueStar": "/images/optimized/figma/rendered/blueStar.webp",
   // yellow shooting star 
-  "yellowStar": "/images/figma/rendered/yellowStar.png",
+  "yellowStar": "/images/optimized/figma/rendered/yellowStar.webp",
   // cloud 3
-  "cloud3": "/images/figma/rendered/cloud-3.png",
+  "cloud3": "/images/optimized/figma/rendered/cloud-3.webp",
   // red shooting star 
-  "redStar": "/images/figma/rendered/redStar.png",
+  "redStar": "/images/optimized/figma/rendered/redStar.webp",
   // cloud 4
-  "cloud4": "/images/figma/rendered/cloud-4.png",
+  "cloud4": "/images/optimized/figma/rendered/cloud-4.webp",
   // last year label cloud (text composed in CSS)
-  "lastYearCloud": "/images/figma/rendered/lastYearCloud.png",
+  "lastYearCloud": "/images/optimized/figma/rendered/lastYearCloud.webp",
 } as const;
 
 export default artwork;

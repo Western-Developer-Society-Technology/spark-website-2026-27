@@ -4,7 +4,7 @@ import type { BlueCloud } from "@/components/ui/Artwork";
 // Lossless WebP retains every decoded RGBA channel, including fully transparent pixels.
 const nativeArtwork = {
   "133:2": {
-    "src": "/images/figma/tall-left-cloud-native.png",
+    "src": "/images/optimized/figma/tall-left-cloud-native.webp",
     "left": -21,
     "top": 2291,
     "width": 1151,
@@ -18,7 +18,7 @@ const nativeArtwork = {
     }
   },
   "133:8": {
-    "src": "/images/figma/upper-right-cloud-native.png",
+    "src": "/images/optimized/figma/upper-right-cloud-native.webp",
     "left": 1525,
     "top": 2310,
     "width": 928,
@@ -32,7 +32,7 @@ const nativeArtwork = {
     }
   },
   "133:24": {
-    "src": "/images/figma/lower-right-cloud-native.png",
+    "src": "/images/optimized/figma/lower-right-cloud-native.webp",
     "left": 1647,
     "top": 3230,
     "width": 1096,
@@ -46,7 +46,7 @@ const nativeArtwork = {
     }
   },
   "134:58": {
-    "src": "/images/figma/lower-left-cloud-native.png",
+    "src": "/images/optimized/figma/lower-left-cloud-native.webp",
     "left": -76,
     "top": 3853,
     "width": 960.99951171875,
@@ -60,7 +60,7 @@ const nativeArtwork = {
     }
   },
   "133:31": {
-    "src": "/images/figma/middle-left-cloud-native.png",
+    "src": "/images/optimized/figma/middle-left-cloud-native.webp",
     "left": -104,
     "top": 2814,
     "width": 960.99951171875,

@@ -7,10 +7,10 @@ export default function AboutRidge() {
   return (
     <div className={styles.ridge} aria-hidden="true">
       <div className={styles.ridgeMountain} data-node-id="112:4">
-        <ArtworkImage absolute src={artwork.mountainRidge} />
+        <ArtworkImage fetchPriority="low" absolute src={artwork.mountainRidge} />
       </div>
       <div className={styles.ridgeForeground} data-node-id="112:52">
-        <ArtworkImage absolute src={artwork.mountainRidgeForeground} />
+        <ArtworkImage fetchPriority="low" absolute src={artwork.mountainRidgeForeground} />
       </div>
     </div>
   );

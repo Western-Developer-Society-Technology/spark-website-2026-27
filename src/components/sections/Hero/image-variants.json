@@ -1,0 +1,22 @@
+{
+  "imgEllipse1": {
+    "srcSet": "/images/figma/rendered/responsive/ellipse-1-640.webp 640w, /images/figma/rendered/responsive/ellipse-1-960.webp 960w, /images/figma/rendered/responsive/ellipse-1-1280.webp 1280w, /images/figma/rendered/responsive/ellipse-1-1600.webp 1600w, /images/figma/rendered/responsive/ellipse-1-1920.webp 1920w, /images/figma/rendered/responsive/ellipse-1-2048.webp 2048w, /images/figma/rendered/responsive/ellipse-1-4372.webp 4372w",
+    "sizes": "(max-width: 1023px) min(280.21777vw, 1748.558881px), 144.556786vw"
+  },
+  "imgEllipse2": {
+    "srcSet": "/images/figma/rendered/responsive/ellipse-2-640.webp 640w, /images/figma/rendered/responsive/ellipse-2-960.webp 960w, /images/figma/rendered/responsive/ellipse-2-1280.webp 1280w, /images/figma/rendered/responsive/ellipse-2-1600.webp 1600w, /images/figma/rendered/responsive/ellipse-2-1920.webp 1920w, /images/figma/rendered/responsive/ellipse-2-3068.webp 3068w",
+    "sizes": "(max-width: 1023px) min(196.679488vw, 1227.28px), 101.461641vw"
+  },
+  "imgEllipse4": {
+    "srcSet": "/images/figma/rendered/responsive/ellipse-4-640.webp 640w, /images/figma/rendered/responsive/ellipse-4-960.webp 960w, /images/figma/rendered/responsive/ellipse-4-1280.webp 1280w, /images/figma/rendered/responsive/ellipse-4-1600.webp 1600w, /images/figma/rendered/responsive/ellipse-4-2580.webp 2580w",
+    "sizes": "(max-width: 1023px) min(175.191229vw, 1093.193264px), 90.376428vw"
+  },
+  "imgEllipse3": {
+    "srcSet": "/images/figma/rendered/responsive/ellipse-3-640.webp 640w, /images/figma/rendered/responsive/ellipse-3-960.webp 960w, /images/figma/rendered/responsive/ellipse-3-2472.webp 2472w",
+    "sizes": "(max-width: 1023px) min(158.468334vw, 988.842401px), 81.749538vw"
+  },
+  "glare": {
+    "srcSet": "/images/figma/rendered/responsive/group-1352-640.webp 640w, /images/figma/rendered/responsive/group-1352-960.webp 960w, /images/figma/rendered/responsive/group-1352-1108.webp 1108w",
+    "sizes": "(max-width: 1023px) min(92.139604vw, 574.951124px), 47.532335vw"
+  }
+}

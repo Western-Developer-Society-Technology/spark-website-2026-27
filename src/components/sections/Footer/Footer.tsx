@@ -17,7 +17,7 @@ function Wordmark() {
         RK
       </span>
       <span className={styles.wordmarkStar} aria-hidden="true">
-        <ArtworkImage absolute src="/images/figma/rendered/sparkcharacter.webp" />
+        <ArtworkImage loading="lazy" absolute src="/images/figma/rendered/sparkcharacter.webp" />
       </span>
     </a>
   );
@@ -32,7 +32,7 @@ export default function Footer() {
       <div className={styles.brand}>
         <p className={styles.credit}>
           Brought to you by
-          <img className={styles.wds} src="/images/footer/wds-logo.png" alt="Western Developers Society" />
+          <img loading="lazy" className={styles.wds} src="/images/optimized/footer/wds-logo.webp" alt="Western Developers Society" width={903} height={326} />
         </p>
         <Wordmark />
         <nav className={styles.socials} aria-label="Western Developers Society online">
@@ -45,7 +45,7 @@ export default function Footer() {
               rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
             >
               <span className={styles.srOnly}>{name}</span>
-              <img className={styles.socialIcon} src={icon} alt="" width={width} height={height} />
+              <img loading="lazy" className={styles.socialIcon} src={icon} alt="" width={width} height={height} />
             </a>
           ))}
         </nav>

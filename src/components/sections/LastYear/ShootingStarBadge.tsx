@@ -23,7 +23,7 @@ export default function ShootingStarBadge({ src, config }: ShootingStarBadgeProp
         height: `calc(${config.height} * var(--u))`,
       }}
     >
-      <ArtworkImage absolute src={src} />
+      <ArtworkImage loading="lazy" absolute src={src} />
       <svg
         className={styles.starBadgeLabel}
         viewBox="0 0 100 100"

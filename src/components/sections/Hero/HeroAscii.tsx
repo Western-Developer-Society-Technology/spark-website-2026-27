@@ -1,6 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { lightEmission } from "@/lib/ascii-glow";
+import { glowCandidates } from "@/lib/ascii-cells";
+import {
+  canvasDirtyRegion,
+  canvasViewportRegion,
+  copyBloomRegion,
+  type CanvasRegion,
+} from "@/lib/canvas-viewport";
 import { HERO_DURATION } from "./hero-motion";
 import styles from "./HeroAscii.module.css";
 
@@ -18,7 +26,7 @@ const FADE_OUT = 0.6;
 const REST = 0.5;
 const CYCLE = FADE_IN + HOLD + FADE_OUT + REST;
 const FLIPS_PER_SECOND = 10;
-const FRAME_MS = 1000 / 15;
+const FRAME_MS = 1000 / 30;
 /** Glyph size on the 1512 grid, clamped in CSS pixels so it stops growing on big screens. */
 const FONT_UNITS = 12;
 const FONT_MIN = 9;
@@ -221,6 +229,10 @@ type Cell = {
   phase: number;
   hold: number;
   strength: number;
+  /** Sampled light intensity, separate from the occupied-cell silhouette. */
+  emission: number;
+  baseOpacity: number;
+  onCore: boolean;
   /** Last sampled RGB, so the colour string is only rebuilt when it changes. */
   packed: number;
   color: string;
@@ -399,7 +411,7 @@ export function HeroStreaks() {
     const flights: (Flight | null)[] = STREAK_PATHS.map(() => null);
     const nextFlight: { at: number; kind: FlightKind }[] = STREAK_PATHS.map(() => ({ at: Infinity, kind: "loop" }));
     const flightCounts = STREAK_PATHS.map(() => 0);
-    const resting = motionPreference.matches;
+    let resting = motionPreference.matches;
     let launched = false;
     let frame = 0;
     let intersecting = true;
@@ -493,7 +505,21 @@ export function HeroStreaks() {
 
     function updateActivity() {
       cancelAnimationFrame(frame);
-      frame = intersecting ? requestAnimationFrame(tick) : 0;
+      frame = intersecting && !document.hidden && !resting ? requestAnimationFrame(tick) : 0;
+    }
+
+    function onMotionPreference() {
+      resting = motionPreference.matches;
+      launched = false;
+      flights.fill(null);
+      STREAK_PATHS.forEach((path, index) => {
+        liveStreaks.heads[index] = resting ? path.length : 0;
+        liveStreaks.alphas[index] = resting ? 1 : 0;
+        nextFlight[index] = { at: Infinity, kind: "loop" };
+        flightCounts[index] = 0;
+      });
+      paint();
+      updateActivity();
     }
 
     const resizeObserver = new ResizeObserver(resize);
@@ -503,6 +529,8 @@ export function HeroStreaks() {
       updateActivity();
     });
     intersectionObserver.observe(root);
+    motionPreference.addEventListener("change", onMotionPreference);
+    document.addEventListener("visibilitychange", updateActivity);
     resize();
     updateActivity();
 
@@ -510,6 +538,8 @@ export function HeroStreaks() {
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
+      motionPreference.removeEventListener("change", onMotionPreference);
+      document.removeEventListener("visibilitychange", updateActivity);
     };
   }, []);
 
@@ -524,13 +554,18 @@ export function HeroStreaks() {
 export default function HeroAscii() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bloomRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const mountedOverlay = overlayRef.current;
     const mountedCanvas = canvasRef.current;
-    if (!mountedOverlay || !mountedCanvas) return;
+    const mountedBloom = bloomRef.current;
+    if (!mountedOverlay || !mountedCanvas || !mountedBloom) return;
     const drawingContext = mountedCanvas.getContext("2d", { alpha: true });
-    if (!drawingContext) return;
+    const bloomDrawingContext = mountedBloom.getContext("2d", { alpha: true });
+    if (!drawingContext || !bloomDrawingContext) return;
+    const bloom = mountedBloom;
+    const bloomContext = bloomDrawingContext;
     const sample = document.createElement("canvas");
     const samplingContext = sample.getContext("2d", { willReadFrequently: true });
     if (!samplingContext) return;
@@ -556,6 +591,7 @@ export default function HeroAscii() {
     let intersecting = true;
     let frame = 0;
     let cells: Cell[] = [];
+    let activeCells: Cell[] = [];
     let overlayWidth = 0;
     let overlayHeight = 0;
     let lastSample = 0;
@@ -567,6 +603,8 @@ export default function HeroAscii() {
     let lastSampleX = Number.NaN;
     let lastSampleY = Number.NaN;
     let asciiVisible = false;
+    let previousRegion: CanvasRegion | null = null;
+    let canvasPixelRatio = 0;
 
     const revealAscii = () => {
       if (asciiVisible || disposed || motionPreference.matches) return;
@@ -584,6 +622,7 @@ export default function HeroAscii() {
         ? { offsetLeft: 0, offsetTop: 0, offsetWidth: node.offsetWidth, offsetHeight: node.offsetHeight }
         : parent;
       const style = getComputedStyle(node);
+      if (style.visibility === "hidden") return;
       const [translateX = 0, translateY = 0] = lengths(style.translate);
       const [rotate = 0] = lengths(style.rotate);
       const [scaleX = 1, scaleY = scaleX] = lengths(style.scale);
@@ -683,7 +722,10 @@ export default function HeroAscii() {
       drawStreaks(width, height);
 
       const field = sampleContext.getImageData(0, 0, width, height).data;
+      activeCells = [];
       for (const cell of cells) {
+        // Mask geometry can change independently of the sampled RGB.
+        if (refreshBase) cell.onCore = isOnEclipseCore(cell.x, cell.y);
         const sampleX = Math.min(width - 1, Math.max(0, Math.round(cell.x * scale)));
         const sampleY = Math.min(height - 1, Math.max(0, Math.round(cell.y * scale)));
         const index = (sampleY * width + sampleX) * 4;
@@ -693,9 +735,15 @@ export default function HeroAscii() {
         const brightness = Math.max(r, g, b) / 255;
         cell.strength = Math.min(1, Math.max(0, (brightness - BRIGHTNESS_HIDE) / (BRIGHTNESS_FULL - BRIGHTNESS_HIDE)));
         cell.glyphs = glyphsFor(cell.strength);
+        if (cell.strength > 0) activeCells.push(cell);
         const packed = (r << 16) | (g << 8) | b;
         if (packed === cell.packed) continue;
         cell.packed = packed;
+        // Saturated orange previously hit full opacity just as early as white
+        // light. Keep dim color translucent and reserve strong emission for
+        // the bright rim/flare. Recalculate only when the sampled RGB changes.
+        cell.emission = lightEmission(r, g, b);
+        cell.baseOpacity = cell.strength ** EDGE_OPACITY_CURVE * cell.emission;
         cell.color = glyphColor(r, g, b, cell.strength);
       }
       if (!asciiVisible && cells.some((cell) => cell.strength > 0)) revealAscii();
@@ -710,8 +758,14 @@ export default function HeroAscii() {
       const cellWidth = context.measureText("M").width * 1.05;
       const cellHeight = fontSize * 1.12;
       const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      canvasPixelRatio = pixelRatio;
       canvas.width = Math.max(1, Math.ceil(overlayWidth * pixelRatio));
       canvas.height = Math.max(1, Math.ceil(overlayHeight * pixelRatio));
+      // The halo is intentionally soft, so CSS-pixel resolution is enough.
+      // Copy the finished glyph pass once instead of shadowing every character.
+      bloom.width = Math.max(1, Math.ceil(overlayWidth));
+      bloom.height = Math.max(1, Math.ceil(overlayHeight));
+      previousRegion = null;
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       context.font = font;
       context.textAlign = "center";
@@ -733,6 +787,9 @@ export default function HeroAscii() {
               phase: seed(identity + 3.7),
               hold: Math.floor(seed(identity + 8.2) * 1000),
               strength: 0,
+              emission: 0,
+              baseOpacity: 0,
+              onCore: false,
               packed: -1,
               color: "",
               glyphs: LIGHT_GLYPHS,
@@ -754,6 +811,9 @@ export default function HeroAscii() {
 
     function tick(now: number) {
       frame = requestAnimationFrame(tick);
+      // A browser can keep the same cached image and CSS box across a density
+      // change. Check on the existing frame loop as well as decoded image loads.
+      if (canvasPixelRatio !== Math.min(window.devicePixelRatio || 1, 2)) layout();
       if (now - lastDraw < FRAME_MS) return;
       lastDraw = now;
       sampleField(now, false);
@@ -762,19 +822,28 @@ export default function HeroAscii() {
       while (trail.length > 0 && trail[0].t < cutoff) trail.shift();
       const trailBox = trailBounds(trail, CURSOR_RADIUS);
 
-      context.clearRect(0, 0, overlayWidth, overlayHeight);
+      const region = canvasViewportRegion(
+        overlay.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight,
+      );
+      const dirty = canvasDirtyRegion(region, previousRegion, overlayWidth, overlayHeight);
+      previousRegion = region;
+      if (!dirty) return;
+      context.clearRect(dirty.left, dirty.top, dirty.right - dirty.left, dirty.bottom - dirty.top);
       const reduced = motionPreference.matches;
       const time = now / 1000;
       const cursorOn = !reduced;
 
-      for (const cell of cells) {
-        const onCore = isOnEclipseCore(cell.x, cell.y);
+      const candidates = glowCandidates(cells, activeCells, cursorOn && trailBox ? {
+        left: trailBox.minX, top: trailBox.minY, right: trailBox.maxX, bottom: trailBox.maxY,
+      } : null);
+      for (const cell of candidates) {
+        if (!region || cell.x < region.left || cell.x > region.right || cell.y < region.top || cell.y > region.bottom) continue;
         const trailFx =
-          cursorOn && !onCore ? trailInfluence(cell.x, cell.y, trail, now, trailBox) : null;
+          cursorOn && !cell.onCore ? trailInfluence(cell.x, cell.y, trail, now, trailBox) : null;
         const hasGlow = cell.strength > 0;
         if (!hasGlow && !trailFx) continue;
 
-        let opacity = hasGlow ? cell.strength ** EDGE_OPACITY_CURVE : 0;
+        let opacity = cell.baseOpacity;
         let cycling = false;
         let cycleIndex = 0;
         if (hasGlow && !reduced) {
@@ -810,6 +879,7 @@ export default function HeroAscii() {
         context.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       context.globalAlpha = 1;
+      copyBloomRegion(canvas, bloom, bloomContext, dirty);
     }
 
     function addTrailPoint(clientX: number, clientY: number, now: number) {
@@ -846,6 +916,17 @@ export default function HeroAscii() {
       else start();
     }
 
+    // Ordinary scrolling stays inside the guard band. A jump needs fresh pixels
+    // on the next frame even if the normal 30 Hz draw interval has not elapsed.
+    function onScroll() {
+      if (!frame || !previousRegion) return;
+      const visible = canvasViewportRegion(
+        overlay.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight, 24,
+      );
+      if (visible && (visible.left < previousRegion.left || visible.top < previousRegion.top ||
+        visible.right > previousRegion.right || visible.bottom > previousRegion.bottom)) lastDraw = 0;
+    }
+
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       intersecting = entry.isIntersecting;
       updateActivity();
@@ -855,27 +936,29 @@ export default function HeroAscii() {
     resizeObserver.observe(overlay);
     document.addEventListener("visibilitychange", updateActivity);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     layout();
     if (motionPreference.matches) overlay.setAttribute("data-visible", "");
     document.fonts.ready.then(() => {
       if (!disposed) layout();
     });
-    // The halo and ring images may finish decoding after the first sample.
-    ECLIPSE_SOURCE_IDS.forEach((nodeId) => {
-      document.querySelector<HTMLImageElement>(`[data-node-id="${nodeId}"] img`)?.decode()
-        .then(() => {
-          if (!disposed) {
-            sampleField(performance.now(), true);
-            if (cells.some((cell) => cell.strength > 0)) revealAscii();
-          }
-        })
-        .catch(() => undefined);
+    // A srcset candidate can change after the intro has stopped sampling its
+    // static base. Refresh on every decoded load, including viewport/DPR changes.
+    const imageListeners = ECLIPSE_SOURCE_IDS.flatMap((nodeId) => {
+      const image = document.querySelector<HTMLImageElement>(`[data-node-id="${nodeId}"] img`);
+      if (!image) return [];
+      const refresh = () => {
+        void image.decode().then(() => {
+          if (disposed) return;
+          if (canvasPixelRatio !== Math.min(window.devicePixelRatio || 1, 2)) layout();
+          else sampleField(performance.now(), true);
+          if (cells.some((cell) => cell.strength > 0)) revealAscii();
+        }).catch(() => undefined);
+      };
+      image.addEventListener("load", refresh);
+      if (image.complete && image.naturalWidth > 0) refresh();
+      return [{ image, refresh }];
     });
-    document.querySelector<HTMLImageElement>(`[data-node-id="${ECLIPSE_CORE_ID}"] img`)?.decode()
-      .then(() => {
-        if (!disposed) sampleField(performance.now(), true);
-      })
-      .catch(() => undefined);
     start();
 
     return () => {
@@ -885,11 +968,14 @@ export default function HeroAscii() {
       resizeObserver.disconnect();
       document.removeEventListener("visibilitychange", updateActivity);
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("scroll", onScroll);
+      imageListeners.forEach(({ image, refresh }) => image.removeEventListener("load", refresh));
     };
   }, []);
 
   return (
     <div className={styles.overlay} ref={overlayRef} aria-hidden="true">
+      <canvas ref={bloomRef} className={styles.bloom} />
       <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   );

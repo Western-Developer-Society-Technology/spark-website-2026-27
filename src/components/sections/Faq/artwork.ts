@@ -34,10 +34,10 @@ function faqBlueCloud(
 
 export const faqClouds = {
   left: {
-    white: "/images/figma/rendered/blue-left-cloud.png",
+    white: "/images/optimized/figma/rendered/blue-left-cloud.webp",
     blueNodeId: "116:127",
     blue: faqBlueCloud(
-      "/images/figma/faq-left-cloud-noise-native.png",
+      "/images/optimized/figma/faq-left-cloud-noise-native.webp",
       -246,
       4958,
       854.5458374023438,
@@ -52,10 +52,10 @@ export const faqClouds = {
     ),
   },
   right: {
-    white: "/images/figma/rendered/blue-right-cloud.png",
+    white: "/images/optimized/figma/rendered/blue-right-cloud.webp",
     blueNodeId: "116:135",
     blue: faqBlueCloud(
-      "/images/figma/faq-right-cloud-noise-native.png",
+      "/images/optimized/figma/faq-right-cloud-noise-native.webp",
       852,
       4928,
       854.5458374023438,
@@ -70,10 +70,10 @@ export const faqClouds = {
     ),
   },
   middle: {
-    white: "/images/figma/rendered/blue-middle-cloud.png",
+    white: "/images/optimized/figma/rendered/blue-middle-cloud.webp",
     blueNodeId: "116:143",
     blue: faqBlueCloud(
-      "/images/figma/faq-middle-cloud-noise-native.png",
+      "/images/optimized/figma/faq-middle-cloud-noise-native.webp",
       1139,
       4940,
       814.8455810546875,
@@ -88,10 +88,10 @@ export const faqClouds = {
     ),
   },
   wide: {
-    white: "/images/figma/rendered/blue-wide-cloud.png",
+    white: "/images/optimized/figma/rendered/blue-wide-cloud.webp",
     blueNodeId: "116:151",
     blue: faqBlueCloud(
-      "/images/figma/faq-wide-cloud-noise-native.png",
+      "/images/optimized/figma/faq-wide-cloud-noise-native.webp",
       -637,
       4996,
       2502.102294921875,
@@ -106,10 +106,10 @@ export const faqClouds = {
     ),
   },
   front: {
-    white: "/images/figma/rendered/blue-front-cloud.png",
+    white: "/images/optimized/figma/rendered/blue-front-cloud.webp",
     blueNodeId: "116:178",
     blue: faqBlueCloud(
-      "/images/figma/faq-front-cloud-noise-native.png",
+      "/images/optimized/figma/faq-front-cloud-noise-native.webp",
       1912,
       5558,
       2502.102294921875,
@@ -127,7 +127,7 @@ export const faqClouds = {
 } as const satisfies Record<string, FaqCloudLayer>;
 
 const artwork = {
-  imgEllipse5: "/images/figma/rendered/ellipse-1.png",
+  imgEllipse5: "/images/optimized/figma/rendered/ellipse-1.webp",
   imgVector11: "/images/figma/vector-11.svg",
   imgLine2: "/images/figma/line-2.svg",
   imgLine3: "/images/figma/line-3.svg",

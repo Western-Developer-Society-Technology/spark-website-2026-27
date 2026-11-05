@@ -16,7 +16,7 @@ export function Boat() {
           <div className={styles.boatHullRotation}>
             <div className={styles.boatHullShape}>
               <div className={styles.boatHullPaintBounds}>
-                <ArtworkImage src={artwork.imgVector11} />
+                <ArtworkImage loading="lazy" src={artwork.imgVector11} />
               </div>
             </div>
           </div>
@@ -26,7 +26,7 @@ export function Boat() {
             <div className={styles.orangeSparklerStemRotation}>
               <div className={styles.orangeSparklerStemShape}>
                 <div className={styles.orangeSparklerStemPaintBounds}>
-                  <ArtworkImage src={artwork.imgLine2} />
+                  <ArtworkImage loading="lazy" src={artwork.imgLine2} />
                 </div>
               </div>
             </div>
@@ -44,7 +44,7 @@ export function Boat() {
             <div className={styles.purpleSparklerStemRotation}>
               <div className={styles.purpleSparklerStemShape}>
                 <div className={styles.purpleSparklerStemPaintBounds}>
-                  <ArtworkImage src={artwork.imgLine3} />
+                  <ArtworkImage loading="lazy" src={artwork.imgLine3} />
                 </div>
               </div>
             </div>
@@ -60,7 +60,7 @@ export function Boat() {
         <div className={styles.boatCharacter} data-node-id="116:166">
           <div className={styles.boatCharacterRotation}>
             <div className={styles.boatCharacterShape}>
-              <ArtworkImage absolute src={artwork.sparkcharacter} />
+              <ArtworkImage loading="lazy" absolute src={artwork.sparkcharacter} />
             </div>  
           </div>
         </div>
@@ -68,7 +68,7 @@ export function Boat() {
           <div className={styles.boatHullRotation}>
             <div className={styles.boatOarShape}>
               <div className={styles.boatOarPaintBounds}>
-                <ArtworkImage src={artwork.imgVector12} />
+                <ArtworkImage loading="lazy" src={artwork.imgVector12} />
               </div>
             </div>
           </div>

@@ -6,14 +6,14 @@ import styles from "./Faq.module.css";
 
 export default function Faq() {
   return (
-    <div className={styles.faqStage}>
+    <div className={styles.faqStage} data-artwork-region="faq">
       <div className={styles.faqSceneryLayer}>
         <div className={styles.faqBackdrop} data-node-id="116:109" />
         <div className={styles.faqHalo} data-node-id="116:110">
           <div className={styles.faqHaloRotation}>
             <div className={styles.faqHaloShape}>
               <div className={styles.faqHaloPaintBounds}>
-                <ArtworkImage src={artwork.imgEllipse5} />
+                <ArtworkImage loading="lazy" src={artwork.imgEllipse5} />
               </div>
             </div>
           </div>
@@ -27,38 +27,38 @@ export default function Faq() {
           <div className={styles.faqLeftCloud} data-node-id="116:124" data-name="Cloud 2">
             <div className={styles.faqLeftCloudBase} data-node-id="116:125" data-name="Cloud">
               <div className={styles.faqLeftCloudBasePaintBounds}>
-                <ArtworkImage src={faqClouds.left.white} />
+                <ArtworkImage loading="lazy" src={faqClouds.left.white} />
               </div>
             </div>
-            <BlueCloudGroup nodeId={faqClouds.left.blueNodeId} cloud={faqClouds.left.blue} />
+            <BlueCloudGroup loading="lazy" nodeId={faqClouds.left.blueNodeId} cloud={faqClouds.left.blue} />
           </div>
           <div className={styles.faqRightCloud} data-node-id="116:132" data-name="Cloud 4">
             <div className={styles.faqRightCloudBase} data-node-id="116:133" data-name="Cloud">
               <div className={styles.faqRightCloudBasePaintBounds}>
-                <ArtworkImage src={faqClouds.right.white} />
+                <ArtworkImage loading="lazy" src={faqClouds.right.white} />
               </div>
             </div>
-            <BlueCloudGroup nodeId={faqClouds.right.blueNodeId} cloud={faqClouds.right.blue} />
+            <BlueCloudGroup loading="lazy" nodeId={faqClouds.right.blueNodeId} cloud={faqClouds.right.blue} />
           </div>
           <div className={styles.faqMiddleCloud} data-node-id="116:140" data-name="Cloud 5">
             <div className={styles.faqMiddleCloudBase} data-node-id="116:141">
               <div className={styles.flipped}>
                 <div className={styles.faqMiddleCloudBaseShape} data-name="Cloud">
                   <div className={styles.faqMiddleCloudBasePaintBounds}>
-                    <ArtworkImage src={faqClouds.middle.white} />
+                    <ArtworkImage loading="lazy" src={faqClouds.middle.white} />
                   </div>
                 </div>
               </div>
             </div>
-            <BlueCloudGroup nodeId={faqClouds.middle.blueNodeId} cloud={faqClouds.middle.blue} />
+            <BlueCloudGroup loading="lazy" nodeId={faqClouds.middle.blueNodeId} cloud={faqClouds.middle.blue} />
           </div>
           <div className={styles.faqWideCloud} data-node-id="116:148" data-name="Cloud 3">
             <div className={styles.faqWideCloudBase} data-node-id="116:149" data-name="Cloud">
               <div className={styles.faqWideCloudBasePaintBounds}>
-                <ArtworkImage src={faqClouds.wide.white} />
+                <ArtworkImage loading="lazy" src={faqClouds.wide.white} />
               </div>
             </div>
-            <BlueCloudGroup nodeId={faqClouds.wide.blueNodeId} cloud={faqClouds.wide.blue} />
+            <BlueCloudGroup loading="lazy" nodeId={faqClouds.wide.blueNodeId} cloud={faqClouds.wide.blue} />
           </div>
           <Boat />
           <FloatingStar />
@@ -67,12 +67,12 @@ export default function Faq() {
               <div className={styles.faqFrontCloudBaseRotation}>
                 <div className={styles.faqFrontCloudBaseShape} data-name="Cloud">
                   <div className={styles.faqFrontCloudBasePaintBounds}>
-                    <ArtworkImage src={faqClouds.front.white} />
+                    <ArtworkImage loading="lazy" src={faqClouds.front.white} />
                   </div>
                 </div>
               </div>
             </div>
-            <BlueCloudGroup nodeId={faqClouds.front.blueNodeId} cloud={faqClouds.front.blue} />
+            <BlueCloudGroup loading="lazy" nodeId={faqClouds.front.blueNodeId} cloud={faqClouds.front.blue} />
           </div>
           <StarSplashes />
         </div>

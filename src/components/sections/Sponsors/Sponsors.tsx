@@ -55,8 +55,8 @@ export default function Sponsors() {
           <ul className={styles.planets} aria-label="Last year's sponsors">
             {PLANETS.map(({ name, logo, className, logoClassName }) => (
               <li className={`${styles.planet} ${className}`} key={name}>
-                <img className={styles.planetBall} src="/images/sponsors/planet-ball.svg" alt="" />
-                <img className={`${styles.planetLogo} ${logoClassName}`} src={logo} alt={name} />
+                <img loading="lazy" className={styles.planetBall} src="/images/sponsors/planet-ball.svg" alt="" />
+                <img loading="lazy" className={`${styles.planetLogo} ${logoClassName}`} src={logo} alt={name} />
               </li>
             ))}
           </ul>

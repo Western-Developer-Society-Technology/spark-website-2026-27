@@ -1,13 +1,15 @@
 // Static SVG filters are baked at 2× into lossless WebP to avoid raster work during scroll.
 const artwork = {
-  "mountainFar": "/images/mountains/mountain1.png",
-  "mountainMiddle": "/images/mountains/mountain2.png",
-  "mountainNear": "/images/mountains/mountain3.png",
-  "mountainRidge": "/images/mountains/mountain4.png",
-  "mountainRidgeForeground": "/images/mountains/ridge-foreground.png",
-  "campfireWood": "/images/campfire/campfire-wood.png",
-  "mountain3Foreground": "/images/mountains/mountain3foreground.png",
-  "mountainStarGradient": "/images/mountains/mountaingradient.png",
+  "mountainFar": "/images/optimized/mountains/mountain1.webp",
+  "mountainMiddle": "/images/optimized/mountains/mountain2.webp",
+  "mountainNear": "/images/optimized/mountains/mountain3.webp",
+  "mountainRidge": "/images/optimized/mountains/mountain4.webp",
+  "mountainRidgeForeground": "/images/optimized/mountains/ridge-foreground.webp",
+  "campfireWood": "/images/optimized/campfire/campfire-wood.webp",
+  "mountain3Foreground": "/images/optimized/mountains/mountain3foreground.webp",
+  "imgGroup1357": "/images/figma/rendered/group-1357.png",
+  "imgGroup1355": "/images/figma/rendered/group-1355.png",
+  "imgGroup1356": "/images/figma/rendered/group-1356.png",
   "imgGroup1366": "/images/figma/rendered/group-1366.webp",
   "imgGroup1365": "/images/figma/rendered/group-1365.webp",
   "imgGroup1367": "/images/figma/rendered/group-1367.webp"

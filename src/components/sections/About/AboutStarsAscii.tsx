@@ -2,6 +2,17 @@
 
 import { useEffect, useRef } from "react";
 import {
+  canvasDirtyRegion,
+  canvasViewportRegion,
+  copyBloomRegion,
+  canvasSurface,
+  canvasSurfaceStyle,
+  intersectCanvasRegions,
+  maskedCanvasRegion,
+  type CanvasRegion,
+  type CanvasSurface,
+} from "@/lib/canvas-viewport";
+import {
   CYCLE,
   FADE_IN,
   FADE_OUT,
@@ -17,6 +28,7 @@ import {
   glyphColor,
   glyphFor,
   glyphsFor,
+  lightEmission,
   seed,
   LIGHT_GLYPHS,
 } from "@/lib/ascii-glow";
@@ -39,15 +51,20 @@ type AboutStarsAsciiProps = {
 export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bloomRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const overlay = overlayRef.current;
     const canvas = canvasRef.current;
-    if (!overlay || !canvas) return;
+    const mountedBloom = bloomRef.current;
+    if (!overlay || !canvas || !mountedBloom) return;
     const overlayEl = overlay;
     const canvasEl = canvas;
     const context = canvasEl.getContext("2d", { alpha: true });
-    if (!context) return;
+    const bloomDrawingContext = mountedBloom.getContext("2d", { alpha: true });
+    if (!context || !bloomDrawingContext) return;
+    const bloom = mountedBloom;
+    const bloomContext = bloomDrawingContext;
 
     const sample = document.createElement("canvas");
     const samplingContext = sample.getContext("2d", { willReadFrequently: true });
@@ -58,12 +75,19 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
     let intersecting = false;
     let frame = 0;
     let cells: GlowCell[] = [];
+    let activeCells: GlowCell[] = [];
     let overlayWidth = 0;
     let overlayHeight = 0;
     let lastSample = 0;
     let lastDraw = 0;
     let lastGridKey = "";
     let asciiVisible = false;
+    let initialized = false;
+    let previousRegion: CanvasRegion | null = null;
+    let crop: CanvasRegion = { left: 0, top: 0, right: 0, bottom: 0 };
+    let surfaces: { source: CanvasSurface; bloom: CanvasSurface };
+    let canvasPixelRatio = 0;
+    const mountedAt = performance.now();
 
     const sampleContext = samplingContext;
     const drawContext = context;
@@ -71,6 +95,13 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
     const revealAscii = () => {
       if (asciiVisible || disposed || motionPreference.matches) return;
       asciiVisible = true;
+      // The original offscreen fade has already elapsed when a distant star is
+      // initialized later. Keep it from replaying as the user scrolls into view.
+      const elapsed = performance.now() - mountedAt;
+      if (elapsed > 650) {
+        canvasEl.style.animationDelay = "-0.65s";
+        bloom.style.animationDelay = "-0.65s";
+      }
       overlayEl.setAttribute("data-visible", "");
     };
 
@@ -94,6 +125,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
 
       const field = sampleContext.getImageData(0, 0, width, height).data;
       const scale = width / Math.max(1, overlayWidth);
+      activeCells = [];
       for (const cell of cells) {
         const sampleX = Math.min(width - 1, Math.max(0, Math.round(cell.x * scale)));
         const sampleY = Math.min(height - 1, Math.max(0, Math.round(cell.y * scale)));
@@ -108,15 +140,19 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
         );
         cell.strength = Math.min(1, normalized ** STAR_STRENGTH_GAMMA);
         cell.glyphs = glyphsFor(cell.strength);
+        if (cell.strength > 0) activeCells.push(cell);
         const packed = (r << 16) | (g << 8) | b;
         if (packed === cell.packed) continue;
         cell.packed = packed;
+        cell.emission = lightEmission(r, g, b);
+        cell.baseOpacity = cell.strength ** STAR_EDGE_OPACITY_CURVE * cell.emission;
         cell.color = glyphColor(r, g, b, cell.strength);
       }
       if (!asciiVisible && cells.some((cell) => cell.strength > 0)) revealAscii();
     }
 
     function layout() {
+      if (!initialized) return;
       overlayWidth = overlayEl.offsetWidth;
       overlayHeight = overlayEl.offsetHeight;
       const fontSize = Math.min(FONT_MAX, Math.max(FONT_MIN, overlayWidth * (FONT_UNITS / 1512)));
@@ -125,9 +161,26 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
       const cellWidth = drawContext.measureText("M").width * 1.05;
       const cellHeight = fontSize * 1.12;
       const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-      canvasEl.width = Math.max(1, Math.ceil(overlayWidth * pixelRatio));
-      canvasEl.height = Math.max(1, Math.ceil(overlayHeight * pixelRatio));
-      drawContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      canvasPixelRatio = pixelRatio;
+      const style = getComputedStyle(overlayEl);
+      const cssWidth = parseFloat(style.width);
+      const cssHeight = parseFloat(style.height);
+      const validBox = Number.isFinite(cssWidth) && Number.isFinite(cssHeight);
+      crop = maskedCanvasRegion(overlayWidth, overlayHeight,
+        validBox ? parseFloat(style.getPropertyValue("--ascii-mask-radius")) : NaN,
+        parseFloat(style.getPropertyValue("--ascii-mask-end")));
+      surfaces = {
+        source: canvasSurface(overlayWidth, overlayHeight, crop, pixelRatio),
+        bloom: canvasSurface(overlayWidth, overlayHeight, crop, 1),
+      };
+      for (const [target, surface] of [[canvasEl, surfaces.source], [bloom, surfaces.bloom]] as const) {
+        target.width = surface.width;
+        target.height = surface.height;
+        if (validBox) Object.assign(target.style, canvasSurfaceStyle(surface, cssWidth, cssHeight));
+        else for (const property of ["left", "top", "right", "bottom", "width", "height", "mask-size", "mask-position", "mask-repeat"]) target.style.removeProperty(property);
+      }
+      previousRegion = null;
+      drawContext.setTransform(pixelRatio, 0, 0, pixelRatio, -surfaces.source.left, -surfaces.source.top);
       drawContext.font = font;
       drawContext.textAlign = "center";
       drawContext.textBaseline = "middle";
@@ -149,6 +202,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
               hold: Math.floor(seed(identity + 8.2) * 1000),
               strength: 0,
               emission: 0,
+              baseOpacity: 0,
               packed: -1,
               color: "",
               glyphs: LIGHT_GLYPHS,
@@ -162,17 +216,24 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
 
     function tick(now: number) {
       frame = requestAnimationFrame(tick);
+      if (canvasPixelRatio !== Math.min(window.devicePixelRatio || 1, 2)) layout();
       if (now - lastDraw < FRAME_MS) return;
       lastDraw = now;
       sampleField(false);
 
-      drawContext.clearRect(0, 0, overlayWidth, overlayHeight);
+      const region = intersectCanvasRegions(canvasViewportRegion(
+        overlayEl.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight,
+      ), crop);
+      const dirty = intersectCanvasRegions(canvasDirtyRegion(region, previousRegion, overlayWidth, overlayHeight), crop);
+      previousRegion = region;
+      if (!dirty) return;
+      drawContext.clearRect(dirty.left, dirty.top, dirty.right - dirty.left, dirty.bottom - dirty.top);
       const reduced = motionPreference.matches;
       const time = now / 1000;
 
-      for (const cell of cells) {
-        if (cell.strength <= 0) continue;
-        let opacity = cell.strength ** STAR_EDGE_OPACITY_CURVE;
+      for (const cell of activeCells) {
+        if (!region || cell.x < region.left || cell.x > region.right || cell.y < region.top || cell.y > region.bottom) continue;
+        let opacity = cell.baseOpacity;
         let cycling = false;
         let cycleIndex = 0;
         if (!reduced) {
@@ -195,10 +256,11 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
         drawContext.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       drawContext.globalAlpha = 1;
+      copyBloomRegion(canvasEl, bloom, bloomContext, dirty, surfaces);
     }
 
     function start() {
-      if (!frame && !disposed && intersecting && !document.hidden) {
+      if (!frame && initialized && !disposed && intersecting && !document.hidden) {
         frame = requestAnimationFrame(tick);
       }
     }
@@ -213,6 +275,31 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
       else start();
     }
 
+    function onScroll() {
+      if (!frame || !previousRegion) return;
+      const visible = intersectCanvasRegions(canvasViewportRegion(
+        overlayEl.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight, 24,
+      ), crop);
+      if (visible && (visible.left < previousRegion.left || visible.top < previousRegion.top ||
+        visible.right > previousRegion.right || visible.bottom > previousRegion.bottom)) lastDraw = 0;
+    }
+
+    const warmupObserver = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || initialized || disposed) return;
+      initialized = true;
+      layout();
+      updateActivity();
+      // Decoding belongs to warmup, rather than fetching distant artwork at mount.
+      void document.querySelector<HTMLImageElement>(`[data-node-id="${nodeId}"] img`)?.decode()
+        .then(() => {
+          if (!disposed && initialized) sampleField(true);
+        }).catch(() => undefined);
+      warmupObserver.disconnect();
+    }, { rootMargin: "300px 0px" });
+    // Observe the actual star rather than its much larger transparent halo box.
+    const artwork = document.querySelector<HTMLElement>(`[data-node-id="${nodeId}"]`);
+    warmupObserver.observe(artwork ?? overlayEl);
+
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       intersecting = entry.isIntersecting;
       updateActivity();
@@ -221,30 +308,28 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
     const resizeObserver = new ResizeObserver(layout);
     resizeObserver.observe(overlayEl);
     document.addEventListener("visibilitychange", updateActivity);
-    layout();
+    window.addEventListener("scroll", onScroll, { passive: true });
     if (motionPreference.matches) overlayEl.setAttribute("data-visible", "");
     document.fonts.ready.then(() => {
       if (!disposed) layout();
     });
-    document.querySelector<HTMLImageElement>(`[data-node-id="${nodeId}"] img`)?.decode()
-      .then(() => {
-        if (!disposed) sampleField(true);
-      })
-      .catch(() => undefined);
     start();
 
     return () => {
       disposed = true;
       stop();
       intersectionObserver.disconnect();
+      warmupObserver.disconnect();
       resizeObserver.disconnect();
       document.removeEventListener("visibilitychange", updateActivity);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [nodeId]);
 
   return (
     <div ref={overlayRef} className={`${styles.overlay} ${className}`.trim()} aria-hidden="true">
-      <canvas ref={canvasRef} className={styles.canvas} />
+      <canvas ref={bloomRef} className={styles.bloom} width={1} height={1} />
+      <canvas ref={canvasRef} className={styles.canvas} width={1} height={1} />
     </div>
   );
 }

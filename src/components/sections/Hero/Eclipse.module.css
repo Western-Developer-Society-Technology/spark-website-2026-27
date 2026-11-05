@@ -98,3 +98,12 @@
     translate: 0 calc(154.80963134765625 * var(--u));
   }
 }
+
+/* A cold download may deliver the bright fills before their dark mask. Keep
+   that incomplete composite hidden, including from the ASCII sampler. */
+@media (scripting: enabled) {
+  :global([data-eclipse-core-ready="pending"]) .eclipseOuterRing,
+  :global([data-eclipse-core-ready="pending"]) .eclipseInnerGlow {
+    visibility: hidden;
+  }
+}

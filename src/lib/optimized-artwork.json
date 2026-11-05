@@ -1,0 +1,299 @@
+[
+  {
+    "source": "/images/footer/wds-logo.png",
+    "target": "/images/optimized/footer/wds-logo.webp",
+    "width": 903,
+    "height": 326,
+    "sourceBytes": 18750,
+    "bytes": 7526,
+    "sourceSha256": "d7ec9dd3cfb0f31fe039a480d5d4cf16247ad61297ea8dea190b0fb6be76d966"
+  },
+  {
+    "source": "/images/mountains/mountain1.png",
+    "target": "/images/optimized/mountains/mountain1.webp",
+    "width": 1585,
+    "height": 655,
+    "sourceBytes": 265236,
+    "bytes": 216666,
+    "sourceSha256": "80cad528fa4484975775d5ca8726e4c2940a16f43e3fc5140211a9f23e9cd2d9"
+  },
+  {
+    "source": "/images/mountains/mountain2.png",
+    "target": "/images/optimized/mountains/mountain2.webp",
+    "width": 1512,
+    "height": 774,
+    "sourceBytes": 84825,
+    "bytes": 66708,
+    "sourceSha256": "c1a83fb0b166b6a1f40c11279c2d800f1df472be576f579d659a97002be75cb8"
+  },
+  {
+    "source": "/images/mountains/mountain3.png",
+    "target": "/images/optimized/mountains/mountain3.webp",
+    "width": 1512,
+    "height": 1227,
+    "sourceBytes": 126893,
+    "bytes": 97164,
+    "sourceSha256": "6f864e82848202833c1a6eeaa9af966d9b5cd62e226a41763a59c80a06c9eda3"
+  },
+  {
+    "source": "/images/mountains/mountain3foreground.png",
+    "target": "/images/optimized/mountains/mountain3foreground.webp",
+    "width": 893,
+    "height": 567,
+    "sourceBytes": 128448,
+    "bytes": 102836,
+    "sourceSha256": "561798f19fa2b4f624d294286b49ed8ec1ffbac4bb451585a80e5d8f473e88f9"
+  },
+  {
+    "source": "/images/campfire/campfire-wood.png",
+    "target": "/images/optimized/campfire/campfire-wood.webp",
+    "width": 194,
+    "height": 94,
+    "sourceBytes": 19624,
+    "bytes": 12396,
+    "sourceSha256": "38ef6cffc258c6f59488ac8a47059a23b6eb03bbf5bf60a91ff218cc92dd21ee"
+  },
+  {
+    "source": "/images/mountains/mountain4.png",
+    "target": "/images/optimized/mountains/mountain4.webp",
+    "width": 1024,
+    "height": 398,
+    "sourceBytes": 134414,
+    "bytes": 96108,
+    "sourceSha256": "0eed64d5407ffc860f38219791660c4dd9dfe9b7fe9ac616bf039b053313c100"
+  },
+  {
+    "source": "/images/mountains/ridge-foreground.png",
+    "target": "/images/optimized/mountains/ridge-foreground.webp",
+    "width": 1024,
+    "height": 495,
+    "sourceBytes": 59815,
+    "bytes": 46468,
+    "sourceSha256": "fc8e9373888af6a573f8fe226275fd8c6cdee0fa5050ac02f038842138f38724"
+  },
+  {
+    "source": "/images/figma/tall-left-cloud-native.png",
+    "target": "/images/optimized/figma/tall-left-cloud-native.webp",
+    "width": 763,
+    "height": 1101,
+    "sourceBytes": 185888,
+    "bytes": 151696,
+    "sourceSha256": "fc336a46013891d89c31ed3b7f6fc4f80f38d06d0296603fc07aa4000c651fe1"
+  },
+  {
+    "source": "/images/figma/upper-right-cloud-native.png",
+    "target": "/images/optimized/figma/upper-right-cloud-native.webp",
+    "width": 712,
+    "height": 639,
+    "sourceBytes": 105291,
+    "bytes": 86492,
+    "sourceSha256": "bf6b0c10b6acedda7282f3f85b0f96f46872331ca36dfd7c8bd4c3c4a2dc6a9b"
+  },
+  {
+    "source": "/images/figma/lower-right-cloud-native.png",
+    "target": "/images/optimized/figma/lower-right-cloud-native.webp",
+    "width": 797,
+    "height": 1034,
+    "sourceBytes": 152810,
+    "bytes": 121226,
+    "sourceSha256": "c8169de4d193f4cc8130927591b6cc5c7f1508d0f46c0dfef252bf3ed654ca43"
+  },
+  {
+    "source": "/images/figma/lower-left-cloud-native.png",
+    "target": "/images/optimized/figma/lower-left-cloud-native.webp",
+    "width": 728,
+    "height": 736,
+    "sourceBytes": 149542,
+    "bytes": 123482,
+    "sourceSha256": "acb98f478be6a251d3b6d144496d1f25ca16d16e7eeedcdf5dfc904b0c8f7dfc"
+  },
+  {
+    "source": "/images/figma/middle-left-cloud-native.png",
+    "target": "/images/optimized/figma/middle-left-cloud-native.webp",
+    "width": 728,
+    "height": 705,
+    "sourceBytes": 90142,
+    "bytes": 72338,
+    "sourceSha256": "c99afef2f40b835e3d9c5d054b3010a9e6ef241b310e2f86714f609b749a0cf5"
+  },
+  {
+    "source": "/images/figma/rendered/orangeStar.png",
+    "target": "/images/optimized/figma/rendered/orangeStar.webp",
+    "width": 277,
+    "height": 247,
+    "sourceBytes": 43994,
+    "bytes": 34150,
+    "sourceSha256": "9d4e7064c96bc3c5f10902b875f02ad535ec01408d470d73ee2f0e24236c939a"
+  },
+  {
+    "source": "/images/figma/rendered/cloud-1.png",
+    "target": "/images/optimized/figma/rendered/cloud-1.webp",
+    "width": 1015,
+    "height": 436,
+    "sourceBytes": 136199,
+    "bytes": 109902,
+    "sourceSha256": "319279110c5007eec336b7731375e699e5100f943cfb5801b1df1415be899a54"
+  },
+  {
+    "source": "/images/figma/rendered/blueStar.png",
+    "target": "/images/optimized/figma/rendered/blueStar.webp",
+    "width": 275,
+    "height": 259,
+    "sourceBytes": 42884,
+    "bytes": 34664,
+    "sourceSha256": "3bae55da94709386b8d8d2ea1e63e7bbd3e69ebd29fdbbe7bd13861bcc5fff36"
+  },
+  {
+    "source": "/images/figma/rendered/yellowStar.png",
+    "target": "/images/optimized/figma/rendered/yellowStar.webp",
+    "width": 267,
+    "height": 270,
+    "sourceBytes": 43052,
+    "bytes": 33076,
+    "sourceSha256": "a1ba52ada3fd60e8c509be0562d4377d029069836b9106accfdea5cec043eec8"
+  },
+  {
+    "source": "/images/figma/rendered/cloud-2.png",
+    "target": "/images/optimized/figma/rendered/cloud-2.webp",
+    "width": 961,
+    "height": 482,
+    "sourceBytes": 140011,
+    "bytes": 113074,
+    "sourceSha256": "6980cc50b5f9c883c814e90f1d0bbbbcc2b149443e16eaf73966653ed669d816"
+  },
+  {
+    "source": "/images/figma/rendered/cloud-3.png",
+    "target": "/images/optimized/figma/rendered/cloud-3.webp",
+    "width": 762,
+    "height": 467,
+    "sourceBytes": 113017,
+    "bytes": 90922,
+    "sourceSha256": "b1e60f228c2d7aac22fb5522ef0646735b6832aa07e8bec7687737d0312f5732"
+  },
+  {
+    "source": "/images/figma/rendered/redStar.png",
+    "target": "/images/optimized/figma/rendered/redStar.webp",
+    "width": 268,
+    "height": 269,
+    "sourceBytes": 41473,
+    "bytes": 35086,
+    "sourceSha256": "fcde4b1cb1035910f7d213bab9ba07e697271beeabcfd2fb46447684e626bcb2"
+  },
+  {
+    "source": "/images/figma/rendered/cloud-4.png",
+    "target": "/images/optimized/figma/rendered/cloud-4.webp",
+    "width": 746,
+    "height": 462,
+    "sourceBytes": 105321,
+    "bytes": 84086,
+    "sourceSha256": "bfa312d506c1189baea336ba5226777ceb1630f8ee862adffc0f0d6f4856b3c3"
+  },
+  {
+    "source": "/images/figma/rendered/lastYearCloud.png",
+    "target": "/images/optimized/figma/rendered/lastYearCloud.webp",
+    "width": 358,
+    "height": 206,
+    "sourceBytes": 10277,
+    "bytes": 8896,
+    "sourceSha256": "613db0c9f1b3f343b6cdbe89a7f15d7a94a66c7347b7bdc777cb899a70c36580"
+  },
+  {
+    "source": "/images/figma/rendered/ellipse-1.png",
+    "target": "/images/optimized/figma/rendered/ellipse-1.webp",
+    "width": 1093,
+    "height": 1055,
+    "sourceBytes": 248340,
+    "bytes": 195592,
+    "sourceSha256": "08fa23efc9af3a78ba6cf51305898cf1debc7f099c38341ddbc011516a2ef8de"
+  },
+  {
+    "source": "/images/figma/rendered/blue-left-cloud.png",
+    "target": "/images/optimized/figma/rendered/blue-left-cloud.webp",
+    "width": 471,
+    "height": 234,
+    "sourceBytes": 24380,
+    "bytes": 16896,
+    "sourceSha256": "3f9a26c415a1423317fc8144d6da5491d8c320311ddb305756d855b7bacc60f1"
+  },
+  {
+    "source": "/images/figma/faq-left-cloud-noise-native.png",
+    "target": "/images/optimized/figma/faq-left-cloud-noise-native.webp",
+    "width": 471,
+    "height": 228,
+    "sourceBytes": 56419,
+    "bytes": 35798,
+    "sourceSha256": "a0274ca7eddd9c483b763bcd8d3770d9128f2fbf996ffbd0686e01b29e8e88cd"
+  },
+  {
+    "source": "/images/figma/rendered/blue-right-cloud.png",
+    "target": "/images/optimized/figma/rendered/blue-right-cloud.webp",
+    "width": 449,
+    "height": 234,
+    "sourceBytes": 23795,
+    "bytes": 16450,
+    "sourceSha256": "f0aad05df17008fc4725f0a93b334ee67ce51ffcf2c7ba0118d4a95708483201"
+  },
+  {
+    "source": "/images/figma/faq-right-cloud-noise-native.png",
+    "target": "/images/optimized/figma/faq-right-cloud-noise-native.webp",
+    "width": 472,
+    "height": 243,
+    "sourceBytes": 61078,
+    "bytes": 39104,
+    "sourceSha256": "2fc252c85e54f578ede94e2c21e0f136434af0b922cb17e2af9a7587ea883083"
+  },
+  {
+    "source": "/images/figma/rendered/blue-middle-cloud.png",
+    "target": "/images/optimized/figma/rendered/blue-middle-cloud.webp",
+    "width": 449,
+    "height": 234,
+    "sourceBytes": 23795,
+    "bytes": 16450,
+    "sourceSha256": "f0aad05df17008fc4725f0a93b334ee67ce51ffcf2c7ba0118d4a95708483201"
+  },
+  {
+    "source": "/images/figma/faq-middle-cloud-noise-native.png",
+    "target": "/images/optimized/figma/faq-middle-cloud-noise-native.webp",
+    "width": 449,
+    "height": 229,
+    "sourceBytes": 53959,
+    "bytes": 34328,
+    "sourceSha256": "45e52e752db8b880c1f1069c331f714dbc45d2b6a4793fa97c1551aea78bd082"
+  },
+  {
+    "source": "/images/figma/rendered/blue-wide-cloud.png",
+    "target": "/images/optimized/figma/rendered/blue-wide-cloud.webp",
+    "width": 1295,
+    "height": 243,
+    "sourceBytes": 41249,
+    "bytes": 28554,
+    "sourceSha256": "124a36b68a1750b84a4933700bebc9a9513910ddfd0d499891baeb90b3654913"
+  },
+  {
+    "source": "/images/figma/faq-wide-cloud-noise-native.png",
+    "target": "/images/optimized/figma/faq-wide-cloud-noise-native.webp",
+    "width": 1277,
+    "height": 233,
+    "sourceBytes": 143456,
+    "bytes": 100540,
+    "sourceSha256": "21383b4d5bcfa830cea73adfc87521edce3f22f4021731171cc4367d750df9cc"
+  },
+  {
+    "source": "/images/figma/rendered/blue-front-cloud.png",
+    "target": "/images/optimized/figma/rendered/blue-front-cloud.webp",
+    "width": 1292,
+    "height": 263,
+    "sourceBytes": 51013,
+    "bytes": 43204,
+    "sourceSha256": "ab08601430c20ecd418073e79ece4ebc52f39e4e627e84514a0164d0fd682567"
+  },
+  {
+    "source": "/images/figma/faq-front-cloud-noise-native.png",
+    "target": "/images/optimized/figma/faq-front-cloud-noise-native.webp",
+    "width": 1278,
+    "height": 263,
+    "sourceBytes": 161501,
+    "bytes": 114702,
+    "sourceSha256": "6947a34eb62fc103ac44be080421eee0684d0f06f3d31169caf95c32994c8198"
+  }
+]

@@ -16,6 +16,14 @@ const NAV_LINKS = [
 const SCROLL_RANGE = 96;
 const MENU_ANIM_MS = 280;
 
+/** Give anchor destinations a head start while the user focuses or opens a link. */
+function warmSectionImages(href: string) {
+  const region = document.querySelector(href)?.closest("[data-artwork-region]");
+  region?.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((image) => {
+    image.loading = "eager";
+  });
+}
+
 function scrollProgress() {
   if (typeof window === "undefined") return 0;
   return Math.min(1, Math.max(0, window.scrollY / SCROLL_RANGE));
@@ -59,6 +67,18 @@ export default function Navbar() {
   useEffect(() => {
     pillRef.current?.style.setProperty("--nav-progress", String(progress));
   }, [progress]);
+
+  useEffect(() => {
+    // The desktop stylesheet hides the overlay; release its scroll lock too.
+    const mobile = window.matchMedia("(max-width: 720px)");
+    const onChange = () => {
+      if (mobile.matches) return;
+      setMenuOpen(false);
+      setMenuClosing(false);
+    };
+    mobile.addEventListener("change", onChange);
+    return () => mobile.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (!menuVisible) return;
@@ -114,7 +134,9 @@ export default function Navbar() {
       const pending = pendingSectionRef.current;
       pendingSectionRef.current = null;
 
-      window.scrollTo(0, scrollY);
+      // This restores a frozen viewport, rather than navigating to a section.
+      // Inheriting the page's smooth scrolling briefly jumps back to the top.
+      window.scrollTo({ top: scrollY, behavior: "instant" });
 
       if (pending) {
         const id = pending.slice(1);
@@ -168,6 +190,7 @@ export default function Navbar() {
   };
 
   const handleSectionLink = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    warmSectionImages(href);
     event.preventDefault();
     pendingSectionRef.current = href;
     closeMenu();
@@ -193,7 +216,7 @@ export default function Navbar() {
               <span className={styles.logoDivider} aria-hidden="true" />
               <img
                 className={styles.wdsLogo}
-                src="/images/footer/wds-logo.png"
+                src="/images/optimized/footer/wds-logo.webp"
                 alt=""
                 width={120}
                 height={32}
@@ -201,7 +224,14 @@ export default function Navbar() {
             </a>
             <nav className={styles.links} aria-label="Page sections">
               {NAV_LINKS.map(({ label, href }) => (
-                <a className={styles.navLink} href={href} key={href}>
+                <a
+                  className={styles.navLink}
+                  href={href}
+                  key={href}
+                  onPointerEnter={() => warmSectionImages(href)}
+                  onFocus={() => warmSectionImages(href)}
+                  onClick={() => warmSectionImages(href)}
+                >
                   {label}
                 </a>
               ))}
@@ -252,6 +282,8 @@ export default function Navbar() {
                 href={href}
                 key={href}
                 onClick={(event) => handleSectionLink(event, href)}
+                onPointerEnter={() => warmSectionImages(href)}
+                onFocus={() => warmSectionImages(href)}
               >
                 {label}
               </a>

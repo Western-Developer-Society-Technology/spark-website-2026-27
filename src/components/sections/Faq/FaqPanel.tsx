@@ -13,7 +13,7 @@ export default function FaqPanel() {
       <div className={styles.panelArtwork} aria-hidden="true">
         {/* Exact exported hand-drawn outline; Figma's code omits this stroke geometry. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/figma/faq-panel.svg" width="1122" height="996" alt="" />
+        <img loading="lazy" src="/images/figma/faq-panel.svg" width="1122" height="996" alt="" />
       </div>
       <div className={styles.panel} data-node-id="116:112">
         {FAQ_COLUMNS.map((questions, column) => (

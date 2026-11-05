@@ -1,17 +1,26 @@
 .overlay {
   position: absolute;
   pointer-events: none;
-  opacity: 0;
-  z-index: 1;
+  --ascii-mask: radial-gradient(
+    ellipse calc(var(--ascii-mask-radius) * 100%) calc(var(--ascii-mask-radius) * 100%) at 50% 50%,
+    #000 0%,
+    #000 calc(var(--ascii-mask-solid) * 100%),
+    transparent calc(var(--ascii-mask-end) * 100%)
+  );
+  /* The passes blend directly with the flare beneath this wrapper. */
 }
 
-.overlay[data-visible] {
-  animation: aboutStarsAsciiFadeIn 0.65s ease forwards;
+@media (prefers-reduced-motion: no-preference) {
+  .overlay[data-visible] .canvas,
+  .overlay[data-visible] .bloom {
+    animation: aboutStarsAsciiFadeIn 0.65s ease forwards;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .overlay {
-    opacity: 1;
+  .overlay .canvas,
+  .overlay .bloom {
+    opacity: var(--ascii-opacity);
   }
 }
 
@@ -21,19 +30,31 @@
   }
 
   to {
-    opacity: 1;
+    opacity: var(--ascii-opacity);
   }
 }
 
-.canvas {
+.canvas,
+.bloom {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 2px rgba(255, 100, 36, 0.48))
+  opacity: 0;
+  /* Mask each pass separately so the wrapper doesn't isolate their blending. */
+  -webkit-mask-image: var(--ascii-mask);
+  mask-image: var(--ascii-mask);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .canvas {
-    filter: none;
-  }
+.canvas {
+  --ascii-opacity: 0.8;
+  mix-blend-mode: overlay;
+  filter: blur(0.22px);
+}
+
+.bloom {
+  --ascii-opacity: 0.85;
+  mix-blend-mode: plus-lighter;
+  filter: blur(clamp(1.6px, 0.16vw, 3px));
 }

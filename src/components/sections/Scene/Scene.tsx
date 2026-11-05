@@ -63,6 +63,14 @@ export default function Scene({ children }: SceneProps) {
     const root = rootRef.current;
     if (!root) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // These light layers need the dark center to composite correctly. Their
+    // downloads can finish first on a cold connection, exposing a white disc.
+    const eclipseCore = root.querySelector<HTMLImageElement>('[data-node-id="111:99"] img');
+    const revealEclipse = () => {
+      if (eclipseCore?.complete && eclipseCore.naturalWidth > 0) root.dataset.eclipseCoreReady = "ready";
+    };
+    eclipseCore?.addEventListener("load", revealEclipse);
+    revealEclipse();
     const motions: ManagedMotion[] = [];
     let starOutline: ReturnType<typeof createStarOutlineMotion> | undefined;
     let splashArt: ReturnType<typeof createWaterSplashArt> | undefined;
@@ -194,6 +202,7 @@ export default function Scene({ children }: SceneProps) {
 
     return () => {
       disposed = true;
+      eclipseCore?.removeEventListener("load", revealEclipse);
       starOutline?.dispose();
       splashArt?.dispose();
       motions.forEach(({ animation }) => animation.cancel());
@@ -205,7 +214,7 @@ export default function Scene({ children }: SceneProps) {
   }, []);
 
   return (
-    <main id="top" className={styles.site} ref={rootRef} data-load-state="pending" data-stars-state="pending">
+    <main id="top" className={styles.site} ref={rootRef} data-load-state="pending" data-eclipse-core-ready="pending" data-stars-state="pending">
       <div className={styles.stage}>{children}</div>
     </main>
   );

@@ -1,4 +1,4 @@
-import { ArtworkImage, BlueCloudGroup, BlueCloudImage } from "@/components/ui/Artwork";
+import { ArtworkImage, BlueCloudImage } from "@/components/ui/Artwork";
 import artwork from "./artwork";
 import nativeArtwork from "./native-artwork";
 import { SHOOTING_STARS } from "./shooting-stars";
@@ -10,7 +10,7 @@ import styles from "./LastYear.module.css";
 
 export default function LastYear() {
   return (
-    <div className={styles.lastYearStage}>
+    <div className={styles.lastYearStage} data-artwork-region="stats">
       <div className={styles.lastYearScene}>
       <div
         className={styles.cloudBackground}
@@ -19,27 +19,27 @@ export default function LastYear() {
       />
       <div className={styles.cloudSection} data-node-id="116:183" data-name="cloud section">
         <div className={styles.tallLeftCloud} data-node-id="133:2" data-name="Cloud 8">
-          <BlueCloudImage cloud={nativeArtwork["133:2"]} />
+          <BlueCloudImage loading="lazy" cloud={nativeArtwork["133:2"]} />
         </div>
         <div className={styles.upperRightCloud} data-node-id="133:8">
           <div className={styles.flipped}>
             <div className={styles.upperRightCloudShape} data-name="Cloud 9">
-              <BlueCloudImage cloud={nativeArtwork["133:8"]} />
+              <BlueCloudImage loading="lazy" cloud={nativeArtwork["133:8"]} />
             </div>
           </div>
         </div>
         <div className={styles.lowerRightCloud} data-node-id="133:24">
           <div className={styles.flipped}>
             <div className={styles.lowerRightCloudShape} data-name="Cloud 9">
-              <BlueCloudImage cloud={nativeArtwork["133:24"]} />
+              <BlueCloudImage loading="lazy" cloud={nativeArtwork["133:24"]} />
             </div>
           </div>
         </div>
         <div className={styles.lowerLeftCloud} data-node-id="134:58" data-name="Cloud 11">
-          <BlueCloudImage cloud={nativeArtwork["134:58"]} />
+          <BlueCloudImage loading="lazy" cloud={nativeArtwork["134:58"]} />
         </div>
         <div className={styles.middleLeftCloud} data-node-id="133:31" data-name="Cloud 10">
-          <BlueCloudImage cloud={nativeArtwork["133:31"]} />
+          <BlueCloudImage loading="lazy" cloud={nativeArtwork["133:31"]} />
         </div>
         <div className={styles.lastYearBand}>
           {SHOOTING_STARS.map((star) => (
@@ -63,13 +63,13 @@ export default function LastYear() {
           </div>
         </div>
         <div className={styles.peachCloudBase} data-node-id="116:191" data-name="Cloud 1">
-          <ArtworkImage src={artwork.cloud1} />
+          <ArtworkImage loading="lazy" src={artwork.cloud1} />
         </div>
         <div className={styles.smallCloudAccent} data-node-id="133:36">
           <div className={styles.flipped}>
             <div className={styles.smallCloudAccentShape}>
               <div className={styles.smallCloudAccentPaintBounds}>
-                <ArtworkImage src={artwork.cloud5} />
+                <ArtworkImage loading="lazy" src={artwork.cloud5} />
               </div>
             </div>
           </div>
@@ -95,10 +95,10 @@ export default function LastYear() {
           </div>
         </div>
         <div className={styles.topRightCloud} data-node-id="116:223" data-name="Cloud 2">
-          <ArtworkImage src={artwork.cloud2} />
+          <ArtworkImage loading="lazy" src={artwork.cloud2} />
         </div>
         <div className={styles.blueCloudBase} data-node-id="116:215" data-name="Cloud 3">
-        <ArtworkImage src={artwork.cloud3} />
+        <ArtworkImage loading="lazy" src={artwork.cloud3} />
         </div>
         <div className={`${styles.shootingStar} ${styles.pinkShootingStar}`} data-node-id="116:231" data-name="Shooting star 4">
           <ShootingStarTrailAscii color={SHOOTING_STAR_TRAIL_COLORS.pink} starId="pink" />
@@ -111,10 +111,10 @@ export default function LastYear() {
           </div>
         </div>
         <div className={styles.pinkCloudBase} data-node-id="116:238" data-name="Cloud 4">
-          <ArtworkImage src={artwork.cloud4} />
+          <ArtworkImage loading="lazy" src={artwork.cloud4} />
         </div>
         <div className={styles.lastYearLabel} data-node-id="116:246" data-name="last year">
-          <ArtworkImage src={artwork.lastYearCloud} />
+          <ArtworkImage loading="lazy" src={artwork.lastYearCloud} />
           <section id="stats" aria-label="Last year at Spark" className={styles.lastYear}>
             <h2 data-node-id="116:257">Last year...</h2>
             <ul className={styles.srOnly}>
