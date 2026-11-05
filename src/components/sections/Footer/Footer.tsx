@@ -1,38 +1,8 @@
 /* eslint-disable @next/next/no-img-element -- Footer wordmark, WDS lockup, and social icons keep their original assets. */
 import { ArtworkImage } from "@/components/ui/Artwork";
+import { SOCIAL_LINKS } from "@/lib/social-links";
 import Orbits from "../Closing/Orbits";
 import styles from "./Footer.module.css";
-
-const SOCIALS = [
-  {
-    name: "Instagram",
-    href: "https://www.instagram.com/westerndevsociety",
-    icon: "/images/footer/instagramicon.svg",
-    width: 22,
-    height: 22,
-  },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/company/western-dev-society",
-    icon: "/images/footer/linkedinicon.svg",
-    width: 22,
-    height: 22,
-  },
-  {
-    name: "Website",
-    href: "https://westerndevsociety.ca",
-    icon: "/images/footer/globeicon.svg",
-    width: 22,
-    height: 22,
-  },
-  {
-    name: "Email",
-    href: "mailto:westerndeveloperssociety@gmail.com",
-    icon: "/images/footer/mailicon.svg",
-    width: 25,
-    height: 20,
-  },
-] as const;
 
 function Wordmark() {
   return (
@@ -66,7 +36,7 @@ export default function Footer() {
         </p>
         <Wordmark />
         <nav className={styles.socials} aria-label="Western Developers Society online">
-          {SOCIALS.map(({ name, href, icon, width, height }) => (
+          {SOCIAL_LINKS.map(({ name, href, icon, width, height }) => (
             <a
               className={styles.social}
               href={href}

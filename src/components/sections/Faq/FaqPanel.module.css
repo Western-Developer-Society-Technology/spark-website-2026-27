@@ -56,8 +56,7 @@
   );
   width: calc(1122 * var(--panel-u));
   height: calc(996 * var(--panel-u));
-  backdrop-filter: blur(calc(75 * var(--panel-u)));
-  -webkit-backdrop-filter: blur(calc(75 * var(--panel-u)));
+  /* Frost comes from the exported SVG; avoid a second backdrop layer that breaks the navbar glass. */
 }
 
 .panelArtwork img {
@@ -203,8 +202,6 @@
     border: 18px solid transparent;
     border-image: url('/images/figma/faq-panel.svg') 60 fill / 18px stretch;
     border-radius: 18px;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
   }
 
   .panelArtwork img {

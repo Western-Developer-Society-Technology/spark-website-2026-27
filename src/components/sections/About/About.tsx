@@ -8,7 +8,7 @@ export default function About() {
     <div className={styles.aboutStage} data-about-stage>
       <div className={styles.motionRegion} data-motion-region="about" aria-hidden="true" />
       <Mountains />
-      <section className={styles.about} aria-labelledby="about-heading">
+      <section id="about" className={styles.about} aria-labelledby="about-heading">
         <h2 id="about-heading" className={styles.heading} data-node-id="111:191">
           Every great idea<br />starts with a spark.
         </h2>

@@ -1,0 +1,177 @@
+.shell {
+  --nav-gutter: clamp(0.75rem, 2.5vw, 1.5rem);
+  --nav-compact-max: 52rem;
+  --nav-progress: 0;
+
+  position: fixed;
+  inset: clamp(0.65rem, 1.75vw, 1.1rem) 0 auto;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--nav-gutter);
+  pointer-events: none;
+}
+
+.pill {
+  --nav-loose: calc(1 - var(--nav-progress));
+  position: relative;
+  width: 100%;
+  max-width: calc((1 - var(--nav-progress)) * 100% + var(--nav-progress) * var(--nav-compact-max));
+  border-radius: 999px;
+  overflow: hidden;
+  background-color: rgba(10, 10, 10, calc(0.34 * var(--nav-progress)));
+  border: 1px solid rgba(255, 247, 245, calc(0.14 * var(--nav-progress)));
+  transition:
+    max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.45s ease,
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+/* WebKit ignores `blur(var(...))` — keep blur literals off CSS variables. */
+.pill[data-glass] {
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  backdrop-filter: blur(20px) saturate(1.2);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(clamp(0.75rem, 2vw, 1.25rem) + 0.35rem * var(--nav-loose));
+  padding:
+    calc(0.45rem + 0.18rem * var(--nav-loose) + 0.22rem * var(--nav-progress))
+    calc(clamp(0.65rem, 2vw, 1.15rem) + 0.25rem * var(--nav-loose));
+}
+
+.startCluster {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: calc(clamp(0.5rem, 1.45vw, 1.15rem) + 0.22rem * var(--nav-loose));
+}
+
+.logoGroup {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(0.3rem + 0.12rem * var(--nav-loose));
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.logoImage {
+  width: calc(2.05rem + 0.55rem * var(--nav-loose));
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.logoDivider {
+  flex-shrink: 0;
+  width: calc(0.3rem + 0.09rem * var(--nav-loose));
+  height: calc(0.3rem + 0.09rem * var(--nav-loose));
+  border-radius: 50%;
+  background-color: rgba(255, 247, 245, 0.55);
+  margin-right: calc(0.2rem);
+}
+
+.wdsLogo {
+  height: calc(1.2rem + 0.38rem * var(--nav-loose));
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: calc(clamp(0.65rem, 1.75vw, 1.35rem) + 0.35rem * var(--nav-loose));
+  pointer-events: auto;
+}
+
+.navLink {
+  color: rgba(255, 247, 245, 0.82);
+  font-size: calc(0.9375rem + 0.1875rem * var(--nav-loose));
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: rgba(255, 247, 245, 0.98);
+}
+
+.navLink:focus-visible,
+.logoGroup:focus-visible,
+.social:focus-visible {
+  outline: 2px solid #ffab7f;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.socials {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.15rem, 0.5vw, 0.35rem);
+  pointer-events: auto;
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(2rem + 0.45rem * var(--nav-loose) + 0.12rem * var(--nav-progress));
+  min-height: calc(2rem + 0.45rem * var(--nav-loose) + 0.12rem * var(--nav-progress));
+  padding: calc(0.2rem + 0.05rem * var(--nav-loose) + 0.06rem * var(--nav-progress));
+  text-decoration: none;
+}
+
+.socialIcon {
+  height: calc(1.05rem + 0.28rem * var(--nav-loose));
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.social:hover .socialIcon {
+  opacity: 1;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .links {
+    gap: calc(0.75rem + 0.25rem * var(--nav-loose));
+  }
+
+  .navLink {
+    font-size: calc(0.8125rem + 0.125rem * var(--nav-loose));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill {
+    transition: none;
+  }
+}

@@ -115,7 +115,7 @@ export default function LastYear() {
         </div>
         <div className={styles.lastYearLabel} data-node-id="116:246" data-name="last year">
           <ArtworkImage src={artwork.lastYearCloud} />
-          <section aria-label="Last year at Spark" className={styles.lastYear}>
+          <section id="stats" aria-label="Last year at Spark" className={styles.lastYear}>
             <h2 data-node-id="116:257">Last year...</h2>
             <ul className={styles.srOnly}>
               <li>110+ hackers</li>

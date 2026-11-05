@@ -8,8 +8,8 @@ export default function FaqPanel() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section className={styles.faq} aria-labelledby="faq-heading">
-      <h2 className={styles.heading} id="faq-heading" data-node-id="116:258">FAQ</h2>
+    <section className={styles.faq} aria-labelledby="faq">
+      <h2 className={styles.heading} id="faq" data-node-id="116:258">FAQ</h2>
       <div className={styles.panelArtwork} aria-hidden="true">
         {/* Exact exported hand-drawn outline; Figma's code omits this stroke geometry. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
