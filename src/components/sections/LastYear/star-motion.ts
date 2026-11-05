@@ -1,16 +1,15 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SHOOTING_STARS } from "./shooting-stars";
+import {
+  buildShootingStarPath,
+  departureOffsetX,
+  entranceTilt,
+  flightPoint,
+  lastYearUnit,
+} from "./flight-path";
 
 const RELEASE_PROPERTIES = "transform,transformOrigin,willChange,visibility";
-/** Keep in sync with --last-year-art-scale in LastYear.module.css */
-const LAST_YEAR_ART_SCALE = 0.91;
-const FIGMA_WIDTH = 1512;
-
-function lastYearUnit(viewportWidth: number) {
-  const unit = viewportWidth / FIGMA_WIDTH;
-  return Math.min(unit * LAST_YEAR_ART_SCALE, 1);
-}
 
 export function createStarEntrances(root: HTMLElement) {
   gsap.registerPlugin(ScrollTrigger);
@@ -29,73 +28,69 @@ export function createStarEntrances(root: HTMLElement) {
     const animate = context.conditions?.animate;
 
     stars.forEach((star) => {
-      const { group, marker, side, slope } = star;
+      const { group, marker, side } = star;
       if (!animate || completed.has(group)) {
         completed.add(group);
         group.dataset.starState = "complete";
+        group.dataset.starProgress = "1";
         return;
       }
 
       group.dataset.starState = "pending";
+      group.dataset.starProgress = "0";
+      const head = group.querySelector<HTMLElement>("[data-star-head]") ?? group;
       const unit = () => lastYearUnit(root.clientWidth);
-      const departureX = () => {
-        const bounds = marker.getBoundingClientRect();
-        const gutter = Math.max(24, 40 * unit());
-        return side < 0 ? -bounds.right - gutter : window.innerWidth - bounds.left + gutter;
+      const pathOf = () => {
+        const fromX = departureOffsetX(marker, side, unit());
+        return buildShootingStarPath(
+          fromX,
+          star.dip,
+          "arc" in star && star.arc === "overshoot" ? "overshoot" : "default",
+        );
       };
       const finish = () => {
         completed.add(group);
         group.dataset.starState = "complete";
+        group.dataset.starProgress = "1";
       };
 
-      // Only the star and its own tail become a composited layer, and only for
-      // the flight. A small overshoot makes the stop feel weighted, not elastic.
+      const pose = { t: 0 };
+      const applyPose = () => {
+        const path = pathOf();
+        const point = flightPoint(path, pose.t);
+        const tilt = entranceTilt(path, pose.t);
+        gsap.set(head, { x: point.x, y: point.y, rotation: tilt, force3D: true });
+        group.dataset.starProgress = pose.t.toFixed(3);
+      };
+
       const flight = gsap.timeline({
         paused: true,
         delay: .3 + star.index * .045,
-        onStart: () => { group.dataset.starState = "running"; },
+        onStart: () => {
+          group.dataset.starState = "running";
+          pose.t = 0;
+          applyPose();
+        },
         onComplete: () => {
           finish();
-          // kill() detaches the timeline without reverting the cleared final
-          // pose. No finished flight remains available for scroll to replay.
           flight.kill();
         },
       });
-      flight.set(group, { visibility: "visible", willChange: "transform" });
-      flight.fromTo(group, {
-        x: departureX,
-        y: () => departureX() * slope,
-        rotation: side * -4,
-        scaleX: 1.06,
-        scaleY: .97,
-      }, {
-        x: () => -side * 12 * unit(),
-        y: () => -side * 12 * unit() * slope,
-        rotation: side * .55,
-        scaleX: 1,
-        scaleY: 1,
+      flight.set(group, { visibility: "visible" });
+      flight.set(head, { willChange: "transform" });
+      flight.fromTo(pose, { t: 0 }, {
+        t: 1,
         duration: star.duration,
-        ease: "power3.out",
-        force3D: true,
-        immediateRender: false,
+        ease: "power4.out",
+        onUpdate: applyPose,
       });
-      flight.to(group, {
-        x: 0, y: 0, rotation: 0,
-        duration: .22,
-        ease: "sine.inOut",
-      });
-      flight.set(group, { clearProps: RELEASE_PROPERTIES });
+      flight.set(head, { clearProps: RELEASE_PROPERTIES });
 
       const enter = (trigger: ScrollTrigger) => {
-        // Keep scrolling and playback independent. Linking the animation to
-        // ScrollTrigger lets its refresh/revert logic render the departure
-        // frame again before a once:true trigger reaches its end boundary.
         trigger.kill(false);
         if (completed.has(group)) return;
         completed.add(group);
 
-        // Scroll restoration or a fling can skip the entire star in one frame.
-        // It should already be settled when the reader returns to this section.
         if (marker.getBoundingClientRect().bottom <= 0) {
           finish();
           flight.kill();
@@ -119,7 +114,10 @@ export function createStarEntrances(root: HTMLElement) {
 
   return () => {
     media.revert();
-    stars.forEach(({ group }) => { delete group.dataset.starState; });
+    stars.forEach(({ group }) => {
+      delete group.dataset.starState;
+      delete group.dataset.starProgress;
+    });
     root.dataset.starsState = "pending";
   };
 }

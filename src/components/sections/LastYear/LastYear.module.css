@@ -92,12 +92,12 @@
   width: calc(961 * var(--u));
 }
 
-/* Each shooting star is its own small animation surface. Children are offset
-   from its bounds, preserving every star/trail's authored position and the
-   clouds' original paint order. Overflow lets the long ASCII tails extend. */
+/* Each shooting star is its own small animation surface. The star head flies
+   in on a shared curve; ASCII is painted along that same path. */
 .shootingStar {
   position: absolute;
   pointer-events: none;
+  overflow: visible;
 }
 
 .peachShootingStar {
@@ -105,30 +105,6 @@
   top: calc(2623 * var(--u));
   width: calc(475.648 * var(--u));
   height: calc(442.983 * var(--u));
-}
-
-.peachTrail {
-  position: absolute;
-  display: flex;
-  height: calc(828.401 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(-1009.61 * var(--u));
-  top: calc(32.82 * var(--u));
-  width: calc(1165.19 * var(--u));
-}
-
-.peachTrailRotation {
-  flex: none;
-  rotate: 4.44deg;
-}
-
-.trailShape {
-  height: calc(744.682 * var(--u));
-  overflow: clip;
-  position: relative;
-  border-radius: calc(12.989 * var(--u));
-  width: calc(1110.903 * var(--u));
 }
 
 .peachStar {
@@ -186,22 +162,6 @@
   height: calc(500.091 * var(--u));
 }
 
-.blueTrail {
-  position: absolute;
-  display: flex;
-  height: calc(1029.047 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(-938 * var(--u));
-  top: calc(204.2 * var(--u));
-  width: calc(1276.432 * var(--u));
-}
-
-.blueTrailRotation {
-  flex: none;
-  rotate: -16.47deg;
-}
-
 .blueStar {
   position: absolute;
   display: flex;
@@ -229,23 +189,6 @@
   top: calc(2770 * var(--u));
   width: calc(582.876 * var(--u));
   height: calc(560.975 * var(--u));
-}
-
-.yellowTrail {
-  position: absolute;
-  display: flex;
-  height: calc(1225.443 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(330 * var(--u));
-  top: calc(-445 * var(--u));
-  width: calc(1337.072 * var(--u));
-}
-
-.yellowTrailRotation {
-  flex: none;
-  rotate: 147.45deg;
-  scale: 1 -1;
 }
 
 .yellowStar {
@@ -292,23 +235,6 @@
   top: calc(3235 * var(--u));
   width: calc(577.893 * var(--u));
   height: calc(555.304 * var(--u));
-}
-
-.pinkTrail {
-  position: absolute;
-  display: flex;
-  height: calc(779.231 * var(--u));
-  align-items: center;
-  justify-content: center;
-  left: calc(364.7 * var(--u));
-  top: calc(228.1 * var(--u));
-  width: calc(1133.76 * var(--u));
-}
-
-.pinkTrailRotation {
-  flex: none;
-  rotate: -178.2deg;
-  scale: 1 -1;
 }
 
 .pinkStar {

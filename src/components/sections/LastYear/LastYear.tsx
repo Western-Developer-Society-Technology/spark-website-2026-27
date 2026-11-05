@@ -1,8 +1,9 @@
 import { ArtworkImage, BlueCloudGroup, BlueCloudImage } from "@/components/ui/Artwork";
-import AsciiArt from "@/components/ui/AsciiArt";
 import artwork from "./artwork";
 import nativeArtwork from "./native-artwork";
 import { SHOOTING_STARS } from "./shooting-stars";
+import ShootingStarTrailAscii from "./ShootingStarTrailAscii";
+import { SHOOTING_STAR_TRAIL_COLORS } from "./trail-colors";
 import styles from "./LastYear.module.css";
 
 export default function LastYear() {
@@ -53,14 +54,8 @@ export default function LastYear() {
             />
           ))}
         <div className={`${styles.shootingStar} ${styles.peachShootingStar}`} data-node-id="116:184" data-name="Shooting star 1">
-          <div className={styles.peachTrail} data-node-id="116:185">
-            <div className={styles.peachTrailRotation}>
-              <div className={styles.trailShape} data-name="ASCII Frame">
-                <AsciiArt nodeId="116:186" />
-              </div>
-            </div>
-          </div>
-          <div className={styles.peachStar} data-node-id="116:187">
+          <ShootingStarTrailAscii color={SHOOTING_STAR_TRAIL_COLORS.peach} starId="peach" />
+          <div className={styles.peachStar} data-node-id="116:187" data-star-head>
             <ArtworkImage absolute src={artwork.imgGroup1358} />
           </div>
         </div>
@@ -77,14 +72,8 @@ export default function LastYear() {
           </div>
         </div>
         <div className={`${styles.shootingStar} ${styles.blueShootingStar}`} data-node-id="116:201" data-name="Shooting star 3">
-          <div className={styles.blueTrail} data-node-id="116:202">
-            <div className={styles.blueTrailRotation}>
-              <div className={styles.trailShape} data-name="ASCII Frame">
-                <AsciiArt nodeId="116:203" />
-              </div>
-            </div>
-          </div>
-          <div className={styles.blueStar} data-node-id="116:204">
+          <ShootingStarTrailAscii color={SHOOTING_STAR_TRAIL_COLORS.blue} starId="blue" />
+          <div className={styles.blueStar} data-node-id="116:204" data-star-head>
             <div className={styles.blueStarRotation}>
               <div className={styles.blueStarShape}>
                 <ArtworkImage absolute src={artwork.imgGroup1359} />
@@ -93,14 +82,8 @@ export default function LastYear() {
           </div>
         </div>
         <div className={`${styles.shootingStar} ${styles.yellowShootingStar}`} data-node-id="116:208" data-name="Shooting star 2">
-          <div className={styles.yellowTrail} data-node-id="116:209">
-            <div className={styles.yellowTrailRotation}>
-              <div className={styles.trailShape} data-name="ASCII Frame">
-                <AsciiArt nodeId="116:210" />
-              </div>
-            </div>
-          </div>
-          <div className={styles.yellowStar} data-node-id="116:211">
+          <ShootingStarTrailAscii color={SHOOTING_STAR_TRAIL_COLORS.yellow} starId="yellow" />
+          <div className={styles.yellowStar} data-node-id="116:211" data-star-head>
             <div className={styles.yellowStarRotation}>
               <div className={styles.yellowStarShape}>
                 <ArtworkImage absolute src={artwork.imgGroup1360} />
@@ -120,14 +103,8 @@ export default function LastYear() {
           <BlueCloudGroup nodeId="116:218" cloud={nativeArtwork["116:218"]} />
         </div>
         <div className={`${styles.shootingStar} ${styles.pinkShootingStar}`} data-node-id="116:231" data-name="Shooting star 4">
-          <div className={styles.pinkTrail} data-node-id="116:232">
-            <div className={styles.pinkTrailRotation}>
-              <div className={styles.trailShape} data-name="ASCII Frame">
-                <AsciiArt nodeId="116:233" />
-              </div>
-            </div>
-          </div>
-          <div className={styles.pinkStar} data-node-id="116:234">
+          <ShootingStarTrailAscii color={SHOOTING_STAR_TRAIL_COLORS.pink} starId="pink" />
+          <div className={styles.pinkStar} data-node-id="116:234" data-star-head>
             <div className={styles.pinkStarRotation}>
               <div className={styles.pinkStarShape}>
                 <ArtworkImage absolute src={artwork.imgGroup1361} />
