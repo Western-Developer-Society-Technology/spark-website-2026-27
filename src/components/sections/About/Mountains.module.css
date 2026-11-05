@@ -160,3 +160,25 @@
   position: absolute;
   inset: -8.98% -5.68% -9.51% -5.67%;
 }
+
+@media (max-width: 1023px) {
+  .mountains {
+    top: calc(-800 * var(--u));
+    /* Enlarge the complete opening landscape around a shared lower anchor.
+       This raises the peaks into the hero without stretching individual layers. */
+    scale: 1.5;
+    transform-origin: 50% calc(1700 * var(--u));
+  }
+}
+
+@media (max-width: 639px) {
+  .mountains {
+    translate: 0 calc(-1 * clamp(90px, 30cqw, 130px));
+  }
+}
+
+@media (max-width: 639px) and (prefers-reduced-motion: reduce) {
+  .mountains {
+    translate: 0 calc(-1 * clamp(40px, 15cqw, 65px));
+  }
+}

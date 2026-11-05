@@ -8,7 +8,8 @@ import styles from "./LastYear.module.css";
 
 export default function LastYear() {
   return (
-    <>
+    <div className={styles.lastYearStage}>
+      <div className={styles.lastYearScene}>
       <div
         className={styles.cloudBackground}
         data-node-id="133:18"
@@ -161,6 +162,7 @@ export default function LastYear() {
         </section>
         </div>
       </div>
-    </>
+      </div>
+    </div>
   );
 }

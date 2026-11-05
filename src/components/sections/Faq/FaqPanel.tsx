@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FAQ_COLUMNS, FAQ_PLACEHOLDER } from "./faq-data";
+import { FAQ_COLUMNS } from "./faq-data";
 import styles from "./FaqPanel.module.css";
 
 export default function FaqPanel() {
@@ -18,13 +18,13 @@ export default function FaqPanel() {
       <div className={styles.panel} data-node-id="116:112">
         {FAQ_COLUMNS.map((questions, column) => (
           <div className={styles.column} key={column}>
-            {questions.map(({ id, question }) => {
+            {questions.map(({ id, question, answer }) => {
               const isOpen = openId === id;
               const answerId = `answer-${id.replace(":", "-")}`;
               const questionId = `question-${id.replace(":", "-")}`;
 
               return (
-                <div key={id}>
+                <div className={styles.item} key={id}>
                   <h3 className={styles.question}>
                     <button
                       type="button"
@@ -60,7 +60,7 @@ export default function FaqPanel() {
                     data-open={isOpen}
                   >
                     <div className={styles.answerContent}>
-                      <p className={styles.answerText}>{FAQ_PLACEHOLDER}</p>
+                      <p className={styles.answerText}>{answer}</p>
                     </div>
                   </div>
                 </div>

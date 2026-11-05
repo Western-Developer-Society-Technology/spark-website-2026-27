@@ -22,3 +22,25 @@
   width: calc(1512 * var(--u));
   height: calc(731 * var(--u));
 }
+
+@media (max-width: 1023px) {
+  .ridge {
+    --u: min(calc(100cqw / 1000), 1.1px);
+    left: calc(50% - 756 * var(--u));
+    right: auto;
+    width: calc(1512 * var(--u));
+    /* Keep the ridge below the characters as the landscape widens on tablets. */
+    --ridge-drop: max(0px, calc(731 * var(--u) - 400px));
+    mask-image: linear-gradient(#000 calc(100% - 120px), transparent);
+  }
+
+  .ridgeMountain {
+    top: auto;
+    bottom: calc(-1 * var(--ridge-drop));
+  }
+
+  .ridgeForeground {
+    top: auto;
+    bottom: calc(-120 * var(--u) - var(--ridge-drop));
+  }
+}

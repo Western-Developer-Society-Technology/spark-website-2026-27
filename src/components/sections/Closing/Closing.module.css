@@ -45,9 +45,18 @@
 
 @media (max-width: 720px) {
   .band {
-    --footer-share: 0.33;
+    /* One proportionate Figma frame for the rings and their original planets.
+       The artwork can extend beyond the phone; its axes are never squeezed. */
+    container-type: inline-size;
+    --sponsor-orbit-width: 155cqw;
+    --sponsor-orbit-height: calc(var(--sponsor-orbit-width) * 1454 / 1512);
+    --sponsor-planet-size: clamp(4.85rem, 20vw, 7.1rem);
+    --sponsor-orbit-left: calc(50% - 0.6045 * var(--sponsor-orbit-width));
+    --sponsor-orbit-top: calc(24px + var(--sponsor-planet-size) / 2 - 0.2071 * var(--sponsor-orbit-height));
+    --sponsor-art-height: calc(0.2737 * var(--sponsor-orbit-height) + var(--sponsor-planet-size) + 48px);
+    grid-template-rows: auto minmax(15rem, 1fr);
     min-height: 48rem;
-    height: max(48rem, 125vw);
+    height: auto;
     aspect-ratio: auto;
   }
 }

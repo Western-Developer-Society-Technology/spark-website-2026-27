@@ -94,6 +94,7 @@ export default function Orbits({ tone, className, omitOutermost = false }: Orbit
         return (
           <ellipse
             key={`${ellipse.cx}-${ellipse.cy}`}
+            className={index === 3 ? styles.voicesOrbit : undefined}
             cx={ellipse.cx}
             cy={ellipse.cy}
             rx={ellipse.rx}

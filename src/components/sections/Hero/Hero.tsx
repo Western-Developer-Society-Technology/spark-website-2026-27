@@ -20,7 +20,7 @@ function Wordmark() {
 
 export default function Hero() {
   return (
-    <>
+    <div className={styles.heroStage}>
       <div className={styles.motionRegion} data-motion-region="hero" aria-hidden="true" />
       <Eclipse />
       <HeroStreaks />
@@ -36,12 +36,12 @@ export default function Hero() {
           >
             <span data-node-id="111:111">Applications open soon</span>
           </button>
-          <p className={styles.date} data-node-id="111:112">February 2-4, 2027</p>
+          <p className={styles.date} data-node-id="111:112">January 30–February 1, 2027</p>
           <p className={styles.format} data-node-id="111:113">Hackathon • Case Competition</p>
           <p className={styles.location} data-node-id="111:114">In-person event @ Western University</p>
         </div>
       </section>
       <Wordmark />
-    </>
+    </div>
   );
 }

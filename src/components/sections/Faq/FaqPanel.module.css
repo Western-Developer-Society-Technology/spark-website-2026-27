@@ -23,6 +23,8 @@
 
 .panel {
   position: absolute;
+  /* Keep the expanded FAQ copy above decorative water and sparkler layers. */
+  z-index: 1;
   left: calc(50% - 545 * var(--panel-u));
   top: calc(
     (var(--faq-cloud-band) + var(--faq-panel-overhang)) * var(--u)
@@ -66,7 +68,8 @@
 .column {
   display: flex;
   flex-direction: column;
-  gap: calc(30 * var(--panel-u));
+  /* Leave room for all eleven questions and the longer approved answers. */
+  gap: calc(22 * var(--panel-u));
 }
 
 .question {
@@ -156,5 +159,118 @@
   .answer,
   .iconStem {
     transition: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .faq {
+    position: relative;
+    display: block;
+    width: min(100% - 32px, 600px);
+    margin-inline: auto;
+    padding-top: 16px;
+    padding-bottom: 24px;
+  }
+
+  .heading {
+    position: relative;
+    inset: auto;
+    width: auto;
+    margin: 0 16px 20px;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .panel {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    border: 0;
+    padding: 20px 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 20px;
+  }
+
+  .panelArtwork {
+    inset: 74px 0 24px;
+    width: auto;
+    height: auto;
+    /* Nine-slice the existing export so its hand-drawn corners stay intact
+       while the panel follows its content instead of stretching the artwork. */
+    border: 18px solid transparent;
+    border-image: url('/images/figma/faq-panel.svg') 60 fill / 18px stretch;
+    border-radius: 18px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .panelArtwork img {
+    display: none;
+  }
+
+  .column {
+    display: contents;
+  }
+
+  .item {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .question {
+    display: flex;
+    flex: 1;
+  }
+
+  /* An open answer gets a readable line length, without a separate mobile
+     accordion or changes to the desktop's two authored columns. */
+  .item:has(.answer[data-open="true"]) {
+    grid-column: 1 / -1;
+  }
+
+  .question button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: 44px;
+    padding: 6px 0;
+    font-size: clamp(15px, 4.2cqw, 18px);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    hyphenate-limit-chars: 10 5 4;
+  }
+
+  /* Keep each question and its control centered in the same shared grid row. */
+  .question button > span {
+    display: block;
+    width: 100%;
+    padding-right: 22px;
+  }
+
+  .question button > span::before {
+    content: none;
+  }
+
+  .answerText {
+    padding: 4px 0 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .toggleIcon {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    right: 0;
+    width: 16px;
+    height: 16px;
   }
 }
