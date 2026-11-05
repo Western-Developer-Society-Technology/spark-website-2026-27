@@ -18,11 +18,6 @@ export default function Faq() {
             </div>
           </div>
         </div>
-        <div className={styles.faqGlow} data-node-id="116:111">
-          <div className={styles.faqGlowPaintBounds}>
-            <ArtworkImage src={artwork.imgEllipse6} />
-          </div>
-        </div>
       </div>
       <FaqPanel />
       <div className={styles.faqSceneryLayer}>

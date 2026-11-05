@@ -47,7 +47,7 @@ export default function Mountains() {
       </div>
       <div className={styles.mountainForeground} data-node-id="112:51">
         <div className={styles.mountainForegroundPaintBounds}>
-          <ArtworkImage src={artwork.imgVector18} />
+          <ArtworkImage src={artwork.mountain3Foreground} />
         </div>
       </div>
     </div>

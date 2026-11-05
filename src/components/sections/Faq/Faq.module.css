@@ -80,19 +80,6 @@
   inset: -42.11% -47.95% -42.27% -40.31%;
 }
 
-.faqGlow {
-  position: absolute;
-  height: calc(1035 * var(--u));
-  left: calc(245.82 * var(--u));
-  top: calc(4473 * var(--u));
-  width: calc(1026.524 * var(--u));
-}
-
-.faqGlowPaintBounds {
-  position: absolute;
-  inset: -10.93% -11.02%;
-}
-
 .faqGround {
   position: absolute;
   background: #f7f7f7;

@@ -47,7 +47,7 @@ function Wordmark() {
         RK
       </span>
       <span className={styles.wordmarkStar} aria-hidden="true">
-        <ArtworkImage absolute src="/images/figma/rendered/group-1363.webp" />
+        <ArtworkImage absolute src="/images/figma/rendered/sparkcharacter.webp" />
       </span>
     </a>
   );

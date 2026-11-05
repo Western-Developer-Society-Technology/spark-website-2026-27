@@ -4,7 +4,7 @@ import type { BlueCloud } from "@/components/ui/Artwork";
 // Lossless WebP retains every decoded RGBA channel, including fully transparent pixels.
 const nativeArtwork = {
   "133:2": {
-    "src": "/images/figma/tall-left-cloud-native.webp",
+    "src": "/images/figma/tall-left-cloud-native.png",
     "left": -21,
     "top": 2291,
     "width": 1151,
@@ -18,7 +18,7 @@ const nativeArtwork = {
     }
   },
   "133:8": {
-    "src": "/images/figma/upper-right-cloud-native.webp",
+    "src": "/images/figma/upper-right-cloud-native.png",
     "left": 1525,
     "top": 2310,
     "width": 928,
@@ -32,7 +32,7 @@ const nativeArtwork = {
     }
   },
   "133:24": {
-    "src": "/images/figma/lower-right-cloud-native.webp",
+    "src": "/images/figma/lower-right-cloud-native.png",
     "left": 1647,
     "top": 3230,
     "width": 1096,
@@ -46,7 +46,7 @@ const nativeArtwork = {
     }
   },
   "134:58": {
-    "src": "/images/figma/lower-left-cloud-native.webp",
+    "src": "/images/figma/lower-left-cloud-native.png",
     "left": -76,
     "top": 3853,
     "width": 960.99951171875,
@@ -60,7 +60,7 @@ const nativeArtwork = {
     }
   },
   "133:31": {
-    "src": "/images/figma/middle-left-cloud-native.webp",
+    "src": "/images/figma/middle-left-cloud-native.png",
     "left": -104,
     "top": 2814,
     "width": 960.99951171875,
@@ -71,62 +71,6 @@ const nativeArtwork = {
       "top": -232.7565155029297,
       "width": 1454.9140625,
       "height": 1408.765625
-    }
-  },
-  "116:196": {
-    "src": "/images/figma/peach-cloud-native.webp",
-    "left": -76,
-    "top": 2846.9998779296875,
-    "width": 746.9995727539062,
-    "height": 352,
-    "transform": "matrix(1, 0, 0, 1, 0, 0)",
-    "paintBounds": {
-      "left": -53.8984375,
-      "top": -41.680267333984375,
-      "width": 839.765625,
-      "height": 436.12353515625
-    }
-  },
-  "116:218": {
-    "src": "/images/figma/blue-cloud-noise-native.webp",
-    "left": 35,
-    "top": 3338.9998779296875,
-    "width": 670.9324340820312,
-    "height": 377.1863708496094,
-    "transform": "matrix(1, 0, 0, 1, 0, 0)",
-    "paintBounds": {
-      "left": -51.79296875,
-      "top": -32,
-      "width": 756.734375,
-      "height": 454.5279846191406
-    }
-  },
-  "116:241": {
-    "src": "/images/figma/pink-cloud-noise-native.webp",
-    "left": 770.9998779296875,
-    "top": 3594,
-    "width": 661.9998779296875,
-    "height": 376.5,
-    "transform": "matrix(1, 0, 0, 1, 0, 0)",
-    "paintBounds": {
-      "left": -40.4609375,
-      "top": -34,
-      "width": 745.1015625,
-      "height": 452.72039794921875
-    }
-  },
-  "116:223": {
-    "src": "/images/figma/yellow-cloud-native.webp",
-    "left": 810,
-    "top": 3034.9998779296875,
-    "width": 738,
-    "height": 400,
-    "transform": "matrix(1, 0, 0, 1, 0, 0)",
-    "paintBounds": {
-      "left": -40.564453125,
-      "top": -36.551170349121094,
-      "width": 832.462890625,
-      "height": 476.2838439941406
     }
   }
 } as const satisfies Record<string, BlueCloud>;

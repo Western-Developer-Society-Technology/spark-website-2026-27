@@ -34,10 +34,10 @@ function faqBlueCloud(
 
 export const faqClouds = {
   left: {
-    white: "/images/figma/rendered/cloud-19.webp",
+    white: "/images/figma/rendered/blue-left-cloud.png",
     blueNodeId: "116:127",
     blue: faqBlueCloud(
-      "/images/figma/faq-left-cloud-noise-native.webp",
+      "/images/figma/faq-left-cloud-noise-native.png",
       -246,
       4958,
       854.5458374023438,
@@ -52,10 +52,10 @@ export const faqClouds = {
     ),
   },
   right: {
-    white: "/images/figma/rendered/cloud-22.webp",
+    white: "/images/figma/rendered/blue-right-cloud.png",
     blueNodeId: "116:135",
     blue: faqBlueCloud(
-      "/images/figma/faq-right-cloud-noise-native.webp",
+      "/images/figma/faq-right-cloud-noise-native.png",
       852,
       4928,
       854.5458374023438,
@@ -70,10 +70,10 @@ export const faqClouds = {
     ),
   },
   middle: {
-    white: "/images/figma/rendered/cloud-25.webp",
+    white: "/images/figma/rendered/blue-middle-cloud.png",
     blueNodeId: "116:143",
     blue: faqBlueCloud(
-      "/images/figma/faq-middle-cloud-noise-native.webp",
+      "/images/figma/faq-middle-cloud-noise-native.png",
       1139,
       4940,
       814.8455810546875,
@@ -88,10 +88,10 @@ export const faqClouds = {
     ),
   },
   wide: {
-    white: "/images/figma/rendered/cloud-28.webp",
+    white: "/images/figma/rendered/blue-wide-cloud.png",
     blueNodeId: "116:151",
     blue: faqBlueCloud(
-      "/images/figma/faq-wide-cloud-noise-native.webp",
+      "/images/figma/faq-wide-cloud-noise-native.png",
       -637,
       4996,
       2502.102294921875,
@@ -106,10 +106,10 @@ export const faqClouds = {
     ),
   },
   front: {
-    white: "/images/figma/rendered/cloud-31.webp",
+    white: "/images/figma/rendered/blue-front-cloud.png",
     blueNodeId: "116:178",
     blue: faqBlueCloud(
-      "/images/figma/faq-front-cloud-noise-native.webp",
+      "/images/figma/faq-front-cloud-noise-native.png",
       1912,
       5558,
       2502.102294921875,
@@ -127,12 +127,11 @@ export const faqClouds = {
 } as const satisfies Record<string, FaqCloudLayer>;
 
 const artwork = {
-  imgEllipse5: "/images/figma/rendered/ellipse-1.webp",
-  imgEllipse6: "/images/figma/rendered/ellipse-6.webp",
+  imgEllipse5: "/images/figma/rendered/ellipse-1.png",
   imgVector11: "/images/figma/vector-11.svg",
   imgLine2: "/images/figma/line-2.svg",
   imgLine3: "/images/figma/line-3.svg",
-  imgGroup1363: "/images/figma/rendered/group-1363.webp",
+  sparkcharacter: "/images/figma/rendered/sparkcharacter.webp",
   imgVector12: "/images/figma/vector-12.svg",
 } as const;
 

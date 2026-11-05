@@ -26,7 +26,7 @@ export default function Eclipse() {
         </div>
       </div>
       <div className={styles.eclipseStar} data-node-id="111:100">
-        <ArtworkImage absolute src={artwork.imgGroup1352} />
+        <ArtworkImage absolute src={artwork.glare} />
       </div>
     </div>
   );

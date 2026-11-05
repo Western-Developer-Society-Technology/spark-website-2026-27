@@ -12,7 +12,7 @@ function Wordmark() {
       <span className={styles.wordmarkA} data-part="a" aria-hidden="true">A</span>
       <span className={styles.wordmarkRk} data-part="rk" aria-hidden="true">RK</span>
       <span className={styles.wordmarkStar} data-part="star" aria-hidden="true">
-        <ArtworkImage absolute src={artwork.imgGroup1363} />
+        <ArtworkImage absolute src={artwork.sparkcharacter} />
       </span>
     </h1>
   );

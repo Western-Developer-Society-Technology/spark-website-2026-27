@@ -86,7 +86,7 @@
 .wordmarkA { left: calc(165.06 * var(--text-u)); opacity: 0; }
 .wordmarkRk { left: calc(283.58 * var(--text-u)); }
 
-/* group-1363 scaled so the star body is 160 units, centred on the cap height
+/* sparkcharacter scaled so the star body is 160 units, centred on the cap height
    between P and R and overlapping each by ~12 units. */
 .wordmarkStar {
   position: absolute;
