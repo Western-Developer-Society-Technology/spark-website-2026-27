@@ -18,7 +18,7 @@ const FADE_OUT = 0.6;
 const REST = 0.5;
 const CYCLE = FADE_IN + HOLD + FADE_OUT + REST;
 const FLIPS_PER_SECOND = 10;
-const FRAME_MS = 1000 / 30;
+const FRAME_MS = 1000 / 15;
 /** Glyph size on the 1512 grid, clamped in CSS pixels so it stops growing on big screens. */
 const FONT_UNITS = 12;
 const FONT_MIN = 9;

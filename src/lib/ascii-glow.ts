@@ -12,7 +12,7 @@ export const FADE_OUT = 0.6;
 export const REST = 0.5;
 export const CYCLE = FADE_IN + HOLD + FADE_OUT + REST;
 export const FLIPS_PER_SECOND = 10;
-export const FRAME_MS = 1000 / 30;
+export const FRAME_MS = 1000 / 10;
 
 export const FONT_UNITS = 12;
 export const FONT_MIN = 9;
