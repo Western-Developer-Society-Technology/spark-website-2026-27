@@ -12,8 +12,17 @@ export type BlueCloud = {
 };
 
 /** Fills its parent: in flow by default, or absolutely inset for relative shape boxes. */
-export function ArtworkImage({ src, absolute = false }: { src: string; absolute?: boolean }) {
-  return <img alt="" className={absolute ? styles.absoluteImage : styles.image} src={src} />;
+export function ArtworkImage({
+  src,
+  absolute = false,
+  className,
+}: {
+  src: string;
+  absolute?: boolean;
+  className?: string;
+}) {
+  const defaultClass = absolute ? styles.absoluteImage : styles.image;
+  return <img alt="" className={className ?? defaultClass} src={src} />;
 }
 
 export function BlueCloudImage({ cloud }: { cloud: BlueCloud }) {
