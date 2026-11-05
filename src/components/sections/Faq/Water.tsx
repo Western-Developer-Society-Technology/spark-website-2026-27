@@ -60,8 +60,8 @@ export function Boat() {
         <div className={styles.boatCharacter} data-node-id="116:166">
           <div className={styles.boatCharacterRotation}>
             <div className={styles.boatCharacterShape}>
-              <ArtworkImage absolute src={artwork.imgGroup1363} />
-            </div>
+              <ArtworkImage absolute src={artwork.sparkcharacter} />
+            </div>  
           </div>
         </div>
         <div className={styles.boatOar} data-node-id="116:170">
