@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- Navbar reuses the same raster and SVG assets as the footer. */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 import styles from "./Navbar.module.css";
 
@@ -22,6 +22,11 @@ function scrollProgress() {
 
 export default function Navbar() {
   const [progress, setProgress] = useState(0);
+  const pillRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    pillRef.current?.style.setProperty("--nav-progress", String(progress));
+  }, [progress]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -52,22 +57,9 @@ export default function Navbar() {
   return (
     <header className={styles.shell} aria-label="Site">
       <div
+        ref={pillRef}
         className={styles.pill}
         data-glass={progress > 0.04 ? "" : undefined}
-        style={
-          {
-            "--nav-progress": progress,
-            ...(progress > 0.04
-              ? {
-                  WebkitBackdropFilter: "blur(20px) saturate(1.2)",
-                  backdropFilter: "blur(20px) saturate(1.2)",
-                }
-              : {
-                  WebkitBackdropFilter: "none",
-                  backdropFilter: "none",
-                }),
-          } as React.CSSProperties
-        }
       >
         <div className={styles.content}>
           <div className={styles.startCluster}>
