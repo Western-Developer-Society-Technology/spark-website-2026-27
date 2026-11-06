@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { canvasSurface, canvasSurfaceStyle, maskedCanvasRegion, intersectCanvasRegions,
-  canvasDirtyRegion, copyBloomRegion } from "../src/lib/canvas-viewport.ts";
+import { canvasSurface, canvasSurfaceStyle, maskedCanvasRegion,
+  canvasRepaintRegion, copyBloomRegion } from "../src/lib/canvas-viewport.ts";
 import { glowCandidates } from "../src/lib/ascii-cells.ts";
 
 test("mask crops contain every potentially visible point plus the blur guard", () => {
@@ -57,13 +57,12 @@ test("cropped bloom samples the same full-resolution pixels as the original copy
   }
 });
 
-test("scroll jumps clear previous ink within the cropped surface", () => {
+test("scroll jumps preserve outgoing ink and invalidate only the cropped surface", () => {
   const crop = { left: 200, top: 200, right: 700, bottom: 700 };
-  const previous = { left: 200, top: 200, right: 700, bottom: 400 };
   const current = { left: 200, top: 500, right: 700, bottom: 700 };
-  assert.deepEqual(intersectCanvasRegions(canvasDirtyRegion(current, previous, 900, 900), crop), crop);
-  assert.deepEqual(intersectCanvasRegions(canvasDirtyRegion(null, previous, 900, 900), crop),
-    { left: 200, top: 200, right: 700, bottom: 424 });
+  assert.deepEqual(canvasRepaintRegion(current, crop, false), current);
+  assert.equal(canvasRepaintRegion(null, crop, false), null);
+  assert.deepEqual(canvasRepaintRegion(null, crop, true), crop);
 });
 
 test("cursor candidates retain dark reveals, original paint order, and unique membership", () => {

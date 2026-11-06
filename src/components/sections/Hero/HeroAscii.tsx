@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { lightEmission } from "@/lib/ascii-glow";
 import { glowCandidates } from "@/lib/ascii-cells";
 import {
-  canvasDirtyRegion,
+  canvasRepaintRegion,
   canvasViewportRegion,
   copyBloomRegion,
   type CanvasRegion,
@@ -604,6 +604,7 @@ export default function HeroAscii() {
     let lastSampleY = Number.NaN;
     let asciiVisible = false;
     let previousRegion: CanvasRegion | null = null;
+    let needsFullPaint = true;
     let canvasPixelRatio = 0;
 
     const revealAscii = () => {
@@ -703,6 +704,7 @@ export default function HeroAscii() {
       }
       const scale = width / Math.max(1, overlayWidth);
       if (refreshBase) {
+        needsFullPaint = true;
         lastSample = now;
         baseContext.setTransform(1, 0, 0, 1, 0, 0);
         baseContext.fillStyle = "#0a0a0a";
@@ -766,6 +768,7 @@ export default function HeroAscii() {
       bloom.width = Math.max(1, Math.ceil(overlayWidth));
       bloom.height = Math.max(1, Math.ceil(overlayHeight));
       previousRegion = null;
+      needsFullPaint = true;
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       context.font = font;
       context.textAlign = "center";
@@ -822,13 +825,19 @@ export default function HeroAscii() {
       while (trail.length > 0 && trail[0].t < cutoff) trail.shift();
       const trailBox = trailBounds(trail, CURSOR_RADIUS);
 
-      const region = canvasViewportRegion(
-        overlay.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight,
+      const region = canvasRepaintRegion(
+        canvasViewportRegion(overlay.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight),
+        { left: 0, top: 0, right: overlayWidth, bottom: overlayHeight },
+        needsFullPaint,
       );
-      const dirty = canvasDirtyRegion(region, previousRegion, overlayWidth, overlayHeight);
-      previousRegion = region;
-      if (!dirty) return;
-      context.clearRect(dirty.left, dirty.top, dirty.right - dirty.left, dirty.bottom - dirty.top);
+      if (!region) return;
+      // Retain offscreen pixels for compositor scrolling between JS frames.
+      // Clipping also prevents changed edge glyphs from overpainting the cache.
+      context.save();
+      context.beginPath();
+      context.rect(region.left, region.top, region.right - region.left, region.bottom - region.top);
+      context.clip();
+      context.clearRect(region.left, region.top, region.right - region.left, region.bottom - region.top);
       const reduced = motionPreference.matches;
       const time = now / 1000;
       const cursorOn = !reduced;
@@ -837,7 +846,7 @@ export default function HeroAscii() {
         left: trailBox.minX, top: trailBox.minY, right: trailBox.maxX, bottom: trailBox.maxY,
       } : null);
       for (const cell of candidates) {
-        if (!region || cell.x < region.left || cell.x > region.right || cell.y < region.top || cell.y > region.bottom) continue;
+        if (cell.x < region.left - 24 || cell.x > region.right + 24 || cell.y < region.top - 24 || cell.y > region.bottom + 24) continue;
         const trailFx =
           cursorOn && !cell.onCore ? trailInfluence(cell.x, cell.y, trail, now, trailBox) : null;
         const hasGlow = cell.strength > 0;
@@ -879,7 +888,10 @@ export default function HeroAscii() {
         context.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       context.globalAlpha = 1;
-      copyBloomRegion(canvas, bloom, bloomContext, dirty);
+      context.restore();
+      copyBloomRegion(canvas, bloom, bloomContext, region);
+      previousRegion = region;
+      needsFullPaint = false;
     }
 
     function addTrailPoint(clientX: number, clientY: number, now: number) {

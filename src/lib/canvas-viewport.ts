@@ -83,21 +83,15 @@ export function canvasViewportRegion(
   return right > left && bottom > top ? { left, top, right, bottom } : null;
 }
 
-/** Clear the old ink as well as newly exposed pixels, including glyph overhang. */
-export function canvasDirtyRegion(
+/** Seed or invalidate the complete cache; otherwise repaint only the current
+ * viewport. Never erase outgoing pixels: compositor scrolling can reveal them
+ * before the next animation frame, especially during a fast reversal. */
+export function canvasRepaintRegion(
   current: CanvasRegion | null,
-  previous: CanvasRegion | null,
-  width: number,
-  height: number,
+  surface: CanvasRegion,
+  invalidate: boolean,
 ): CanvasRegion | null {
-  const regions = [current, previous].filter((region): region is CanvasRegion => region !== null);
-  if (!regions.length) return null;
-  return {
-    left: Math.max(0, Math.min(...regions.map((region) => region.left)) - 24),
-    top: Math.max(0, Math.min(...regions.map((region) => region.top)) - 24),
-    right: Math.min(width, Math.max(...regions.map((region) => region.right)) + 24),
-    bottom: Math.min(height, Math.max(...regions.map((region) => region.bottom)) + 24),
-  };
+  return invalidate ? surface : intersectCanvasRegions(current, surface);
 }
 
 /** Keep the full-image sampling transform when updating only part of the bloom. */

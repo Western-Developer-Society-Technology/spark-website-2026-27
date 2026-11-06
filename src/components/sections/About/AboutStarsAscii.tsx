@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import {
-  canvasDirtyRegion,
+  canvasRepaintRegion,
   canvasViewportRegion,
   copyBloomRegion,
   canvasSurface,
@@ -84,6 +84,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
     let asciiVisible = false;
     let initialized = false;
     let previousRegion: CanvasRegion | null = null;
+    let needsFullPaint = true;
     let crop: CanvasRegion = { left: 0, top: 0, right: 0, bottom: 0 };
     let surfaces: { source: CanvasSurface; bloom: CanvasSurface };
     let canvasPixelRatio = 0;
@@ -112,6 +113,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
       const resized = sample.width !== width || sample.height !== height;
       if (!force && !resized && now - lastSample < 500) return;
       lastSample = now;
+      if (force || resized) needsFullPaint = true;
 
       if (resized) {
         sample.width = width;
@@ -143,6 +145,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
         if (cell.strength > 0) activeCells.push(cell);
         const packed = (r << 16) | (g << 8) | b;
         if (packed === cell.packed) continue;
+        needsFullPaint = true;
         cell.packed = packed;
         cell.emission = lightEmission(r, g, b);
         cell.baseOpacity = cell.strength ** STAR_EDGE_OPACITY_CURVE * cell.emission;
@@ -180,6 +183,7 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
         else for (const property of ["left", "top", "right", "bottom", "width", "height", "mask-size", "mask-position", "mask-repeat"]) target.style.removeProperty(property);
       }
       previousRegion = null;
+      needsFullPaint = true;
       drawContext.setTransform(pixelRatio, 0, 0, pixelRatio, -surfaces.source.left, -surfaces.source.top);
       drawContext.font = font;
       drawContext.textAlign = "center";
@@ -221,18 +225,23 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
       lastDraw = now;
       sampleField(false);
 
-      const region = intersectCanvasRegions(canvasViewportRegion(
-        overlayEl.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight,
-      ), crop);
-      const dirty = intersectCanvasRegions(canvasDirtyRegion(region, previousRegion, overlayWidth, overlayHeight), crop);
-      previousRegion = region;
-      if (!dirty) return;
-      drawContext.clearRect(dirty.left, dirty.top, dirty.right - dirty.left, dirty.bottom - dirty.top);
+      const region = canvasRepaintRegion(
+        canvasViewportRegion(overlayEl.getBoundingClientRect(), overlayWidth, overlayHeight, window.innerWidth, window.innerHeight),
+        crop,
+        needsFullPaint,
+      );
+      if (!region) return;
+      // Keep the cropped surface fully cached when it leaves the viewport.
+      drawContext.save();
+      drawContext.beginPath();
+      drawContext.rect(region.left, region.top, region.right - region.left, region.bottom - region.top);
+      drawContext.clip();
+      drawContext.clearRect(region.left, region.top, region.right - region.left, region.bottom - region.top);
       const reduced = motionPreference.matches;
       const time = now / 1000;
 
       for (const cell of activeCells) {
-        if (!region || cell.x < region.left || cell.x > region.right || cell.y < region.top || cell.y > region.bottom) continue;
+        if (cell.x < region.left - 24 || cell.x > region.right + 24 || cell.y < region.top - 24 || cell.y > region.bottom + 24) continue;
         let opacity = cell.baseOpacity;
         let cycling = false;
         let cycleIndex = 0;
@@ -256,7 +265,10 @@ export default function AboutStarsAscii({ nodeId, className }: AboutStarsAsciiPr
         drawContext.fillText(glyphFor(cell, time, cycling, cycleIndex), cell.x, cell.y);
       }
       drawContext.globalAlpha = 1;
-      copyBloomRegion(canvasEl, bloom, bloomContext, dirty, surfaces);
+      drawContext.restore();
+      copyBloomRegion(canvasEl, bloom, bloomContext, region, surfaces);
+      previousRegion = region;
+      needsFullPaint = false;
     }
 
     function start() {
