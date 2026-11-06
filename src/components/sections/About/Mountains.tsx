@@ -10,11 +10,9 @@ export default function Mountains() {
         <ArtworkImage fetchPriority="low" absolute src={artwork.mountainFar} />
       </div>
       <div className={styles.smallMountainStar} data-node-id="116:102">
-        <div className={styles.smallMountainStarRotation}>
-          <div className={styles.smallMountainStarShape}>
-            <div className={styles.smallMountainStarPaintBounds}>
-              <ArtworkImage fetchPriority="low" src={artwork.imgGroup1357} />
-            </div>
+        <div className={styles.smallMountainStarShape}>
+          <div className={styles.smallMountainStarPaintBounds}>
+            <ArtworkImage fetchPriority="low" src={artwork.mountainStarGradient} />
           </div>
         </div>
         <AboutStarsAscii nodeId="116:102" className={styles.smallMountainStarAscii} />
@@ -23,21 +21,17 @@ export default function Mountains() {
         <ArtworkImage fetchPriority="low" absolute src={artwork.mountainMiddle} />
       </div>
       <div className={styles.largeMountainStar} data-node-id="116:87">
-        <div className={styles.largeMountainStarRotation}>
-          <div className={styles.largeMountainStarShape}>
-            <div className={styles.largeMountainStarPaintBounds}>
-              <ArtworkImage fetchPriority="low" src={artwork.imgGroup1355} />
-            </div>
+        <div className={styles.largeMountainStarShape}>
+          <div className={styles.largeMountainStarPaintBounds}>
+            <ArtworkImage fetchPriority="low" src={artwork.mountainStarGradient} />
           </div>
         </div>
         <AboutStarsAscii nodeId="116:87" className={styles.largeMountainStarAscii} />
       </div>
       <div className={styles.leftMountainStar} data-node-id="116:96">
-        <div className={styles.largeMountainStarRotation}>
-          <div className={styles.leftMountainStarShape}>
-            <div className={styles.leftMountainStarPaintBounds}>
-              <ArtworkImage fetchPriority="low" src={artwork.imgGroup1356} />
-            </div>
+        <div className={styles.leftMountainStarShape}>
+          <div className={styles.leftMountainStarPaintBounds}>
+            <ArtworkImage fetchPriority="low" src={artwork.mountainStarGradient} />
           </div>
         </div>
         <AboutStarsAscii nodeId="116:96" className={styles.leftMountainStarAscii} />

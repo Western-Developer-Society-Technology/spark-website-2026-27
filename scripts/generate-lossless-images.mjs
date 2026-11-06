@@ -7,13 +7,14 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const require = createRequire(import.meta.url);
 const sharp = createRequire(require.resolve("next/package.json"))("sharp");
-// PNG samplers remain unchanged: Chrome can premultiply WebP alpha one level differently.
+// Preserve the authored palette and alpha, including artwork sampled by ASCII.
 const sources = [
   "/images/footer/wds-logo.png",
   "/images/mountains/mountain1.png",
   "/images/mountains/mountain2.png",
   "/images/mountains/mountain3.png",
   "/images/mountains/mountain3foreground.png",
+  "/images/mountains/mountaingradient.png",
   "/images/campfire/campfire-wood.png",
   "/images/mountains/mountain4.png",
   "/images/mountains/ridge-foreground.png",

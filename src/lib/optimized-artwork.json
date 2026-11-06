@@ -45,6 +45,15 @@
     "sourceSha256": "561798f19fa2b4f624d294286b49ed8ec1ffbac4bb451585a80e5d8f473e88f9"
   },
   {
+    "source": "/images/mountains/mountaingradient.png",
+    "target": "/images/optimized/mountains/mountaingradient.webp",
+    "width": 185,
+    "height": 243,
+    "sourceBytes": 14342,
+    "bytes": 11980,
+    "sourceSha256": "fd9a816339726305bc8f48729c7669ff164b03458177dbfbc6061fb9b4265e3c"
+  },
+  {
     "source": "/images/campfire/campfire-wood.png",
     "target": "/images/optimized/campfire/campfire-wood.webp",
     "width": 194,

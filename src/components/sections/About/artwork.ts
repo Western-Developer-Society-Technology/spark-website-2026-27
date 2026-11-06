@@ -7,9 +7,7 @@ const artwork = {
   "mountainRidgeForeground": "/images/optimized/mountains/ridge-foreground.webp",
   "campfireWood": "/images/optimized/campfire/campfire-wood.webp",
   "mountain3Foreground": "/images/optimized/mountains/mountain3foreground.webp",
-  "imgGroup1357": "/images/figma/rendered/group-1357.png",
-  "imgGroup1355": "/images/figma/rendered/group-1355.png",
-  "imgGroup1356": "/images/figma/rendered/group-1356.png",
+  "mountainStarGradient": "/images/optimized/mountains/mountaingradient.webp",
   "imgGroup1366": "/images/figma/rendered/group-1366.webp",
   "imgGroup1365": "/images/figma/rendered/group-1365.webp",
   "imgGroup1367": "/images/figma/rendered/group-1367.webp"
