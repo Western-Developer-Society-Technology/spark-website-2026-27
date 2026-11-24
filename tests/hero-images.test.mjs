@@ -57,8 +57,8 @@ test("responsive descriptors match real pixels, aspect ratios and smaller lossle
   }
 });
 
-test("soft glow layers send every phone density the 640w file", () => {
-  for (const key of ["imgEllipse1", "imgEllipse2", "imgEllipse4"]) {
+test("soft layers send every phone density the 640w file", () => {
+  for (const key of ["imgEllipse1", "imgEllipse2", "imgEllipse3", "imgEllipse4"]) {
     const { srcSet, sizes } = manifest[key];
     const phone = /^\(max-width: 1023px\) (\d+)px, /.exec(sizes);
     assert.ok(phone, `${key} needs a fixed phone size`);

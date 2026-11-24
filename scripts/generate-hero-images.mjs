@@ -13,12 +13,14 @@ const base = "/images/figma/rendered";
 const widths = [640, 960, 1280, 1600, 1920, 2048, 2560, 3200];
 // Soft glows have no fine detail: upscaled from 640px they match the largest file within 4/255 per
 // channel on a 3x phone. So below 1024px every density gets the 640w file (640 / 3 = 213px).
+// The eclipse core is a near-black disc: at 640w its faint grain softens (mean 1.8/255), but it
+// arrives ~350 KB sooner on phones, where it is the LCP image.
 const SOFT_PHONE_SIZES = "213px";
 const images = {
   imgEllipse1: { name: "ellipse-1", paintWidth: 1161 * (1 + .4795 + .4031), peakScale: 1, soft: true },
   imgEllipse2: { name: "ellipse-2", paintWidth: 1334 * (1 + .075 + .075), peakScale: 1, soft: true },
   imgEllipse4: { name: "ellipse-4", paintWidth: 1090 * (1 + .0917 + .091), peakScale: 1.06, soft: true },
-  imgEllipse3: { name: "ellipse-3", paintWidth: 1222 * (1 + .0057 + .0058), peakScale: 1 },
+  imgEllipse3: { name: "ellipse-3", paintWidth: 1222 * (1 + .0057 + .0058), peakScale: 1, soft: true },
   glare: { name: "group-1352", paintWidth: 553.852, peakScale: 1.09 / .84 },
 };
 const manifest = {};

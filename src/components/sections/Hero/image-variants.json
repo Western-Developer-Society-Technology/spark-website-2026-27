@@ -13,7 +13,7 @@
   },
   "imgEllipse3": {
     "srcSet": "/images/figma/rendered/responsive/ellipse-3-640.webp 640w, /images/figma/rendered/responsive/ellipse-3-960.webp 960w, /images/figma/rendered/responsive/ellipse-3-2472.webp 2472w",
-    "sizes": "(max-width: 1023px) min(158.468334vw, 988.842401px), 81.749538vw"
+    "sizes": "(max-width: 1023px) 213px, 81.749538vw"
   },
   "glare": {
     "srcSet": "/images/figma/rendered/responsive/group-1352-640.webp 640w, /images/figma/rendered/responsive/group-1352-960.webp 960w, /images/figma/rendered/responsive/group-1352-1108.webp 1108w",

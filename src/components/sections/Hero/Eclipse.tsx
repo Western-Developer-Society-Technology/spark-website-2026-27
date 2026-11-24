@@ -22,7 +22,7 @@ export default function Eclipse() {
       </div>
       <div className={styles.eclipseCore} data-node-id="111:99">
         <div className={styles.eclipseCorePaintBounds}>
-          <ArtworkImage src={artwork.imgEllipse3} {...heroImages.imgEllipse3} loading="eager" fetchPriority="low" />
+          <ArtworkImage src={artwork.imgEllipse3} {...heroImages.imgEllipse3} loading="eager" fetchPriority="high" />
         </div>
       </div>
       <div className={styles.eclipseStar} data-node-id="111:100">
