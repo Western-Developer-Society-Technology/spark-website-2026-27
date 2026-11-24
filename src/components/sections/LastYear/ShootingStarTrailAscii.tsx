@@ -23,6 +23,7 @@ const EFFECT_FRAME_MS = 1000 / 24;
 const FONT_MIN = 13;
 const FONT_MAX = 18;
 const ALONG_COLS = 58;
+const FIRE_FILL_STEPS = 64;
 
 type ShootingStarTrailAsciiProps = {
   color: string;
@@ -106,6 +107,8 @@ export default function ShootingStarTrailAscii({ color, starId }: ShootingStarTr
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const white = mixColor(color, 0.8);
     const highlight = mixColor(color, 0.45);
+    // Built once: a fresh colour string per glyph per frame (~47k/s) made the browser parse a new colour every time.
+    const fireFills = Array.from({ length: FIRE_FILL_STEPS + 1 }, (_, step) => fireFill(color, step / FIRE_FILL_STEPS));
     const identifierSeed = Array.from(color).reduce((sum, character) => sum + character.charCodeAt(0), 0);
 
     let disposed = false;
@@ -264,7 +267,8 @@ export default function ShootingStarTrailAscii({ color, starId }: ShootingStarTr
           idle,
         );
         if (sample.character === " ") continue;
-        glyph(sample.character, cell.x, cell.y, fireFill(color, sample.intensity), sample.opacity);
+        // sample.intensity is already clamped to 0..1.
+        glyph(sample.character, cell.x, cell.y, fireFills[Math.round(sample.intensity * FIRE_FILL_STEPS)], sample.opacity);
       }
 
       if (idle) {

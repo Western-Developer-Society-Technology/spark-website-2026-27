@@ -156,6 +156,8 @@ function cellBounds(cells: AsciiCell[]): AsciiBounds {
   };
 }
 
+const FIRE_FILL_STEPS = 64;
+
 function mixColor(color: string, amount: number) {
   const matches = color.match(/[a-f\d]{2}/gi);
   if (!matches) return color;
@@ -537,10 +539,17 @@ function useAsciiMotion(artwork: PreparedAsciiArt | undefined, mode: AsciiArtMod
       }
     }
 
-    function fireFill(intensity: number) {
+    // Built once: a fresh colour string per glyph per frame made the browser parse a new colour every time.
+    const fireFills = Array.from({ length: FIRE_FILL_STEPS + 1 }, (_, step) => {
+      const intensity = step / FIRE_FILL_STEPS;
       // Same white lift as hero ASCII hot glow (HeroAscii glyphColor).
       const hot = Math.min(1, Math.max(0, (intensity - 0.38) / 0.62));
       return mixColor(art.color, Math.min(0.62, 0.28 * intensity + hot * 0.62));
+    });
+
+    // Intensity is never negative here; the colour stops changing below 1, so clamping above is lossless.
+    function fireFill(intensity: number) {
+      return fireFills[Math.round(Math.min(1, intensity) * FIRE_FILL_STEPS)];
     }
 
     function drawCrackleBurst(

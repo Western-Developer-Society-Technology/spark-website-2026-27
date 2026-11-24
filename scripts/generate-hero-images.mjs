@@ -11,17 +11,20 @@ const sharp = createRequire(require.resolve("next/package.json"))("sharp");
 const base = "/images/figma/rendered";
 // 2048 avoids overserving 2560px textures at common laptop paint widths.
 const widths = [640, 960, 1280, 1600, 1920, 2048, 2560, 3200];
+// Soft glows have no fine detail: upscaled from 640px they match the largest file within 4/255 per
+// channel on a 3x phone. So below 1024px every density gets the 640w file (640 / 3 = 213px).
+const SOFT_PHONE_SIZES = "213px";
 const images = {
-  imgEllipse1: { name: "ellipse-1", paintWidth: 1161 * (1 + .4795 + .4031), peakScale: 1 },
-  imgEllipse2: { name: "ellipse-2", paintWidth: 1334 * (1 + .075 + .075), peakScale: 1 },
-  imgEllipse4: { name: "ellipse-4", paintWidth: 1090 * (1 + .0917 + .091), peakScale: 1.06 },
+  imgEllipse1: { name: "ellipse-1", paintWidth: 1161 * (1 + .4795 + .4031), peakScale: 1, soft: true },
+  imgEllipse2: { name: "ellipse-2", paintWidth: 1334 * (1 + .075 + .075), peakScale: 1, soft: true },
+  imgEllipse4: { name: "ellipse-4", paintWidth: 1090 * (1 + .0917 + .091), peakScale: 1.06, soft: true },
   imgEllipse3: { name: "ellipse-3", paintWidth: 1222 * (1 + .0057 + .0058), peakScale: 1 },
   glare: { name: "group-1352", paintWidth: 553.852, peakScale: 1.09 / .84 },
 };
 const manifest = {};
 mkdirSync(path.join(root, "public", base, "responsive"), { recursive: true });
 
-for (const [key, { name, paintWidth, peakScale }] of Object.entries(images)) {
+for (const [key, { name, paintWidth, peakScale, soft }] of Object.entries(images)) {
   const src = `${base}/${name}.webp`;
   const input = path.join(root, "public", src);
   const { width: originalWidth } = await sharp(input).metadata();
@@ -56,7 +59,7 @@ for (const [key, { name, paintWidth, peakScale }] of Object.entries(images)) {
   const n = (value) => Math.ceil(value * 1000000) / 1000000;
   manifest[key] = {
     srcSet: candidates.join(", "),
-    sizes: `(max-width: 1023px) min(${n(logicalWidth / 780 * 100)}vw, ${n(logicalWidth * .8)}px), ${n(logicalWidth / 1512 * 100)}vw`,
+    sizes: `(max-width: 1023px) ${soft ? SOFT_PHONE_SIZES : `min(${n(logicalWidth / 780 * 100)}vw, ${n(logicalWidth * .8)}px)`}, ${n(logicalWidth / 1512 * 100)}vw`,
   };
   console.log(`${name}: ${candidates.length} sizes (original ${originalWidth}px retained)`);
 }
