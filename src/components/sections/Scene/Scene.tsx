@@ -145,7 +145,7 @@ export default function Scene({ children }: SceneProps) {
     }
     root.dataset.loadState = heroFinished ? "complete" : "running";
 
-    WATER_MOTION.forEach(({ selector, keyframes, options }) => {
+    WATER_MOTION.filter(({ selector }) => !selector.includes("water-splash")).forEach(({ selector, keyframes, options }) => {
       const element = root.querySelector<HTMLElement | SVGElement>(selector);
       if (!element) return;
       const animation = addMotion(element, keyframes, "water", options);

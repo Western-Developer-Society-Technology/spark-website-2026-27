@@ -1,7 +1,7 @@
 import { gsap } from "gsap";
 import { ORIGINAL_STAR_OUTLINE, starOutline } from "./star-shape";
 import { SPLASH_DROPLETS, splashKeyframes } from "./water-splashes";
-import { SPLASH_CELLS, splashGlyph } from "./water-splash-art";
+import { SPLASH_ART, SPLASH_CELLS, splashGlyph } from "./water-splash-art";
 import { BOAT_DURATION, boatPathKeyframes } from "./boat-motion";
 
 export type WaterMotion = {
@@ -258,13 +258,37 @@ export function createWaterSplashArt(root: HTMLElement, clock: Animation) {
   let ticking = false;
   let lastStep = -1;
 
+  const headAngle = Math.atan2(.65, .38 * SPLASH_ART.aspect) * 180 / Math.PI;
+  let shown = true;
+  const place = (localTime: number, beat: RecoveryBeat | undefined) => {
+    const unit = root.clientWidth / 1512;
+    particles.forEach(({ droplet, element }) => {
+      if (!element) return;
+      const age = beat ? localTime - beat.at - droplet.at : -1;
+      if (!beat || age <= 0 || age >= droplet.flight) {
+        if (element.style.opacity !== "0") element.style.opacity = "0";
+        return;
+      }
+      const p = age / droplet.flight;
+      const vertical = 4 * droplet.rise * (2 * p - 1);
+      const heading = Math.atan2(vertical, Math.abs(droplet.drift)) * 180 / Math.PI;
+      const travel = droplet.drift < 0 ? 180 - heading : heading;
+      const native = droplet.mirror ? 180 - headAngle : headAngle;
+      element.style.translate = `${droplet.drift * beat.strength * p * unit}px ${-4 * droplet.rise * beat.strength * p * (1 - p) * unit}px`;
+      element.style.rotate = `${travel - native}deg`;
+      element.style.opacity = String(.95 * Math.min(1, p / .12, (1 - p) / .45));
+    });
+  };
+
   const render = () => {
     const elapsed = Number(clock.currentTime ?? 0);
+    const localTime = elapsed % RECOVERY_DURATION;
+    const beat = RECOVERY_BEATS.find(({ at }) => localTime >= at && localTime < at + 3000);
+    if (beat || shown) place(localTime, beat);
+    shown = Boolean(beat);
     const step = Math.floor(elapsed / 100);
     if (step === lastStep) return;
     lastStep = step;
-    const localTime = elapsed % RECOVERY_DURATION;
-    const beat = RECOVERY_BEATS.find(({ at }) => localTime >= at && localTime < at + 3000);
     if (!beat) return;
 
     particles.forEach((particle) => {
