@@ -319,7 +319,13 @@ export default function ShootingStarTrailAscii({ color, starId }: ShootingStarTr
     const resizeObserver = new ResizeObserver(measure);
     const group = root.parentElement;
     if (group) resizeObserver.observe(group);
-    window.addEventListener("resize", measure);
+    let lastWidth = window.innerWidth;
+    const onWindowResize = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      measure();
+    };
+    window.addEventListener("resize", onWindowResize);
     document.addEventListener("visibilitychange", updateActivity);
     measure();
     document.fonts.ready.then(() => {
@@ -331,7 +337,7 @@ export default function ShootingStarTrailAscii({ color, starId }: ShootingStarTr
       stop();
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
-      window.removeEventListener("resize", measure);
+      window.removeEventListener("resize", onWindowResize);
       document.removeEventListener("visibilitychange", updateActivity);
     };
   }, [color, starId]);

@@ -172,12 +172,12 @@
 .details {
   --cta-u: calc(var(--text-u) * 0.9);
   /* On short viewports, pin the block above the fold; tall screens keep the Figma Y. */
-  --hero-cta-bottom: max(clamp(1.25rem, 3.5vh, 2.75rem), env(safe-area-inset-bottom, 0px));
+  --hero-cta-bottom: max(clamp(1.25rem, calc(3.5 * var(--locked-vh, 1vh)), 2.75rem), env(safe-area-inset-bottom, 0px));
   position: absolute;
   left: calc(755.5 * var(--u) - 170 * var(--cta-u));
   top: min(
     calc(723 * var(--u)),
-    calc(100vh - var(--hero-cta-bottom) - 150 * var(--cta-u))
+    calc(100 * var(--locked-vh, 1vh) - var(--hero-cta-bottom) - 150 * var(--cta-u))
   );
   width: calc(340 * var(--cta-u));
   height: calc(150 * var(--cta-u));
@@ -266,7 +266,7 @@
     display: block;
     left: calc(50% - 756 * var(--u));
     width: calc(1512 * var(--u));
-    height: max(clamp(560px, 82svh, 820px), calc(1030 * var(--u)));
+    height: max(clamp(560px, calc(82 * var(--locked-vh, 1svh)), 820px), calc(1030 * var(--u)));
   }
 
   .ground {

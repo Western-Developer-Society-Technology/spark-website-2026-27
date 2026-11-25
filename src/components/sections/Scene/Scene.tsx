@@ -47,6 +47,22 @@ function heroKeyframes(motion: HeroMotion, unit: number): Keyframe[] {
 export default function Scene({ children }: SceneProps) {
   const rootRef = useRef<HTMLElement>(null);
 
+  // In-app browsers (Google app, Discord) resize vh/svh as their toolbar slides,
+  // which resizes the hero and shifts the page. On touch screens, keep the
+  // height from load and update it only when the width changes (rotation).
+  useLayoutEffect(() => {
+    const touch = window.matchMedia("(pointer: coarse)");
+    let lastWidth = -1;
+    const lockViewportHeight = () => {
+      if (touch.matches && window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      document.documentElement.style.setProperty("--locked-vh", `${window.innerHeight / 100}px`);
+    };
+    lockViewportHeight();
+    window.addEventListener("resize", lockViewportHeight);
+    return () => window.removeEventListener("resize", lockViewportHeight);
+  }, []);
+
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
