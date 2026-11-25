@@ -7,7 +7,7 @@ export default function Closing() {
     <div className={styles.band} data-artwork-region="sponsors">
       <div className={styles.gradient} aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element -- Soft radial glow scales with the closing band. */}
-        <img loading="lazy" src="/images/sponsors/gradient.svg" alt="" />
+        <img loading="lazy" src="/images/optimized/sponsors/gradient.webp" alt="" />
       </div>
       <Sponsors />
       <Footer />
