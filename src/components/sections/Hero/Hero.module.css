@@ -269,8 +269,12 @@
     height: max(clamp(560px, calc(82 * var(--locked-vh, 1svh)), 820px), calc(1030 * var(--u)));
   }
 
+  /* Start 80 units above the eclipse's bottom rim (ends at 1699): when the browser
+     toolbar shrinks the stage to its 560px minimum, the About mountains move up and
+     no longer hide that orange rim. The bottom edge stays at 2531. */
   .ground {
-    top: calc(1700 * var(--u));
+    top: calc(1620 * var(--u));
+    height: calc(911 * var(--u));
   }
 
   .wordmark,
